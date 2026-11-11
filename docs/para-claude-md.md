@@ -48,6 +48,9 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
   en depuración. iOS: argumento de lanzamiento `-mockScenario <X>`, solo en `#if DEBUG`.
 - **En iOS no se registra con `NSLog` y argumentos variádicos**: un `String` de Kotlin como `%@` da `EXC_BAD_ACCESS`
   (lo fija `IosLoggerTest`). Se compone el mensaje en Kotlin.
+- **La puerta** (`config/checks/puerta.sh`) sustituye a los cuatro verdes a mano desde la Fase 6.5: formato, detekt, los
+  cuatro verdes + los tests de iOS en una invocación con `--rerun-tasks`, cada verificador, el recuento de tests y los
+  marcadores de conflicto. Cualquier código distinto de 0 es rojo, incluido el 3. `--rapido` solo para iterar.
 - **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
   `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
 - **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.

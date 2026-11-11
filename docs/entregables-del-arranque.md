@@ -26,3 +26,4 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 6.5 | `config/checks/entregables.py` | Comprueba que existe cada entregable de esta lista |
 | 6.5 | `config/detekt/detekt.yml` | Diferencias de detekt con el default, con su porqué |
 | 6.5 | `.editorconfig` | Copia para el IDE de la autoridad de formato |
+| 6.5 | `config/checks/puerta.sh` | La puerta: formato, detekt, verdes, verificadores, recuento de tests, conflictos |
