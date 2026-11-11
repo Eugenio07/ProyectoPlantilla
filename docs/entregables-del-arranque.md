@@ -66,3 +66,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 11 | `config/checks/skills_de_cierre.py` | Las skills de la lista de cierre resuelven |
 | 12 | `.claude/agents/auditor-sin-contexto.md` | El auditor sin contexto como subagente |
 | 12 | `.claude/hooks/auditor-deny-github.sh` | Filtro que le niega GitHub (falla cerrado) |
+| 12 | `docs/historico/auditorias/AUDIT-2026-11-11.md` | Informe de la auditoría integral (fase A) |
+| — | `docs/manuales/notas-del-arranque-2026-11-11.md` | Preguntas y desviaciones del arranque, para la versión siguiente de los manuales |
