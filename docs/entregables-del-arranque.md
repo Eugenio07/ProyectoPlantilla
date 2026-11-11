@@ -50,3 +50,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 9 | `config/checks/sin_para_claude_md.py` | Una sola fuente de reglas |
 | 9 | `config/checks/claude_md.py` | Proporción de líneas por regla de CLAUDE.md |
 | 9 | `config/checks/claude_md_excepciones.txt` | Reglas que pueden pasarse del umbral, con su motivo |
+| 9 | `docs/overviews/README.md` | Qué es un overview y cuándo se actualiza |
+| 9 | `docs/reversiones/_plantilla.md` | Fichero de reversión de una escritura reversible |
