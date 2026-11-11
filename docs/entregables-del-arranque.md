@@ -34,3 +34,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 6.5 | `config/checks/barrido_texto.py` | Barrido del texto que deja de ser cierto |
 | 6.5 | `config/checks/tope_plan.py` | Tope de ~150 líneas por plan |
 | 6.5 | `config/checks/tope_plan_exclusiones.txt` | Secciones excluidas del tope, con su motivo |
+| 6.5 | `config/checks/corrio.sh` | «Verde no es corrió»: ninguna tarea que compila o testea sale UP-TO-DATE/FROM-CACHE (puerta y CI) |
+| 6.5 | `config/checks/recuento_tests.py` | Recuento de tests en los XML (puerta y CI) |

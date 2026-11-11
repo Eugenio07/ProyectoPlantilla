@@ -78,6 +78,18 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      con la red del emulador funcionando). Manual de operación §10: el texto no afirma lo que no sabe.
 - **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar.
 
+### #PP6 · 2026-11-11 · El CI no existe en el remoto: el token no puede subir workflows (requisito de salida)
+
+- **Mecanismo:** GitHub rechaza crear `.github/workflows/*` con un token OAuth sin el permiso `workflow` [medido
+  2026-11-11: push de `f7/ci` rechazado con ese mensaje]. `ci.yml` y `.github/actions/calidad/action.yml` están escritos
+  y auditados (`docs/plans/2026-11-11-f7-ci.md`), fuera del repositorio hasta que se puedan subir.
+- **Quién lo desbloquea:** quien decide: `gh auth refresh -h github.com -s workflow` (paso interactivo en el navegador).
+- **Disparador:** cuando el token tenga el permiso `workflow` — estado medido 2026-11-11: no lo tiene.
+- **Vigente hasta que:**
+  1. `ci.yml` y la acción compuesta están en `develop`, y
+  2. un PR los ha visto correr: `android`, `calidad` e `ios` en verde, con los verdes ejecutados (`corrio.sh`).
+- **Peso:** requisito de salida (fuera de escala): sin CI nada verifica fuera de la máquina de trabajo antes de una versión.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
