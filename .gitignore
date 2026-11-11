@@ -21,3 +21,6 @@ node_modules/
 # Firebase: la config nativa no se versiona (v2 §2). El ejemplo, sí.
 google-services.json
 GoogleService-Info.plist
+
+# Informes de los commands de Claude Code (se sobrescriben en cada ejecución)
+.claude/informes/

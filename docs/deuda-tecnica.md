@@ -90,6 +90,19 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un PR los ha visto correr: `android`, `calidad` e `ios` en verde, con los verdes ejecutados (`corrio.sh`).
 - **Peso:** requisito de salida (fuera de escala): sin CI nada verifica fuera de la máquina de trabajo antes de una versión.
 
+### #PP7 · 2026-11-11 · Las skills y commands del proyecto no están validados en tres pasos (requisito de salida)
+
+- **Mecanismo:** la validación (positiva, control, negativa) exige una sesión NUEVA de Claude Code; la lanzada con
+  `claude -p` respondió «Failed to authenticate: OAuth session expired and could not be refreshed» [medido 2026-11-11].
+  Las cuatro filas de `.claude/validaciones.md` están en «no pude medir», y por eso `validaciones.py` no está todavía en
+  la puerta (saldría rojo y bloquearía todo commit).
+- **Quién lo desbloquea:** quien decide (iniciar sesión en la CLI, o correr la validación en una sesión nueva).
+- **Disparador:** cuando la CLI tenga sesión válida — estado medido 2026-11-11: caducada.
+- **Vigente hasta que:**
+  1. las cuatro filas tienen sus tres pasos en «pasó», sobre el hash actual de cada fichero, y
+  2. `validaciones.py` está en `VERIFICADORES` de la puerta.
+- **Peso:** requisito de salida (fuera de escala): una skill que no se activa no ayuda a nadie, y sin validar no se sabe.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
