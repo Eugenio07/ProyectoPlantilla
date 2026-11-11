@@ -244,6 +244,19 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      `hooks_test.sh` (un `.swift` que no es UI no avisa; uno que sí, avisa).
 - **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
 
+### #PP23 · 2026-11-11 · El job `ios` tarda ~15 min cuando arranca la app: compila el SDK de Firebase desde el código fuente (higiene) (peso por decidir)
+
+- **Mecanismo:** el paso «Construir la app» compila `firebase-ios-sdk` (SwiftPM) y el framework de Kotlin sin caché
+  entre jobs: 20:08:21 → ~20:18 del run 43093127544 [medido: log del job; la app siguió viva a los 15 s]. Con macOS ×10,
+  ~150 minutos facturados por cada PR que toque una ruta de arranque [sin medir: la API de facturación pide el permiso
+  `user`]. Encontrado durante la fase B: a la cola.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** con el nivel P2 de la fase B.
+- **Vigente hasta que:**
+  1. el job cachea `SourcePackages` (y, si compensa, el DerivedData) con una clave por `Package.resolved`, y un segundo
+     run que arranca la app tarda claramente menos (medido en el log).
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo, en la factura.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |

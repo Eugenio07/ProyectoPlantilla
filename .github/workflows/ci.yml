@@ -181,8 +181,8 @@ jobs:
     needs: [alcance]
     if: ${{ !cancelled() && github.event_name == 'pull_request' && contains(fromJSON('["main","develop"]'), github.base_ref) && needs.alcance.outputs.solo_docs != 'true' }}
     runs-on: macos-latest
-    # 25 y no 45: el primer arranque real tardó ~15 min (con el SDK de Firebase por SwiftPM); un colgado no debe facturar
-    # tres cuartos de hora de macOS (×10).
+    # 25 y no 45: el primer arranque real tardó ~15 min (10 de construir la app con el SDK de Firebase por SwiftPM);
+    # un job que se cuelgue de verdad no debe facturar tres cuartos de hora de macOS (×10).
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -251,8 +251,9 @@ jobs:
           else
             echo "La app NO está viva a los 15 s: no arrancó o murió."; exit 1
           fi
-      # Cierra SIEMPRE la app y el simulador: con los dos vivos, el primer job que los arrancó se quedó «en curso» 12 min
-      # después de «Complete job» (2026-11-11, run 43093127544). Hipótesis sin medir: el runner espera a esos procesos.
+      # Cierra SIEMPRE la app y el simulador (higiene del runner). NO arregla un «colgado»: el job del run 43093127544
+      # que parecía colgado había terminado a las 20:20:20 (9 s tras «Complete job"); GitHub tardó más de una hora en
+      # mostrarlo (medido 2026-11-11). La hipótesis «el runner espera a la app» resultó falsa.
       - name: Cerrar la app y apagar el simulador
         if: always() && steps.filtro.outputs.arrancar == 'true'
         run: |
