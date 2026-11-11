@@ -42,6 +42,8 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
   `core/log` (interfaz) y `core/platform` (contratos), enumerados; nunca de `core/network` ni `core/di`. `data`→`domain`,
   `ui`→`domain`, nada depende de `ui`. Un use case existe solo si hace algo que el repositorio no puede. La lista de
   `domain` se amplía con una decisión escrita en `docs/ARCHITECTURE.md`.
+- **Contratos: rama A** (sin backend). Los borradores viven en `docs/contracts/`; son la fuente para construir el
+  backend. La clave JSON de un DTO es la del contrato (`@SerialName` si la propiedad Kotlin difiere).
 - **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
   `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
 - **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.
