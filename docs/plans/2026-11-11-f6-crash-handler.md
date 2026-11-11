@@ -47,7 +47,7 @@ Contra el commit: `791c985`
 |---|---|---|---|
 | Release Android: un crash reabre en Home | Comprobación humana declarada | Ejecutor, 2026-11-11, `releaseLocal` en Pixel_10_Pro: `adb shell am crash` → pid 7392 → 7450, logcat `CrashHandler: … se relanza en Home`, capturas `crash-release-{antes,despues}.png` (Error → Home sin Splash). `am crash` sí pasa por el handler (supuesto medido) | Declarado |
 | Depuración Android: el crash no se esconde | Comprobación humana declarada | Ejecutor, mismo día, debug: tras `am crash` no queda pid, `FATAL EXCEPTION` en logcat y 0 líneas del handler (delegó) | Declarado |
-| iOS: el crash se registra | Comprobación humana declarada | Se mide en el incremento C, que trae el disparador (hallazgo 4) | pendiente (C) |
+| iOS: el crash se registra | Comprobación humana declarada | Medido en C: `docs/plans/2026-11-11-f6-andamiaje.md` | Declarado (en C) |
 | El handler está en el grafo de las dos plataformas | Verificable | Aserción añadida a `AndroidGraphTest` y `KoinIosTest`; mutación: quitar `single<GlobalCrashHandler>` del módulo de Android → `AssertionError: GlobalCrashHandler` | Pasó |
 
 ### Lo que no podrá comprobarse aquí

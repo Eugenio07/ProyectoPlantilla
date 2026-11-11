@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,5 +37,12 @@ fun HomeScreen(viewModel: HomeViewModel, onOpenDetail: (String) -> Unit) {
             modifier = Modifier.semantics { heading() },
         )
         Button(onClick = { onOpenDetail(state.sampleDetailId) }) { Text(stringResource(Res.string.home_open_detail)) }
+        // CRASH-TEST-SCAFFOLD: solo en depuración (Android y iOS). Prueba el GlobalCrashHandler y el breaker (v2 Fase 6 C).
+        // Retirar: `grep -rn CRASH-TEST-SCAFFOLD` y borrar cada bloque. Texto de herramienta, no de producto: va en el código.
+        if (state.showCrashTest) {
+            OutlinedButton(onClick = { throw IllegalStateException("CRASH-TEST-SCAFFOLD: crash provocado") }) {
+                Text("Provocar crash (prueba)")
+            }
+        }
     }
 }
