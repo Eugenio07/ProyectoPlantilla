@@ -3,8 +3,10 @@
 - **Firma:** Ejecutor, en la matriz de versiones
 - **Fecha:** 2026-11-11
 - **Estado:** Vigente
-- **descartada_porque:** Ktor 3.6.1 (la última): compatibilidad binaria con Ktorfit sin verificar.
+- **descartada_porque:** la última línea de Ktor: compatibilidad binaria con Ktorfit sin verificar.
 
-**Decisión.** Ktor 3.5.x, no 3.6.
+**Decisión.** Ktor se queda en la línea contra la que se construyó Ktorfit, no en la última (la pareja, en el comentario
+de `gradle/libs.versions.toml`).
 
-**Por qué.** Ktorfit 2.7.5 se construyó contra Ktor 3.5.0; la compatibilidad binaria con 3.6 no está verificada (`docs/mediciones/2026-11-11-matriz-de-versiones.md`).
+**Por qué.** La compatibilidad binaria de Ktorfit con una línea más nueva de Ktor no está verificada (los números, con su
+fecha: `docs/mediciones/2026-11-11-matriz-de-versiones.md`).
