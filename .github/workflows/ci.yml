@@ -39,7 +39,13 @@ jobs:
         with:
           fetch-depth: 0
       - id: a
-        run: config/checks/alcance.sh "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" | tee -a "$GITHUB_OUTPUT" || true
+        # Solo la línea solo_docs=… va a GITHUB_OUTPUT (el texto humano lo rechazaría el runner). Con 3 (no pudo listar
+        # el diff) alcance.sh imprime solo_docs=false: se corre todo.
+        run: |
+          set +e
+          salida="$(config/checks/alcance.sh "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}")"
+          echo "$salida"
+          printf '%s\n' "$salida" | grep -E '^solo_docs=(true|false)$' >> "$GITHUB_OUTPUT" || echo "solo_docs=false" >> "$GITHUB_OUTPUT"
 
   # SELLO DEL ÁRBOL (solo push a develop): si el árbol es IDÉNTICO byte a byte a uno sellado por un PR (artefacto
   # verificado-<job>-<árbol>), se saltan android y calidad. Ante cualquier duda (API caída, el push toca Gradle) se
@@ -102,19 +108,14 @@ jobs:
           if [ -n "$malos" ]; then echo "Ficheros prohibidos rastreados:"; echo "$malos"; exit 1; fi
       # --no-build-cache: «verde no es corrió». Cada verde se registra y corrio.sh falla si una tarea que compila o
       # testea salió UP-TO-DATE o FROM-CACHE.
-      - name: Verde 1 · commonMain aislado
-        run: |
-          ./gradlew :shared:compileCommonMainKotlinMetadata --no-build-cache --console=plain | tee "$RUNNER_TEMP/v1.log"
-          config/checks/corrio.sh "$RUNNER_TEMP/v1.log"
-      - name: Verde 2 · la app Android
-        run: |
-          ./gradlew :androidApp:assembleDebug --no-build-cache --console=plain | tee "$RUNNER_TEMP/v2.log"
-          config/checks/corrio.sh "$RUNNER_TEMP/v2.log"
-      - name: Verde 3 · tests JVM (commonTest + androidHostTest)
+      # Los tres verdes en UNA invocación de Gradle (como la puerta): separados, el tercero encontraría UP-TO-DATE lo que
+      # compiló el segundo y corrio.sh saldría 1 siempre (auditoría 2026-11-11, P0-1).
+      - name: Verdes 1-3 · commonMain, la app Android y los tests JVM
         run: |
           rm -rf shared/build/test-results
-          ./gradlew :shared:testAndroidHostTest --no-build-cache --console=plain | tee "$RUNNER_TEMP/v3.log"
-          config/checks/corrio.sh "$RUNNER_TEMP/v3.log"
+          ./gradlew :shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :shared:testAndroidHostTest \
+            --no-build-cache --console=plain | tee "$RUNNER_TEMP/verdes.log"
+          config/checks/corrio.sh "$RUNNER_TEMP/verdes.log"
           python3 -I config/checks/recuento_tests.py shared/build/test-results
       - name: Sello del árbol verificado
         if: github.event_name == 'pull_request'
@@ -178,7 +179,7 @@ jobs:
   # dejaría de comprobarse fuera de la máquina de trabajo que iOS compila (los tres primeros verdes no lo cazan).
   ios:
     needs: [alcance]
-    if: github.event_name == 'pull_request' && contains(fromJSON('["main","develop"]'), github.base_ref) && needs.alcance.outputs.solo_docs != 'true'
+    if: ${{ !cancelled() && github.event_name == 'pull_request' && contains(fromJSON('["main","develop"]'), github.base_ref) && needs.alcance.outputs.solo_docs != 'true' }}
     runs-on: macos-latest
     timeout-minutes: 45
     steps:
