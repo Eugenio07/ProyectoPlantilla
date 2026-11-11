@@ -40,3 +40,5 @@ commitearla, por si trae un dato personal.
 ¹ **Corrección 2026-11-11:** estas filas decían «iPhone 17 Pro». Con dos simuladores arrancados, `simctl … booted`
 resolvía al iPhone 18 Pro (`7DA267B4…`), que arrancó la tarea `iosSimulatorArm64Test`; medido con
 `simctl getenv booted SIMULATOR_UDID`. Desde aquí las capturas de iOS usan el UDID explícito.
+| `2026-11-11-error-state-android.png` | Android (Pixel_10_Pro, emulador) | depuración | `643b7ff` + rama `f5/error-state` | 2026-11-11 13:31 | `ErrorState` con `SERVER_ERROR` (code `MAINTENANCE`): «El servicio está en mantenimiento. Inténtalo de nuevo en unos minutos.» + «Reintentar» |
+| `2026-11-11-error-state-ios.png` | iOS (iPhone 18 Pro, simulador, UDID explícito) | depuración | `643b7ff` + rama `f5/error-state` | 2026-11-11 13:31 | Lo mismo en iOS |
