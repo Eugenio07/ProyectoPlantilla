@@ -59,6 +59,21 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. Android Studio lista un simulador y corre `iosApp`. Mientras tanto, iOS se corre desde Xcode.
 - **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
 
+### #PP5 · 2026-11-11 · Los textos de la Splash y las acciones por code no están aprobados (requisito de salida)
+
+- **Mecanismo:** el ejecutor propuso el texto de producto de `shared/src/commonMain/composeResources/values/strings.xml`
+  (Splash: carga, actualización obligatoria, error, Reintentar, «Inicio») y las acciones por code de
+  `docs/contracts/api-errors.md`; su versión final es de quien decide (manual de operación §6).
+- **Quién lo desbloquea:** quien decide.
+- **Disparador:** cuando quien decide revise los textos — estado medido 2026-11-11: no revisados. **Fecha de revisión:**
+  antes de la primera versión publicada.
+- **Vigente hasta que:**
+  1. quien decide aprueba o cambia cada texto de `strings.xml`, con su firma;
+  2. quien decide aprueba o cambia la acción por code de `api-errors.md`;
+  3. quien decide dice qué salida ofrece la pantalla de actualización obligatoria (hoy ninguna: no hay URL de tienda).
+     Hasta entonces la persona queda sin salida dentro de la app, que es lo que «bloqueante» pide.
+- **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |

@@ -44,6 +44,10 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
   `domain` se amplía con una decisión escrita en `docs/ARCHITECTURE.md`.
 - **Contratos: rama A** (sin backend). Los borradores viven en `docs/contracts/`; son la fuente para construir el
   backend. La clave JSON de un DTO es la del contrato (`@SerialName` si la propiedad Kotlin difiere).
+- **Stub de config** (v2 Fase 4): `ConfigMockScenario` es la única fuente de los JSON. Android: `--es mockScenario <X>`
+  en depuración. iOS: argumento de lanzamiento `-mockScenario <X>`, solo en `#if DEBUG`.
+- **En iOS no se registra con `NSLog` y argumentos variádicos**: un `String` de Kotlin como `%@` da `EXC_BAD_ACCESS`
+  (lo fija `IosLoggerTest`). Se compone el mensaje en Kotlin.
 - **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
   `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
 - **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.

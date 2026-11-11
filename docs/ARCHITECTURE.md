@@ -7,6 +7,9 @@ Ante conflicto entre este documento y el código, **gana el código**: se corrig
 
 ## Paquetes
 
+**El paquete raíz (`org.example.proyecto_plantilla`: `App.kt`, `KoinIos.kt`) es la raíz de composición**: ensambla los
+módulos de Koin de todas las capas, incluida `ui`. Puede depender de todo; nada depende de él.
+
 Raíz: `shared/src/commonMain/kotlin/org/example/proyecto_plantilla/`
 
 | Paquete | Qué vive ahí |
@@ -49,8 +52,13 @@ puras») genera falsos positivos y «correcciones» de código sano.
 
 ## Excepciones deliberadas
 
-(Ninguna todavía. Cada excepción se enumera aquí junto a la regla que exceptúa; una regla sin sus excepciones hace que un
-agente «corrija» código sano.)
+Cada excepción se enumera aquí junto a la regla que exceptúa; una regla sin sus excepciones hace que un agente
+«corrija» código sano.
+
+- **`ktor-client-mock` en `iosMain`** (excepción a «el stub nunca en release», v2 Fase 4): iOS no tiene variantes de
+  Gradle, así que el stub de config viaja en el framework de release. Lo apaga Swift: `useMockConfig: false` en la rama
+  no-`DEBUG` de `iOSApp.swift`. En Android el stub es `debugImplementation` y no llega a release (comprobado en
+  `releaseRuntimeClasspath`).
 
 ## Configuración por plataforma
 

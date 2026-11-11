@@ -9,6 +9,8 @@ import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
+import org.example.proyecto_plantilla.ui.splash.SplashViewModel
+import org.example.proyecto_plantilla.ui.uiModule
 import org.koin.core.context.stopKoin
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -21,7 +23,7 @@ class AndroidGraphTest {
 
     @Test
     fun androidGraphResolvesHttpClientAndMapper() {
-        val koin = initKoin(listOf(androidPlatformModule(NetworkConfig("https://example.test/", false)))) {
+        val koin = initKoin(listOf(androidPlatformModule(NetworkConfig("https://example.test/", false), engineOverride = null), uiModule)) {
             androidContext(mockk<Context>(relaxed = true))
         }.koin
         assertNotNull(koin.getOrNull<HttpClient>(), "HttpClient")
@@ -29,5 +31,6 @@ class AndroidGraphTest {
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")
         assertNotNull(koin.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
+        assertNotNull(koin.getOrNull<SplashViewModel>(), "SplashViewModel")
     }
 }

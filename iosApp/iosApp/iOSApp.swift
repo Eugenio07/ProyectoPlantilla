@@ -8,9 +8,11 @@ struct iOSApp: App {
         let baseUrl = "https://api.example.invalid/"
         // Gate de depuración en las DOS ramas: los valores por defecto de Kotlin no llegan a Swift.
         #if DEBUG
-        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, isDebug: true)
+        // Escenario del stub: `xcrun simctl launch booted <bundle> -mockScenario UPDATE_REQUIRED`.
+        KoinIosKt.selectConfigMockScenario(name: UserDefaults.standard.string(forKey: "mockScenario"))
+        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, useMockConfig: true, isDebug: true)
         #else
-        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, isDebug: false)
+        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, useMockConfig: false, isDebug: false)
         #endif
     }
 

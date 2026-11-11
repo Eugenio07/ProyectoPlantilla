@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Texto de producto (lo lee quien usa la app). PROPUESTAS del ejecutor, pendientes de quien decide
+  (manual de operación §6, «Un texto que lee quien usa la app»).
+-->
+<resources>
+    <string name="splash_loading">Cargando</string>
+    <string name="splash_force_update_title">Actualización necesaria</string>
+    <string name="splash_force_update_body">Esta versión de la app ya no se puede usar. Instala la versión %1$s o una más reciente para continuar.</string>
+    <string name="splash_error_body">No se pudo completar la carga.</string>
+    <string name="action_retry">Reintentar</string>
+    <string name="home_placeholder">Inicio</string>
+</resources>

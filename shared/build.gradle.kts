@@ -48,6 +48,9 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            // Stub de config en iOS: no hay variantes de Gradle, así que viaja en el framework de release y lo apaga Swift
+            // (`useMockConfig: false` en la rama no-DEBUG). Excepción declarada en docs/ARCHITECTURE.md.
+            implementation(libs.ktor.client.mock)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
