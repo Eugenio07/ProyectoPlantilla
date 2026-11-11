@@ -51,3 +51,5 @@ resolvía al iPhone 18 Pro (`7DA267B4…`), que arrancó la tarea `iosSimulatorA
 | `2026-11-11-firebase-ios-sin-proyecto.md` | iOS (iPhone 18 Pro) | depuración | `aa7268f` + rama `f8/firebase-ios` | 2026-11-11 14:20 | Build con Firebase por SwiftPM; arranca sin plist; con el plist de ejemplo crashea (formato de la clave) |
 | `2026-11-11-primer-ci.md` | CI (GitHub, alojado) | — | `7577bfc` | 2026-11-11 15:43 | El primer CI: los cuatro jobs del PR ejecutados de verdad; el sello del árbol y `varadas` en el push |
 | `2026-11-11-aprobacion-fase-b.md` | repo | — | `9d8cf6b` | 2026-11-11 15:55 | Aprobación literal de la fase B, de la decisión de `#PP10` y de los pesos |
+| `2026-11-11-ios-release.md` | iOS (simulador, por UDID) | release | `4c6b662` | 2026-11-11 17:30 | `xcodebuild -configuration Release` compila la rama `#else` y el framework de release (`#PP13`); no se arrancó (añadida al índice con retraso, en el cierre del P2) |
+| `2026-11-11-cache-ios.md` | CI (GitHub, macOS alojado) | depuración | `4494aae` / `8d1caa6` | 2026-11-11 18:59 | «Construir la app» 8 min 07 s en frío → 3 min 11 s con el DerivedData restaurado desde `develop` (`#PP23`) |

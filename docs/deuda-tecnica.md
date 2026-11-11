@@ -104,27 +104,11 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP23 · 2026-11-11 · El job `ios` tarda ~15 min cuando arranca la app: compila el SDK de Firebase desde el código fuente (higiene)
-
-- **Mecanismo:** el paso «Construir la app» compila `firebase-ios-sdk` (SwiftPM) y el framework de Kotlin sin caché
-  entre jobs: 20:08:21 → ~20:18 del run 43093127544 [medido: log del job; la app siguió viva a los 15 s]. Con macOS ×10,
-  ~150 minutos facturados por cada PR que toque una ruta de arranque [sin medir: la API de facturación pide el permiso
-  `user`]. Encontrado durante la fase B: a la cola.
-- **Quién lo desbloquea:** nosotros.
-- **Disparador:** cuando el primer PR que arranque la app tras fusionar el P2 termine — estado 2026-11-11: implementado
-  (`f3f3317`): `ios` restaura el DerivedData y `cache-ios` lo llena desde `develop` (decisión de quien decide); sin medir.
-  **Fecha de revisión:** 2026-12-11.
-- **Vigente hasta que:**
-  1. ~~el job cachea el DerivedData con una clave por `Package.resolved`~~ (`f3f3317`; el DerivedData entero y no solo
-     `SourcePackages`, porque lo lento es compilar Firebase, no descargarlo);
-  2. el primer PR que arranca la app tras llenarse la caché tarda claramente menos en «Construir la app» que los ~10 min
-     en frío (medido en el log).
-- **Peso:** fuera de escala (higiene): solo lo ve el equipo, en la factura. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
-
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP23` | El job `ios` compilaba el SDK de Firebase en frío en cada PR. `ios` restaura el DerivedData y `cache-ios` lo llena desde `develop`: «Construir la app» 8 min 07 s → 3 min 11 s (`docs/mediciones/2026-11-11-cache-ios.md`) | `f3f3317` |
 | `#PP12` | Nada impedía que el stub de config volviera a release de Android. `:androidApp:verificarSinStubEnRelease` (grafo resuelto) en la puerta y en el job `android`; mutación `debugImplementation`→`implementation` → roja | `4c6b662` |
 | `#PP13` | Las variantes release no se compilaban. `assembleRelease` en `VERDES` y en `android` (una mutación de tipo en `src/release` era ciega); iOS Release medido una vez (`docs/mediciones/2026-11-11-ios-release.md`) | `c752870` |
 | `#PP14` | Un segmento de versión más largo que un `Int` valía 0. Segmentos comparados como cadenas de dígitos; test primero (`hugeSegmentsCompareNumerically`) y mutación | `36309b3` |
