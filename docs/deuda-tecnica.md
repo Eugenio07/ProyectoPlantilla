@@ -232,6 +232,18 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. el caso de JSON ilegible del hook de tests no lanza Gradle (o `hooks_test.sh` lo salta en el CI), con su prueba.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo, en la factura. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
+### #PP22 · 2026-11-11 · El recordatorio de auditoría visual salta con ficheros Swift que no son UI (higiene) (peso por decidir)
+
+- **Mecanismo:** `stop-ui-audit-reminder.sh` trata como UI todo `iosApp/iosApp/*.swift` [medido 2026-11-11: saltó tras
+  el commit de `SwiftCrashReporter.swift` (#PP11), que no cambia nada visible]. Un aviso que salta sin motivo enseña a
+  ignorarlo. Encontrado durante la fase B: va a la cola, no se corrige ahí.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** con el nivel P2 de la fase B.
+- **Vigente hasta que:**
+  1. el patrón distingue las vistas de Swift (`ContentView.swift`, ficheros con `View`) del resto, con su caso en
+     `hooks_test.sh` (un `.swift` que no es UI no avisa; uno que sí, avisa).
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
