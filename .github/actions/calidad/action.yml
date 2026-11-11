@@ -29,3 +29,17 @@ runs:
     - name: Tope de los planes
       shell: bash
       run: python3 -I config/checks/tope_plan.py
+    # Los mismos verificadores que la puerta (un criterio, dos disparadores), salvo skills_de_cierre.py, que necesita
+    # ~/.claude y solo corre en local (auditoría 2026-11-11, P1-6).
+    - name: wiki/ y sus punteros
+      shell: bash
+      run: python3 -I config/checks/wiki.py
+    - name: Una sola fuente de reglas
+      shell: bash
+      run: python3 -I config/checks/sin_para_claude_md.py
+    - name: CLAUDE.md (proporción por regla)
+      shell: bash
+      run: python3 -I config/checks/claude_md.py
+    - name: Hooks de Claude Code (sin los casos que corren Gradle)
+      shell: bash
+      run: bash config/checks/hooks_test.sh

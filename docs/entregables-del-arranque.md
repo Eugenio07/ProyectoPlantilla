@@ -37,8 +37,8 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 6.5 | `config/checks/recuento_tests.py` | Recuento de tests en los XML (puerta y CI) |
 | 7 | `config/checks/alcance.sh` | ¿El diff es solo documentación? |
 | 7 | `config/checks/ramas_varadas.sh` | Commits varados y ramas sin PR |
-| 7 | `config/ci-pendiente/workflows/ci.yml` | El CI (pendiente de subir a `.github/`, `#PP6`) |
-| 7 | `config/ci-pendiente/actions/calidad/action.yml` | Acción compuesta de calidad (pendiente, `#PP6`) |
+| 7 | `.github/workflows/ci.yml` | CI: alcance, sello, android, calidad, ios, varadas |
+| 7 | `.github/actions/calidad/action.yml` | Los pasos de calidad, en una acción compuesta |
 | 8 | `docs/android-release-checklist.md` | Lista de release de Android |
 | 8 | `docs/ios-release-checklist.md` | Lista de release de iOS |
 | 8 | `docs/reparto/_plantilla.md` | Plantilla de la lista de reparto |

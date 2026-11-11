@@ -17,8 +17,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 ## §2 · Ranuras
 
 - Máquina de verificación: una Mac (Android + iOS). Sin ella no corren iOS ni la puerta; la válvula es el CI alojado.
-- CI: runners alojados de GitHub. Prueba: `.github/workflows/ci.yml` existe (hoy espera en `config/ci-pendiente/`,
-  `#PP6`). Por qué: `wiki/decisiones/ci-alojado.md`.
+- CI: runners alojados de GitHub (`.github/workflows/ci.yml`). Prueba: los checks del PR. Por qué:
+  `wiki/decisiones/ci-alojado.md`.
 - Protección de ramas: no disponible (403). Rigen las reglas de fusión de §9. Por qué:
   `wiki/decisiones/fusion-sin-proteccion.md`.
 - Backend: ninguno → contratos en rama A (§12). Personas: una. Quien decide: Eugenio Martínez. Revisor externo: por
