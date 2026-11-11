@@ -72,3 +72,4 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 12 B | `config/checks/versiones.py` | Ningún número de versión en los documentos vivos (`#PP16`) |
 | 12 B | `config/checks/versiones_test.sh` | Pruebas de `versiones.py` (`#PP16`) |
 | 12 B | `.claude/agents/revisor-externo.md` | Revisor externo con otro modelo: juzga la Parte 1 de un plan |
+| 12 B | `.claude/validacion-sesion-nueva.md` | Prompt de reparto para la validación en tres pasos (`#PP7`) |

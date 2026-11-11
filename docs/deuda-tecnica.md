@@ -68,7 +68,8 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Quién lo desbloquea:** quien decide (iniciar sesión en la CLI, o correr la validación en una sesión nueva).
 - **Disparador:** cuando la CLI tenga sesión válida — estado medido 2026-11-11: caducada.
 - **Vigente hasta que:**
-  1. las cuatro filas tienen sus tres pasos en «pasó», sobre el hash actual de cada fichero, y
+  1. todas las filas de `.claude/validaciones.md` tienen sus tres pasos en «pasó», sobre el hash actual de cada fichero
+     (el prompt para correrlo en una sesión nueva: `.claude/validacion-sesion-nueva.md`), y
   2. `validaciones.py` está en `VERIFICADORES` de la puerta.
 - **Peso:** requisito de salida (fuera de escala): una skill que no se activa no ayuda a nadie, y sin validar no se sabe. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
@@ -116,7 +117,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
-| `#PP5` | Los textos de la Splash, de `CrashSafeScreen` y las acciones por code no estaban aprobados. Aprobados como provisionales de plantilla; `error_network` ya no afirma una causa; la salida de la actualización obligatoria, decidida (opción a) → `#PP24` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`) | (este commit) |
+| `#PP5` | Los textos de la Splash, de `CrashSafeScreen` y las acciones por code no estaban aprobados. Aprobados como provisionales de plantilla; `error_network` ya no afirma una causa; la salida de la actualización obligatoria, decidida (opción a) → `#PP24` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`) | `551786c` |
 | `#PP23` | El job `ios` compilaba el SDK de Firebase en frío en cada PR. `ios` restaura el DerivedData y `cache-ios` lo llena desde `develop`: «Construir la app» 8 min 07 s → 3 min 11 s (`docs/mediciones/2026-11-11-cache-ios.md`) | `f3f3317` |
 | `#PP12` | Nada impedía que el stub de config volviera a release de Android. `:androidApp:verificarSinStubEnRelease` (grafo resuelto) en la puerta y en el job `android`; mutación `debugImplementation`→`implementation` → roja | `4c6b662` |
 | `#PP13` | Las variantes release no se compilaban. `assembleRelease` en `VERDES` y en `android` (una mutación de tipo en `src/release` era ciega); iOS Release medido una vez (`docs/mediciones/2026-11-11-ios-release.md`) | `c752870` |
