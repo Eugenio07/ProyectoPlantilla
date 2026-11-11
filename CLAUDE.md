@@ -21,11 +21,13 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   `wiki/decisiones/ci-alojado.md`.
 - Protección de ramas: no disponible (403). Rigen las reglas de fusión de §9. Por qué:
   `wiki/decisiones/fusion-sin-proteccion.md`.
-- Backend: ninguno → contratos en rama A (§12). Personas: una. Quien decide: Eugenio Martínez. Revisor externo: por
-  confirmar por quien decide.
+- Backend: ninguno → contratos en rama A (§12). Personas: una. Quien decide: Eugenio Martínez. Revisor externo: el
+  agente `revisor-externo` (otro modelo; juzga la Parte 1), lanzado en la puerta del plan si quien decide lo pide.
 - Ruta crítica, activo crítico y dónde vive: no aplican a la plantilla; **cada app derivada los rellena antes de su
   primera ficha**. Publicada: no. El ejecutor prueba contra: local (stub de §6). Bandeja: incidencias de GitHub
   (por confirmar). Zona horaria: America/Caracas.
+- Revisa, en cada app derivada y antes de su primera ficha, los textos provisionales de la plantilla (`strings.xml`,
+  `CrashSafeScreen`, acciones de `api-errors.md`). Prueba: ¿su primera ficha los cita?
 - Auditoría visual de UI: la skill `compose-visual-loop` (captura real en las dos plataformas) más `/material-3 audit`
   con sus 10 categorías. Prueba: ¿el cierre de una tarea de UI cita las capturas en `docs/mediciones/` y el informe?
 - Herramienta de grafo: ninguna. Escribe una afirmación de alcanzabilidad como «no comprobada: sin herramienta de grafo».
@@ -125,7 +127,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 
 - Escribe identificadores en inglés y copy en español, siempre en `composeResources` (la pantalla segura es la única
   excepción, §13). Las claves JSON del contrato son intocables.
-- Propón el texto que lee quien usa la app y para: su versión final es de quien decide (`#PP5`).
+- Propón el texto que lee quien usa la app y para: su versión final es de quien decide. Los de la plantilla están
+  aprobados como provisionales (`docs/mediciones/2026-11-11-aprobacion-pp5.md`).
 
 ## §11 · No-hacer
 

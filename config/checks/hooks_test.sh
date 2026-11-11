@@ -44,6 +44,13 @@ filtro() { printf '%s' "$1" | PATH="${2:-$PATH}" bash "$F"; }
 SINPY="$(mktemp -d)"; for b in bash cat tr printf grep; do p="$(command -v $b)"; [ -n "$p" ] && ln -s "$p" "$SINPY/$b"; done
 [ "$(filtro "$(bashjson 'gh --version')" "$SINPY" | decision)" = "deny" ] && ok "auditor: sin python3 en el PATH → deny" || ko "auditor: sin python3"
 rm -rf "$SINPY"
+# Todo agente con Bash engancha el filtro en su frontmatter: el guion probado arriba no sirve si nadie lo llama.
+for a in .claude/agents/*.md; do
+  fm="$(awk 'NR==1 && /^---$/ {f=1; next} f && /^---$/ {exit} f' "$a")"
+  if printf '%s\n' "$fm" | grep -qE '^tools:.*\bBash\b'; then
+    printf '%s\n' "$fm" | grep -q 'auditor-deny-github.sh' && ok "agente $(basename "$a"): con Bash, engancha el filtro de GitHub" || ko "agente $(basename "$a"): tiene Bash y NO engancha auditor-deny-github.sh"
+  fi
+done
 
 # --- Stop (informan: fallan abierto)
 # El de tests JVM corre en un proyecto FALSO cuyo gradlew solo deja una marca (#PP21): sin candado vivo (el CI) el hook

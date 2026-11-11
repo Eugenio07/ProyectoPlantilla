@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Texto de producto (lo lee quien usa la app). PROPUESTAS del ejecutor, pendientes de quien decide
-  (manual de operación §6, «Un texto que lee quien usa la app»).
+  Texto de producto (lo lee quien usa la app). APROBADO por quien decide el 2026-11-11 como PROVISIONAL de plantilla
+  (docs/mediciones/2026-11-11-aprobacion-pp5.md): cada app derivada lo revisa antes de su primera ficha (CLAUDE.md §2).
+  El de red no afirma una causa: también cae ahí un servidor que no responde con internet funcionando.
 -->
 <resources>
     <string name="splash_loading">Cargando</string>
     <string name="splash_force_update_title">Actualización necesaria</string>
     <string name="splash_force_update_body">Esta versión de la app ya no se puede usar. Instala la versión %1$s o una más reciente para continuar.</string>
-    <string name="error_network">No hay conexión. Revisa tu conexión a internet e inténtalo de nuevo.</string>
+    <string name="error_network">No se pudo conectar. Inténtalo de nuevo en unos momentos.</string>
     <string name="error_maintenance">El servicio está en mantenimiento. Inténtalo de nuevo en unos minutos.</string>
     <string name="error_rate_limited">Hubo demasiados intentos seguidos. Espera un momento e inténtalo de nuevo.</string>
     <string name="error_unauthorized">Tu sesión no es válida.</string>

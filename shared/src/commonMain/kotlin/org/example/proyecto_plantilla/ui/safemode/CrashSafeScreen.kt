@@ -19,7 +19,8 @@ import androidx.compose.ui.unit.dp
 /**
  * Pantalla segura tras varios crashes seguidos. AUTOCONTENIDA: sin DI, sin red, sin config remota y SIN RECURSOS
  * (cualquiera de esas piezas puede ser la que está fallando). Por eso su copy está escrita aquí: es la ÚNICA excepción
- * a «la copy vive en los recursos» (excepción declarada en `docs/ARCHITECTURE.md`; textos propuestos, `#PP5`).
+ * a «la copy vive en los recursos» (excepción declarada en `docs/ARCHITECTURE.md`). Textos aprobados como
+ * provisionales el 2026-11-11 (`docs/mediciones/2026-11-11-aprobacion-pp5.md`).
  */
 @Composable
 fun CrashSafeScreen(onRetry: () -> Unit) {
