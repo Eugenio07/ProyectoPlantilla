@@ -119,7 +119,7 @@ jobs:
             :androidApp:assembleRelease :androidApp:verificarSinStubEnRelease \
             --no-build-cache --console=plain | tee "$RUNNER_TEMP/verdes.log"
           config/checks/corrio.sh "$RUNNER_TEMP/verdes.log"
-          python3 -I config/checks/recuento_tests.py shared/build/test-results
+          python3 -I config/checks/recuento_tests.py --exige testAndroidHostTest shared/build/test-results
       - name: Sello del árbol verificado
         if: github.event_name == 'pull_request'
         run: echo "${{ github.sha }}" > sello.txt && echo "ARBOL=$(git rev-parse HEAD^{tree})" >> "$GITHUB_ENV"

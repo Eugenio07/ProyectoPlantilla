@@ -64,7 +64,7 @@ done
 VERDES=":shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :androidApp:assembleRelease :androidApp:verificarSinStubEnRelease :shared:testAndroidHostTest :shared:compileKotlinIosSimulatorArm64 :shared:iosSimulatorArm64Test"
 
 # Verificadores que son paso de la puerta (los informativos, como que_va_ahora.py, no van aquí).
-VERIFICADORES="entregables.py cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py hooks_test.sh skills_de_cierre.py"
+VERIFICADORES="entregables.py recuento_tests_test.sh cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py hooks_test.sh skills_de_cierre.py"
 # validaciones.py entra aquí cuando se cierre #PP7 (hoy saldría rojo: la validación en tres pasos no se pudo correr).
 
 paso "a) formato"
@@ -102,7 +102,7 @@ for v in $VERIFICADORES; do
 done
 
 paso "e) recuento de tests"
-python3 -I config/checks/recuento_tests.py "$RESULTADOS"
+python3 -I config/checks/recuento_tests.py --exige testAndroidHostTest,iosSimulatorArm64Test "$RESULTADOS"
 c=$?; [ "$c" -eq 0 ] || rojo "e) recuento de tests" "$c"
 
 # En modo --commit se indexa AQUÍ lo que se va a commitear, para que f) mire exactamente eso (un marcador en un fichero
