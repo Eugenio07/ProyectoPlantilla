@@ -48,3 +48,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 9 | `wiki/README.md` | Una página por porqué |
 | 9 | `config/checks/wiki.py` | Campos de wiki/ y punteros de CLAUDE.md |
 | 9 | `config/checks/sin_para_claude_md.py` | Una sola fuente de reglas |
+| 9 | `config/checks/claude_md.py` | Proporción de líneas por regla de CLAUDE.md |
+| 9 | `config/checks/claude_md_excepciones.txt` | Reglas que pueden pasarse del umbral, con su motivo |
