@@ -32,8 +32,11 @@ bashjson() { python3 -I -c 'import json,sys; print(json.dumps({"tool_name":"Bash
 # --- Filtro del auditor (deniega: falla cerrado)
 F=.claude/hooks/auditor-deny-github.sh
 filtro() { printf '%s' "$1" | PATH="${2:-$PATH}" bash "$F"; }
-bashjson() { python3 -I -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
 [ "$(filtro "$(bashjson 'gh --version')" | decision)" = "deny" ] && ok "auditor: gh → deny" || ko "auditor: gh"
+# #PP18: entre comillas o con barra invertida, el shell lo ejecuta igual.
+[ "$(filtro "$(bashjson "'gh' pr list")" | decision)" = "deny" ] && ok "auditor: 'gh' entre comillas simples → deny" || ko "auditor: comillas simples"
+[ "$(filtro "$(bashjson '"gh" api repos/x/y')" | decision)" = "deny" ] && ok "auditor: \"gh\" entre comillas dobles → deny" || ko "auditor: comillas dobles"
+[ "$(filtro "$(bashjson '\gh pr view 1')" | decision)" = "deny" ] && ok "auditor: \\gh → deny" || ko "auditor: barra invertida"
 [ "$(filtro "$(bashjson 'curl -s https://api.github.com/repos/x/y')" | decision)" = "deny" ] && ok "auditor: api.github.com → deny" || ko "auditor: api.github.com"
 [ "$(filtro "$(bashjson 'cd x && GH --help')" | decision)" = "deny" ] && ok "auditor: GH en mayúsculas → deny" || ko "auditor: mayúsculas"
 [ "$(filtro "$(bashjson 'grep -rn high shared/src')" | decision)" = "pasa" ] && ok "auditor: grep (contiene «gh» dentro de otra palabra) → pasa" || ko "auditor: falso positivo"
