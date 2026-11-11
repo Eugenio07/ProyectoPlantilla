@@ -55,8 +55,10 @@ LOG_VERDES="$(mktemp "${TMPDIR:-/tmp}/puerta-verdes.XXXXXX")"
 c=$?
 tail -n 15 "$LOG_VERDES"
 [ "$c" -eq 0 ] || { echo "(log completo: $LOG_VERDES)"; rojo "c) los verdes" "$c"; }
-# Verde no es corrió: sin --rapido, ninguna tarea que compila o testea puede salir UP-TO-DATE ni FROM-CACHE.
-if [ -n "$RERUN" ] && grep -E '^> Task :[A-Za-z:]*(compile|test|Test|assemble|link)[A-Za-z0-9]* (UP-TO-DATE|FROM-CACHE)' "$LOG_VERDES"; then
+# Verde no es corrió: sin --rapido, ninguna tarea que compila o testea puede salir UP-TO-DATE ni FROM-CACHE. El nombre
+# de la tarea EMPIEZA por compile/test/assemble/link o TERMINA en Test (no casa con preAndroidHostTestBuild, una tarea
+# de ciclo de vida sin acciones que siempre sale UP-TO-DATE).
+if [ -n "$RERUN" ] && grep -E '^> Task :([A-Za-z0-9]+:)*(compile[A-Za-z0-9]*|test[A-Za-z0-9]*|assemble[A-Za-z0-9]*|link[A-Za-z0-9]*|[A-Za-z0-9]*Test) (UP-TO-DATE|FROM-CACHE)$' "$LOG_VERDES"; then
   rojo "c) los verdes: una tarea no se ejecutó (UP-TO-DATE/FROM-CACHE)" 1
 fi
 
