@@ -17,3 +17,7 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
+
+# Firebase: la config nativa no se versiona (v2 §2). El ejemplo, sí.
+google-services.json
+GoogleService-Info.plist

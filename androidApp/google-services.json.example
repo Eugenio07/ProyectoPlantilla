@@ -1,0 +1,23 @@
+{
+  "project_info": {
+    "project_number": "000000000000",
+    "project_id": "proyecto-plantilla-ejemplo",
+    "storage_bucket": "proyecto-plantilla-ejemplo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
+        "android_client_info": {
+          "package_name": "org.example.proyecto_plantilla"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "VALOR-DE-EJEMPLO-NO-ES-UNA-CLAVE"
+        }
+      ]
+    }
+  ],
+  "configuration_version": "1"
+}

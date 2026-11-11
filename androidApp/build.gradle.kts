@@ -3,6 +3,31 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.googleServices) apply false
+    alias(libs.plugins.firebaseCrashlytics) apply false
+}
+
+// FIREBASE SIN PROYECTO: la plantilla compila y arranca sin google-services.json (no se commitea: .gitignore + pre-commit).
+// Con el fichero, se aplican los dos plugins, y van JUNTOS: con Firebase inicializado y sin el plugin de Crashlytics, la
+// app crashea al arrancar (falta el build ID de Crashlytics). Sin el fichero, Firebase no se inicializa y la app sigue
+// (medición: docs/mediciones/2026-11-11-firebase-android-sin-proyecto.md). Cómo dar de alta el proyecto: la lista de
+// release de Android (docs/android-release-checklist.md, Fase 8, incremento 3).
+//
+// OJO: un build SIN el fichero (el CI, por ejemplo) no lleva Crashlytics. Antes de publicar, `./gradlew
+// :androidApp:verificarFirebase` falla si falta: lo exige la lista de release.
+val firebaseConfigurado = file("google-services.json").exists()
+if (firebaseConfigurado) {
+    apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
+}
+
+tasks.register("verificarFirebase") {
+    description = "Falla si falta androidApp/google-services.json (un release sin él no lleva Crashlytics)."
+    val configurado = firebaseConfigurado
+    doLast {
+        check(configurado) { "Falta androidApp/google-services.json: este build no llevaría Crashlytics." }
+        println("Firebase configurado: google-services.json presente.")
+    }
 }
 
 kotlin {
@@ -15,6 +40,7 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.koin.bom))
+    implementation(platform(libs.firebase.bom))
     implementation(libs.koin.android)
     implementation(libs.ktor.client.core)
     // El stub de config, SOLO en debug (v2 Fase 4). Nunca en release: lo comprueba la dependencia de releaseRuntimeClasspath.
