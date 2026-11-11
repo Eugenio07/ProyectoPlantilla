@@ -11,6 +11,7 @@ class AndroidGlobalCrashHandler(
     private val buildInfo: AppBuildInfo,
     private val logger: Logger,
     private val breaker: CrashCircuitBreaker,
+    private val reporter: CrashReporter,
 ) : GlobalCrashHandler {
     private var installed = false
 
@@ -26,7 +27,12 @@ class AndroidGlobalCrashHandler(
             }
             try {
                 logger.error(TAG, "crash no gestionado; se relanza en Home", throwable)
+                reporter.recordException(throwable)
                 breaker.recordCrash() // síncrono: antes de morir
+                if (reporter.isActive) {
+                    // recordException escribe en un worker de fondo sin flush público: espera ACOTADA antes de morir.
+                    Thread.sleep(REPORT_FLUSH_WAIT_MS)
+                }
                 relaunchAtHome()
             } finally {
                 exitProcess(0)
@@ -44,5 +50,8 @@ class AndroidGlobalCrashHandler(
     companion object {
         const val TAG = "CrashHandler"
         const val EXTRA_START_AT_HOME = "startAtHome"
+
+        /** Espera entre `recordException` y `exitProcess(0)`: el informe se escribe en segundo plano. */
+        const val REPORT_FLUSH_WAIT_MS = 300L
     }
 }

@@ -5,6 +5,7 @@ import io.ktor.client.HttpClient
 import io.mockk.mockk
 import org.example.proyecto_plantilla.core.crash.CrashBreakerConfig
 import org.example.proyecto_plantilla.core.crash.CrashCircuitBreaker
+import org.example.proyecto_plantilla.core.crash.CrashReporter
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.crash.HealthyUptimeReset
 import org.example.proyecto_plantilla.core.network.NetworkConfig
@@ -48,6 +49,7 @@ class AndroidGraphTest {
             }.koin
         assertNotNull(koin.getOrNull<HttpClient>(), "HttpClient")
         assertNotNull(koin.getOrNull<GlobalCrashHandler>(), "GlobalCrashHandler")
+        assertNotNull(koin.getOrNull<CrashReporter>(), "CrashReporter")
         assertNotNull(koin.getOrNull<CrashCircuitBreaker>(), "CrashCircuitBreaker")
         assertNotNull(koin.getOrNull<HealthyUptimeReset>(), "HealthyUptimeReset")
         assertEquals(10_000, koin.get<CrashBreakerConfig>().windowMs, "ventana de Android")

@@ -5,6 +5,7 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import org.example.proyecto_plantilla.core.crash.CrashReporter
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.di.initKoin
 import org.example.proyecto_plantilla.core.di.iosPlatformModule
@@ -21,6 +22,8 @@ private var koinApplication: KoinApplication? = null
  * Arranca Koin en iOS, que no tiene `Application`. Vive en el paquete raíz (raíz de composición) porque registra
  * `uiModule`, y nada de `core` depende de `ui`.
  *
+ * [crashReporter]: la implementación de Swift con el SDK nativo de Crashlytics (contrato de callback, v2 trampa 12).
+ *
  * Swift la llama en el `init()` del `@main` con TODOS los argumentos y el gate `#if DEBUG` en las dos ramas:
  * `true/true` en DEBUG, `false/false` en el else (los valores por defecto de Kotlin no llegan a Swift).
  * Idempotente; guarda el `Koin` aquí porque en iOS no se usa `GlobalContext` (trampa 5 de v2).
@@ -29,11 +32,12 @@ fun startKoinIos(
     baseUrl: String,
     useMockConfig: Boolean,
     isDebug: Boolean,
+    crashReporter: CrashReporter,
 ): Koin {
     koinApplication?.let { return it.koin }
     val engine = if (useMockConfig) configMockEngine() else null
     val config = NetworkConfig(baseUrl = baseUrl, enableLogging = isDebug)
-    val app = initKoin(listOf(iosPlatformModule(config, engine, AppBuildInfo(isDebug)), uiModule))
+    val app = initKoin(listOf(iosPlatformModule(config, engine, AppBuildInfo(isDebug), crashReporter), uiModule))
     koinApplication = app
     app.koin.get<GlobalCrashHandler>().install()
     return app.koin

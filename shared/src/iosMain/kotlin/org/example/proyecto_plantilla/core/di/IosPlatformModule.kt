@@ -4,6 +4,7 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 import org.example.proyecto_plantilla.core.crash.CrashBreakerConfig
 import org.example.proyecto_plantilla.core.crash.CrashCounterStore
+import org.example.proyecto_plantilla.core.crash.CrashReporter
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.crash.IosGlobalCrashHandler
 import org.example.proyecto_plantilla.core.crash.UserDefaultsCrashCounterStore
@@ -21,11 +22,13 @@ fun iosPlatformModule(
     config: NetworkConfig,
     engineOverride: HttpClientEngine?,
     buildInfo: AppBuildInfo,
+    crashReporter: CrashReporter,
 ): Module =
     module {
         single { config }
         single { buildInfo }
-        single<GlobalCrashHandler> { IosGlobalCrashHandler(get(), get()) }
+        single { crashReporter }
+        single<GlobalCrashHandler> { IosGlobalCrashHandler(get(), get(), get()) }
         single<CrashCounterStore> { UserDefaultsCrashCounterStore() }
         // Override de las ventanas comunes: en iOS la reapertura es MANUAL, así que la ventana es más larga.
         single { CrashBreakerConfig(threshold = 3, windowMs = 60_000, healthyUptimeMs = 75_000) }

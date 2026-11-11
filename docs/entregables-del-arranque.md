@@ -40,3 +40,8 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 7 | `config/checks/ramas_varadas.sh` | Commits varados y ramas sin PR |
 | 7 | `config/ci-pendiente/workflows/ci.yml` | El CI (pendiente de subir a `.github/`, `#PP6`) |
 | 7 | `config/ci-pendiente/actions/calidad/action.yml` | Acción compuesta de calidad (pendiente, `#PP6`) |
+| 8 | `docs/android-release-checklist.md` | Lista de release de Android |
+| 8 | `docs/ios-release-checklist.md` | Lista de release de iOS |
+| 8 | `docs/reparto/_plantilla.md` | Plantilla de la lista de reparto |
+| 8 | `androidApp/google-services.json.example` | Forma del config de Firebase (Android) |
+| 8 | `iosApp/GoogleService-Info.plist.example` | Forma del config de Firebase (iOS) |

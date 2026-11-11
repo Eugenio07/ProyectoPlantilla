@@ -16,9 +16,9 @@ struct iOSApp: App {
         #if DEBUG
         // Escenario del stub: `xcrun simctl launch booted <bundle> -mockScenario UPDATE_REQUIRED`.
         KoinIosKt.selectConfigMockScenario(name: UserDefaults.standard.string(forKey: "mockScenario"))
-        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, useMockConfig: true, isDebug: true)
+        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, useMockConfig: true, isDebug: true, crashReporter: SwiftCrashReporter())
         #else
-        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, useMockConfig: false, isDebug: false)
+        _ = KoinIosKt.startKoinIos(baseUrl: baseUrl, useMockConfig: false, isDebug: false, crashReporter: SwiftCrashReporter())
         #endif
     }
 
