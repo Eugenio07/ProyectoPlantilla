@@ -1,0 +1,3 @@
+# Secciones de un plan que NO cuentan para el tope, una por línea: «<título de la sección> | <motivo>».
+# Una exclusión sin motivo pone tope_plan.py en rojo.
+Revisiones | es el diario de la puerta y de las pasadas del auditor, no alcance (manual de operación §2)

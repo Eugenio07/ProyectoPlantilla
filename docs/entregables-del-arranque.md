@@ -29,3 +29,8 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 6.5 | `config/checks/puerta.sh` | La puerta: formato, detekt, verdes, verificadores, recuento de tests, conflictos |
 | 6.5 | `config/checks/candado.sh` | El candado de la puerta: una sola función de liveness |
 | 6.5 | `config/checks/candado_test.sh` | Prueba del candado como lo usará un hook |
+| 6.5 | `config/checks/cola.py` | Verificador de la cola (ids, historial, campos) |
+| 6.5 | `config/checks/que_va_ahora.py` | Vista derivada «qué va ahora» |
+| 6.5 | `config/checks/barrido_texto.py` | Barrido del texto que deja de ser cierto |
+| 6.5 | `config/checks/tope_plan.py` | Tope de ~150 líneas por plan |
+| 6.5 | `config/checks/tope_plan_exclusiones.txt` | Secciones excluidas del tope, con su motivo |
