@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Rechaza en el ÍNDICE los ficheros prohibidos (configs nativas de Firebase, keystores, local.properties).
+# .gitignore solo filtra los adds implícitos; Xcode fuerza el staging de lo que se añade al proyecto.
+# Instalación, una vez por clon: git config core.hooksPath .githooks
+set -u
+
+if ! git rev-parse --git-dir >/dev/null 2>&1; then
+  echo "pre-commit: no pude leer el repositorio; rechazo el commit por seguridad." >&2
+  exit 1
+fi
+
+malos=()
+while IFS= read -r -d '' f; do
+  # APFS no distingue mayúsculas: se compara el basename en minúsculas.
+  base=$(basename "$f" | tr '[:upper:]' '[:lower:]')
+  case "$base" in
+    google-services.json | googleservice-info.plist | local.properties | *.jks | *.keystore)
+      malos+=("$f") ;;
+  esac
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+# (No se guarda la lista en una variable: $(...) elimina los NUL y el bucle no iteraría nunca.)
+
+if [ "${#malos[@]}" -gt 0 ]; then
+  echo "pre-commit: ficheros prohibidos en el índice:" >&2
+  printf '  %s\n' "${malos[@]}" >&2
+  echo "Sácalos con: git restore --staged <fichero>" >&2
+  exit 1
+fi
+exit 0

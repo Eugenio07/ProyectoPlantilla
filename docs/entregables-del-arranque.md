@@ -16,3 +16,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 0 | `docs/manuales/kmp_bootstrap_playbook_generico_v2.md` | Manual de arranque |
 | 0 | `docs/manuales/kmp_manual_de_operacion_v1.md` | Manual de operación |
 | 0 | `docs/manuales/manuales_revisiones.md` | Registro de revisiones de los manuales |
+| 0 | `.gitattributes` | `*.sh` con fin de línea LF |
+| 0 | `.githooks/pre-commit` | Rechaza ficheros prohibidos en el índice |
