@@ -9,5 +9,7 @@
     <string name="splash_force_update_body">Esta versión de la app ya no se puede usar. Instala la versión %1$s o una más reciente para continuar.</string>
     <string name="splash_error_body">No se pudo completar la carga.</string>
     <string name="action_retry">Reintentar</string>
-    <string name="home_placeholder">Inicio</string>
+    <string name="home_title">Inicio</string>
+    <string name="home_open_detail">Ver detalle</string>
+    <string name="detail_title">Detalle %1$s</string>
 </resources>
