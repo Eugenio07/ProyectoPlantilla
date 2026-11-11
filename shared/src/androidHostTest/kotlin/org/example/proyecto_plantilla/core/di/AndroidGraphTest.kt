@@ -8,6 +8,7 @@ import org.koin.android.ext.koin.androidContext
 import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
+import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
 import org.koin.core.context.stopKoin
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -27,5 +28,6 @@ class AndroidGraphTest {
         assertNotNull(koin.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")
+        assertNotNull(koin.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
     }
 }
