@@ -4,6 +4,7 @@ import android.app.Application
 import org.example.proyecto_plantilla.core.di.androidPlatformModule
 import org.example.proyecto_plantilla.core.di.initKoin
 import org.example.proyecto_plantilla.core.network.NetworkConfig
+import org.example.proyecto_plantilla.ui.uiModule
 import org.koin.android.ext.koin.androidContext
 
 class ProyectoPlantillaApp : Application() {
@@ -13,7 +14,9 @@ class ProyectoPlantillaApp : Application() {
             platformModules = listOf(
                 androidPlatformModule(
                     NetworkConfig(baseUrl = BuildConfig.BASE_URL, enableLogging = BuildConfig.DEBUG),
+                    engineOverride = provideConfigEngine(),
                 ),
+                uiModule,
             ),
         ) { androidContext(this@ProyectoPlantillaApp) }
     }

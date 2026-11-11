@@ -1,10 +1,11 @@
-package org.example.proyecto_plantilla.core.di
+package org.example.proyecto_plantilla
 
 import io.ktor.client.HttpClient
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
+import org.example.proyecto_plantilla.ui.splash.SplashViewModel
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
@@ -13,13 +14,14 @@ import kotlin.test.assertSame
 class KoinIosTest {
     @Test
     fun startKoinIosIsIdempotentAndResolvesTheIosGraph() {
-        val first = startKoinIos(baseUrl = "https://example.test/", isDebug = false)
-        val second = startKoinIos(baseUrl = "https://example.test/", isDebug = false)
+        val first = startKoinIos(baseUrl = "https://example.test/", useMockConfig = false, isDebug = false)
+        val second = startKoinIos(baseUrl = "https://example.test/", useMockConfig = false, isDebug = false)
         assertSame(first, second, "startKoinIos no es idempotente")
         assertNotNull(first.getOrNull<HttpClient>(), "HttpClient")
         assertNotNull(first.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(first.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(first.getOrNull<AppVersionProvider>(), "AppVersionProvider")
         assertNotNull(first.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
+        assertNotNull(first.getOrNull<SplashViewModel>(), "SplashViewModel")
     }
 }

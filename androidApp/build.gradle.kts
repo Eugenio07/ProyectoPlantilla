@@ -16,6 +16,9 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
+    implementation(libs.ktor.client.core)
+    // El stub de config, SOLO en debug (v2 Fase 4). Nunca en release: lo comprueba la dependencia de releaseRuntimeClasspath.
+    debugImplementation(libs.ktor.client.mock)
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)

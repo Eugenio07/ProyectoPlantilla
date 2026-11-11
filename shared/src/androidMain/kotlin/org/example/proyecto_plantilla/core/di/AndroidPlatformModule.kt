@@ -11,10 +11,13 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-/** Lo que Android aporta al grafo: su config (de `BuildConfig`) y su engine. */
-fun androidPlatformModule(config: NetworkConfig): Module = module {
+/**
+ * Lo que Android aporta al grafo: su config (de `BuildConfig`) y su engine. [engineOverride] es el stub de la variante
+ * debug (`provideConfigEngine()` de `androidApp`); en release es `null` y se usa OkHttp.
+ */
+fun androidPlatformModule(config: NetworkConfig, engineOverride: HttpClientEngine?): Module = module {
     single { config }
-    single<HttpClientEngine> { OkHttp.create() }
+    single<HttpClientEngine> { engineOverride ?: OkHttp.create() }
     single<AppVersionProvider> { AndroidAppVersionProvider(androidContext()) }
     single<Logger> { AndroidLogger() }
 }
