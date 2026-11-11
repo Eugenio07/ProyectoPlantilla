@@ -18,7 +18,7 @@ kotlin {
         }
     }
     android {
-       namespace = "org.example.projecto_plantilla.shared"
+       namespace = "org.example.proyecto_plantilla.shared"
        compileSdk = libs.versions.android.compileSdk.get().toInt()
        minSdk = libs.versions.android.minSdk.get().toInt()
        compilerOptions {

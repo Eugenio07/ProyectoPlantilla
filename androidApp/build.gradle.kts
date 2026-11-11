@@ -20,11 +20,11 @@ dependencies {
 }
 
 android {
-    namespace = "org.example.projecto_plantilla"
+    namespace = "org.example.proyecto_plantilla"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.example.projecto_plantilla"
+        applicationId = "org.example.proyecto_plantilla"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

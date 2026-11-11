@@ -1,4 +1,4 @@
-package org.example.projecto_plantilla
+package org.example.proyecto_plantilla
 
 import platform.UIKit.UIDevice
 

@@ -1,9 +1,9 @@
-package org.example.projecto_plantilla
+package org.example.proyecto_plantilla
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SharedCommonTest {
+class SharedLogicAndroidHostTest {
 
     @Test
     fun example() {
