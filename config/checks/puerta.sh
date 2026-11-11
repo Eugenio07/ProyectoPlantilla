@@ -83,11 +83,10 @@ LOG_VERDES="$(mktemp "${TMPDIR:-/tmp}/puerta-verdes.XXXXXX")"
 c=$?
 tail -n 15 "$LOG_VERDES"
 [ "$c" -eq 0 ] || { echo "(log completo: $LOG_VERDES)"; rojo "c) los verdes" "$c"; }
-# Verde no es corrió: sin --rapido, ninguna tarea que compila o testea puede salir UP-TO-DATE ni FROM-CACHE. El nombre
-# de la tarea EMPIEZA por compile/test/assemble/link o TERMINA en Test (no casa con preAndroidHostTestBuild, una tarea
-# de ciclo de vida sin acciones que siempre sale UP-TO-DATE).
-if [ -n "$RERUN" ] && grep -E '^> Task :([A-Za-z0-9]+:)*(compile[A-Za-z0-9]*|test[A-Za-z0-9]*|assemble[A-Za-z0-9]*|link[A-Za-z0-9]*|[A-Za-z0-9]*Test) (UP-TO-DATE|FROM-CACHE)$' "$LOG_VERDES"; then
-  rojo "c) los verdes: una tarea no se ejecutó (UP-TO-DATE/FROM-CACHE)" 1
+# Verde no es corrió: sin --rapido, ninguna tarea que compila o testea puede salir UP-TO-DATE ni FROM-CACHE.
+if [ -n "$RERUN" ]; then
+  config/checks/corrio.sh "$LOG_VERDES"
+  c=$?; [ "$c" -eq 0 ] || rojo "c) los verdes: una tarea no se ejecutó" "$c"
 fi
 
 paso "d) verificadores"
@@ -98,24 +97,7 @@ for v in $VERIFICADORES; do
 done
 
 paso "e) recuento de tests"
-python3 -I - "$RESULTADOS" <<'PY'
-import glob, os, sys, xml.etree.ElementTree as ET
-raiz = sys.argv[1]
-xmls = glob.glob(os.path.join(raiz, "**", "TEST-*.xml"), recursive=True)
-if not xmls:
-    print("no hay XML de resultados de esta ejecución → NO PUDE MEDIR"); sys.exit(3)
-tests = fallos = 0
-for x in xmls:
-    try:
-        r = ET.parse(x).getroot()
-    except ET.ParseError as e:
-        print(f"XML ilegible {x}: {e} → NO PUDE MEDIR"); sys.exit(3)
-    tests += int(r.get("tests", 0)); fallos += int(r.get("failures", 0)) + int(r.get("errors", 0))
-print(f"{tests} tests en {len(xmls)} ficheros, {fallos} fallos")
-if tests == 0:
-    print("CERO tests: un verde sin tests no es de nadie"); sys.exit(1)
-sys.exit(1 if fallos else 0)
-PY
+python3 -I config/checks/recuento_tests.py "$RESULTADOS"
 c=$?; [ "$c" -eq 0 ] || rojo "e) recuento de tests" "$c"
 
 paso "f) marcadores de conflicto"
