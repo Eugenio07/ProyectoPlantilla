@@ -46,12 +46,20 @@ SINPY="$(mktemp -d)"; for b in bash cat tr printf grep; do p="$(command -v $b)";
 rm -rf "$SINPY"
 
 # --- Stop (informan: fallan abierto)
+# El de tests JVM corre en un proyecto FALSO cuyo gradlew solo deja una marca (#PP21): sin candado vivo (el CI) el hook
+# lanzaba el Gradle real, ~3 min del job calidad por un caso que no prueba nada de Gradle. Los otros dos siguen sobre el
+# repositorio: sin config/checks ni .git sus casos no medirían nada.
+FALSO="$(mktemp -d)"
+printf '#!/usr/bin/env bash\ntouch "%s/gradle-llamado"\nexit 0\n' "$FALSO" > "$FALSO/gradlew"; chmod +x "$FALSO/gradlew"
 for h in stop-run-jvm-tests.sh stop-verificadores.sh stop-ui-audit-reminder.sh; do
-  printf 'basura' | bash "$H/$h" >/dev/null 2>&1; c=$?
+  dir="$PWD"; [ "$h" = stop-run-jvm-tests.sh ] && dir="$FALSO"
+  printf 'basura' | CLAUDE_PROJECT_DIR="$dir" bash "$H/$h" >/dev/null 2>&1; c=$?
   [ "$c" -eq 0 ] || [ "$c" -eq 2 ] && ok "$h: JSON ilegible → no revienta ($c)" || ko "$h: JSON ilegible ($c)"
-  printf '{"stop_hook_active": true}' | bash "$H/$h" >/dev/null 2>&1
+  printf '{"stop_hook_active": true}' | CLAUDE_PROJECT_DIR="$dir" bash "$H/$h" >/dev/null 2>&1
   [ $? -eq 0 ] && ok "$h: stop_hook_active → 0" || ko "$h: stop_hook_active"
 done
+[ -f "$FALSO/gradle-llamado" ] && ok "stop-run-jvm-tests.sh: con JSON ilegible llega a Gradle (el falso), no al real" || ko "stop-run-jvm-tests.sh: no llegó a Gradle"
+rm -rf "$FALSO"
 
 if [ "${1:-}" = "--completo" ]; then
   GITDIR="$(git rev-parse --git-dir)"; LOCK="$GITDIR/puerta.lock"
