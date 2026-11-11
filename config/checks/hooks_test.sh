@@ -21,6 +21,13 @@ json() { printf '{"tool_name":"Edit","tool_input":{"file_path":"%s"}}' "$1"; }
 SINPY="$(mktemp -d)"; for b in bash cat basename dirname tr printf; do p="$(command -v $b)"; [ -n "$p" ] && ln -s "$p" "$SINPY/$b"; done
 [ "$(guard "$(json "$PWD/local.properties")" "$SINPY" | decision)" = "ask" ] && ok "guard: sin python3 en el PATH → ask (sigue sin dejar pasar)" || ko "guard: sin python3"
 rm -rf "$SINPY"
+# Guard en Bash (#PP17): un comando que NOMBRA un protegido y ESCRIBE → deny; leer o no nombrarlo → pasa.
+bashjson() { python3 -I -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
+[ "$(guard "$(bashjson 'echo sdk.dir=/x > local.properties')" | decision)" = "deny" ] && ok "guard Bash: redirección a local.properties → deny" || ko "guard Bash: redirección"
+[ "$(guard "$(bashjson 'cp /tmp/a androidApp/release.JKS')" | decision)" = "deny" ] && ok "guard Bash: cp a un keystore → deny" || ko "guard Bash: cp"
+[ "$(guard "$(bashjson "sed -i '' s/a/b/ androidApp/google-services.json")" | decision)" = "deny" ] && ok "guard Bash: sed -i → deny" || ko "guard Bash: sed -i"
+[ "$(guard "$(bashjson 'git grep -n google-services.json 2>/dev/null')" | decision)" = "pasa" ] && ok "guard Bash: leer (con 2>/dev/null) → pasa" || ko "guard Bash: falso positivo al leer"
+[ "$(guard "$(bashjson 'ls -la > /tmp/x')" | decision)" = "pasa" ] && ok "guard Bash: escribir sin protegido → pasa" || ko "guard Bash: falso positivo sin protegido"
 
 # --- Filtro del auditor (deniega: falla cerrado)
 F=.claude/hooks/auditor-deny-github.sh

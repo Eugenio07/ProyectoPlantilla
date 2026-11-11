@@ -150,4 +150,6 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   en el `provideConfigEngine` de release, `FunctionNaming` en `MainViewController` (Swift lo llama así).
 - El `pbxproj` y `Package.resolved` fijan la versión del SDK de Firebase de iOS: SwiftPM no lee el catálogo de Gradle.
   Se sube a mano junto con GitLive (el comentario del catálogo dice la pareja).
+- El guard mira `Bash` por heurística: deniega un comando que nombra un protegido y escribe. No ve uno que no se
+  nombra (variable, glob); el pre-commit y el CI siguen siendo la red. Prueba: `config/checks/hooks_test.sh`.
 - La puerta corre también los tests de iOS en el simulador. Por qué: `wiki/decisiones/tests-ios-en-la-puerta.md`.
