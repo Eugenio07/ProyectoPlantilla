@@ -24,3 +24,7 @@ GoogleService-Info.plist
 
 # Informes de los commands de Claude Code (se sobrescriben en cada ejecución)
 .claude/informes/
+
+# Keystores: el pre-commit y el CI ya los rechazan; además no aparecen como «sin rastrear» (#PP20).
+*.jks
+*.keystore
