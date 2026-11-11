@@ -54,6 +54,10 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
 - **Se commitea con la puerta**: `config/checks/puerta.sh --commit <fichero-del-mensaje> [ficheros nuevos…]`. Nunca
   `git add -A` ni `git add .`; el mensaje por fichero (heredoc `<<'EOF'`). La puerta es dueña del árbol mientras corre
   (`config/checks/candado.sh`).
+- **Herramientas de la cola y del cierre:** `config/checks/que_va_ahora.py` (el único «qué va ahora»: vista derivada de la
+  cola, no un fichero que se mantiene) y `config/checks/barrido_texto.py` (cierre de una tarea con una salida nueva).
+  `cola.py` y `tope_plan.py` van en la puerta. **Sin herramienta de grafo** (ranura): una afirmación de alcanzabilidad se
+  escribe «no comprobada: sin herramienta de grafo», y la puerta no tiene paso de frescura de grafo.
 - **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
   `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
 - **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.
