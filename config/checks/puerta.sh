@@ -63,7 +63,7 @@ done
 VERDES=":shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :shared:testAndroidHostTest :shared:compileKotlinIosSimulatorArm64 :shared:iosSimulatorArm64Test"
 
 # Verificadores que son paso de la puerta (los informativos, como que_va_ahora.py, no van aquí).
-VERIFICADORES="entregables.py cola.py tope_plan.py"
+VERIFICADORES="entregables.py cola.py tope_plan.py wiki.py sin_para_claude_md.py"
 
 paso "a) formato"
 ./gradlew spotlessCheck --console=plain -q

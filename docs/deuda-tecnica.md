@@ -82,7 +82,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 - **Mecanismo:** GitHub rechaza crear `.github/workflows/*` con un token OAuth sin el permiso `workflow` [medido
   2026-11-11: push de `f7/ci` rechazado con ese mensaje]. `ci.yml` y `.github/actions/calidad/action.yml` están escritos
-  y auditados (`docs/plans/2026-11-11-f7-ci.md`); esperan en `config/ci-pendiente/` (su README dice cómo moverlos).
+  y auditados (`docs/historico/planes/2026-11-11-f7-ci.md`); esperan en `config/ci-pendiente/` (su README dice cómo moverlos).
 - **Quién lo desbloquea:** quien decide: `gh auth refresh -h github.com -s workflow` (paso interactivo en el navegador).
 - **Disparador:** cuando el token tenga el permiso `workflow` — estado medido 2026-11-11: no lo tiene.
 - **Vigente hasta que:**
