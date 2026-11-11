@@ -11,6 +11,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 - Para trabajar una tarea, sigue el ciclo del manual de operación §2: ficha → plan en `docs/plans/` con
   `docs/plans/_plantilla.md` → auditor sin contexto → autorización escrita → rama → puerta → PR. Prueba: ¿el plan tiene
   la línea `Implementación autorizada: Sí (…)` antes del primer commit de código?
+- Lanza el subagente `auditor-sin-contexto` con SOLO la ruta del plan, siempre y sin preguntar, antes de enseñarlo.
+  Prueba: ¿*Revisiones* tiene la pasada con su fecha antes de la revisión?
 
 ## §2 · Ranuras
 
