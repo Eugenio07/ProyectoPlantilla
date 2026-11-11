@@ -22,3 +22,6 @@ Resultado:
 | El framework de Kotlin es el de release | el log ejecuta `linkReleaseFrameworkIosSimulatorArm64` (vía `embedAndSignAppleFrameworkForXcode`) | Pasó |
 
 **No medido:** que la app Release ARRANQUE (solo se compiló). Lo cubre, para Android, `releaseLocal` (Fase 6).
+
+**Medido después** (2026-11-11, `#PP5`): la app Release arranca en el simulador y muestra el error de red contra
+`api.example.invalid` (`2026-11-11-error-red-ios.png`).

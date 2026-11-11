@@ -59,25 +59,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. Android Studio lista un simulador y corre `iosApp`. Mientras tanto, iOS se corre desde Xcode.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP5 · 2026-11-11 · Los textos de la Splash y las acciones por code no están aprobados (requisito de salida)
-
-- **Mecanismo:** el ejecutor propuso el texto de producto de `shared/src/commonMain/composeResources/values/strings.xml`
-  (Splash: carga, actualización obligatoria, error, Reintentar, «Inicio») y las acciones por code de
-  `docs/contracts/api-errors.md`; su versión final es de quien decide (manual de operación §6).
-- **Quién lo desbloquea:** quien decide.
-- **Disparador:** cuando quien decide revise los textos — estado medido 2026-11-11: no revisados. **Fecha de revisión:**
-  antes de la primera versión publicada.
-- **Vigente hasta que:**
-  1. quien decide aprueba o cambia cada texto de `strings.xml` (incluida la copy de cada `ErrorKind` y los
-     placeholders de Home y Detail) y los tres de `CrashSafeScreen` (escritos en el código), con su firma;
-  2. quien decide aprueba o cambia la acción por code de `api-errors.md`;
-  3. quien decide dice qué salida ofrece la pantalla de actualización obligatoria (hoy ninguna: no hay URL de tienda).
-     Hasta entonces la persona queda sin salida dentro de la app, que es lo que «bloqueante» pide.
-  4. la copy de `NETWORK` («No hay conexión…») afirma una causa que no siempre es la real: también cae ahí un servidor
-     que no resuelve (medido 2026-11-11: build `releaseLocal` contra `api.example.invalid` muestra «No hay conexión»
-     con la red del emulador funcionando). Manual de operación §10: el texto no afirma lo que no sabe.
-- **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
-
 ### #PP7 · 2026-11-11 · Las skills y commands del proyecto no están validados en tres pasos (requisito de salida)
 
 - **Mecanismo:** la validación (positiva, control, negativa) exige una sesión NUEVA de Claude Code; la lanzada con
@@ -104,10 +85,38 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
+### #PP24 · 2026-11-11 · La pantalla de actualización obligatoria no tiene salida (requisito de salida) (peso por decidir)
+
+- **Mecanismo:** la pantalla es bloqueante y no ofrece ninguna acción: la persona queda sin nada que pulsar dentro de la
+  app [leído]. Quien decide eligió la opción (a) de `#PP5` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`): un botón
+  «Actualizar» que abre la tienda, con la URL por plataforma en la config remota; sin URL, sin botón.
+- **Quién lo desbloquea:** nosotros (plan propio: contrato de config, DTO, UI con captura en las dos plataformas).
+- **Fecha de revisión:** antes de la primera versión publicada de una app derivada.
+- **Vigente hasta que:**
+  1. `docs/contracts/config-endpoint.md` define la URL de la tienda por plataforma, y el DTO y el mapper la leen (test
+     primero);
+  2. la pantalla muestra el botón con URL y no lo muestra sin ella (captura en Android e iOS) y el botón abre la tienda.
+- **Peso:** (peso por decidir) — propuesta: requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar.
+
+### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven (peso por decidir)
+
+- **Mecanismo:** `enableEdgeToEdge()` elige iconos claros cuando el sistema está en oscuro, pero la app pinta siempre el
+  tema claro (`MaterialTheme {}` sin esquema oscuro, `App.kt:24`) [medido 2026-11-11: captura
+  `docs/mediciones/2026-11-11-error-red-android.png`, emulador con `night mode: yes`]. Encontrado en la auditoría MD3 de
+  `#PP5`: va a la cola, no se corrige ahí.
+- **Quién lo desbloquea:** nosotros (o la primera app derivada al poner su tema).
+- **Fecha de revisión:** antes de la primera versión publicada de una app derivada.
+- **Vigente hasta que:**
+  1. con el sistema en oscuro, la barra de estado se lee en Android (captura), sea porque la app tiene tema oscuro o porque
+     el estilo de la barra sigue al tema de la app.
+- **Peso:** (peso por decidir) — propuesta: 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en
+  pantalla, fuera de la ruta crítica.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP5` | Los textos de la Splash, de `CrashSafeScreen` y las acciones por code no estaban aprobados. Aprobados como provisionales de plantilla; `error_network` ya no afirma una causa; la salida de la actualización obligatoria, decidida (opción a) → `#PP24` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`) | (este commit) |
 | `#PP23` | El job `ios` compilaba el SDK de Firebase en frío en cada PR. `ios` restaura el DerivedData y `cache-ios` lo llena desde `develop`: «Construir la app» 8 min 07 s → 3 min 11 s (`docs/mediciones/2026-11-11-cache-ios.md`) | `f3f3317` |
 | `#PP12` | Nada impedía que el stub de config volviera a release de Android. `:androidApp:verificarSinStubEnRelease` (grafo resuelto) en la puerta y en el job `android`; mutación `debugImplementation`→`implementation` → roja | `4c6b662` |
 | `#PP13` | Las variantes release no se compilaban. `assembleRelease` en `VERDES` y en `android` (una mutación de tipo en `src/release` era ciega); iOS Release medido una vez (`docs/mediciones/2026-11-11-ios-release.md`) | `c752870` |

@@ -34,7 +34,7 @@ Hoy (`shared/src/commonMain/kotlin/org/example/proyecto_plantilla/core/network/N
 
 ## Los codes del servidor
 
-| `code` | Cuándo | Acción que ofrece el cliente (**propuesta del ejecutor; la decide quien decide**) |
+| `code` | Cuándo | Acción que ofrece el cliente (**aprobada por quien decide el 2026-11-11**, `docs/mediciones/2026-11-11-aprobacion-pp5.md`) |
 |---|---|---|
 | `MAINTENANCE` | El servicio está en mantenimiento | Reintentar (cambia con el tiempo) |
 | `RATE_LIMITED` | Demasiadas peticiones | Reintentar (cambia con el tiempo) |
@@ -45,7 +45,7 @@ Hoy (`shared/src/commonMain/kotlin/org/example/proyecto_plantilla/core/network/N
 En el cliente, el code se tipa como un enum con un valor `Unknown` de respaldo y su copy vive en los recursos de texto
 multiplataforma (`shared/src/commonMain/composeResources/values/strings.xml`). Los dos los crea la Fase 5 (`ErrorState`
 con el mapeo code→copy). La telemetría del code desconocido va por la interfaz de `core/log`. La copy es **texto de
-producto**: su versión final es de quien decide (manual de operación §6).
+producto**: aprobada como provisional de plantilla; cada app derivada la revisa (`CLAUDE.md` §2).
 
 **El texto del fallback (code desconocido) no afirma una causa:** dice que no se pudo y ofrece la acción neutra
 (Reintentar). Si hiciera falta saber la causa para escribirlo, el code no sería desconocido: se mapearía.
