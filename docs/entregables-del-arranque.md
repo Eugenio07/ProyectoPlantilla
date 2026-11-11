@@ -22,3 +22,7 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 0 | `docs/mediciones/2026-11-11-matriz-de-versiones.md` | La matriz de versiones (PROMPT 1) |
 | 3 | `docs/contracts/config-endpoint.md` | Borrador del contrato de config |
 | 3 | `docs/contracts/api-errors.md` | Borrador del envelope de errores |
+| 6.5 | `config/checks/mutar.sh` | Mutador: prueba que una guarda puede ponerse roja (0/1/2/3) |
+| 6.5 | `config/checks/entregables.py` | Comprueba que existe cada entregable de esta lista |
+| 6.5 | `config/detekt/detekt.yml` | Diferencias de detekt con el default, con su porqué |
+| 6.5 | `.editorconfig` | Copia para el IDE de la autoridad de formato |
