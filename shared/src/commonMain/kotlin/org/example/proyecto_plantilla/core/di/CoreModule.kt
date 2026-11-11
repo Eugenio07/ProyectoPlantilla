@@ -23,9 +23,9 @@ val coreModule: Module =
         single { NetworkErrorMapper(get()) }
         single { HttpClientFactory(get(), get()) }
         single<HttpClient> { get<HttpClientFactory>().create(get()) }
-        // Ventanas de ANDROID (relanzamiento automático en ~1 s). iOS las sobrescribe en su módulo (Koin: el último
-        // gana).
-        single { CrashBreakerConfig(threshold = 3, windowMs = 10_000, healthyUptimeMs = 15_000) }
+        // ANDROID: racha SIN ventana; la borra la vida sana de 15 s (#PP10: así un bucle lento también dispara).
+        // iOS lo sobrescribe con su ventana de 60 s en su módulo (Koin: el último gana).
+        single { CrashBreakerConfig(threshold = 3, windowMs = null, healthyUptimeMs = 15_000) }
         single { CrashCircuitBreaker(get(), get()) { Clock.System.now().toEpochMilliseconds() } }
     }
 

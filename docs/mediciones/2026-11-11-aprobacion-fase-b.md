@@ -17,3 +17,15 @@ Mensaje literal:
    (Reintentar en la pantalla segura, o en Android la vida sana): el disparo ya no caduca con la ventana.
 3. **Pesos:** se aceptan las propuestas del ejecutor en cada entrada abierta de la cola; se firman en `docs/deuda-tecnica.md`
    con esta medición como cita.
+
+## Corrección de `#PP10` (2026-11-11, misma conversación)
+
+El ejecutor avisó de que la recomendación aceptada en el punto 2 era incompleta (mantener el disparo no corta un bucle
+lento: la ventana de 10 s nunca junta 3 crashes si cada uno llega a los 5 s del arranque) y preguntó si contar la racha en
+Android por vida sana. Respuesta literal de quien decide:
+
+> Sí, por vida sana
+
+**Lectura del ejecutor:** en Android la racha son los crashes seguidos sin vida sana (15 s) entre medias, sin ventana; en
+iOS se queda la ventana de 60 s (reapertura manual, sin vida sana). En las dos, una vez disparada, la pantalla segura se
+mantiene hasta un reset (Reintentar; en Android también la vida sana).
