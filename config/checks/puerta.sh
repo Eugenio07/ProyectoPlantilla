@@ -104,6 +104,13 @@ paso "e) recuento de tests"
 python3 -I config/checks/recuento_tests.py "$RESULTADOS"
 c=$?; [ "$c" -eq 0 ] || rojo "e) recuento de tests" "$c"
 
+# En modo --commit se indexa AQUÍ lo que se va a commitear, para que f) mire exactamente eso (un marcador en un fichero
+# rastreado pero sin indexar se escapaba: medido 2026-11-11, #PP9).
+if [ -n "$MENSAJE" ]; then
+  git add -u
+  for f in "${NUEVOS[@]+"${NUEVOS[@]}"}"; do git add -- "$f"; done
+fi
+
 paso "f) marcadores de conflicto"
 if git grep --cached -nE '^(<<<<<<<|>>>>>>>)( |$)' -- . ':!config/checks/puerta.sh'; then
   rojo "f) marcadores de conflicto en lo indexado" 1
@@ -115,8 +122,6 @@ echo "PUERTA VERDE."
 
 if [ -n "$MENSAJE" ]; then
   paso "commit"
-  git add -u
-  for f in "${NUEVOS[@]+"${NUEVOS[@]}"}"; do git add -- "$f"; done
   fuera="$(git status --porcelain --untracked-files=all | grep -v '^[MARD] ' || true)"
   if [ -n "$fuera" ]; then
     echo "$fuera"
