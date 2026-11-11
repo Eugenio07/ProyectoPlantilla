@@ -19,23 +19,29 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 /**
- * Pipeline Ktor real con `MockEngine`, en `runBlocking`: el reloj virtual de `runTest` dispara el `HttpTimeout` antes de
+ * Pipeline Ktor real con `MockEngine`, en `runBlocking`: el reloj virtual de `runTest` dispara el `HttpTimeout` antes
+ * de
  * que el mock responda (v2 §2, «Tests»).
  */
 class SafeApiCallTest {
     @Serializable
-    private data class Ping(val ok: Boolean)
+    private data class Ping(
+        val ok: Boolean,
+    )
 
     private val json = headersOf(HttpHeaders.ContentType, "application/json")
     private val mapper = NetworkErrorMapper()
 
-    private fun client(timeoutMs: Long = 15_000, handler: suspend (io.ktor.client.engine.mock.MockRequestHandleScope) -> io.ktor.client.request.HttpResponseData) =
-        HttpClientFactory(NetworkConfig("https://example.test/", enableLogging = false, requestTimeoutMs = timeoutMs))
-            .create(MockEngine { handler(this) })
+    private fun client(
+        timeoutMs: Long = 15_000,
+        handler: suspend (io.ktor.client.engine.mock.MockRequestHandleScope) -> io.ktor.client.request.HttpResponseData,
+    ) = HttpClientFactory(NetworkConfig("https://example.test/", enableLogging = false, requestTimeoutMs = timeoutMs))
+        .create(MockEngine { handler(this) })
 
-    private fun call(client: io.ktor.client.HttpClient): Resource<Ping> = runBlocking<Resource<Ping>> {
-        safeApiCall(mapper) { client.get("v1/ping").body<Ping>() }
-    }
+    private fun call(client: io.ktor.client.HttpClient): Resource<Ping> =
+        runBlocking<Resource<Ping>> {
+            safeApiCall(mapper) { client.get("v1/ping").body<Ping>() }
+        }
 
     @Test
     fun validBodyIsSuccess() {
@@ -57,9 +63,14 @@ class SafeApiCallTest {
 
     @Test
     fun statusWithEnvelopeIsServer() {
-        val c = client {
-            it.respond("""{"code":"MAINTENANCE","message":"texto del servidor"}""", HttpStatusCode.ServiceUnavailable, json)
-        }
+        val c =
+            client {
+                it.respond(
+                    """{"code":"MAINTENANCE","message":"texto del servidor"}""",
+                    HttpStatusCode.ServiceUnavailable,
+                    json,
+                )
+            }
         assertEquals(Resource.Error(AppError.Server("MAINTENANCE", "texto del servidor")), call(c))
     }
 
@@ -71,10 +82,11 @@ class SafeApiCallTest {
 
     @Test
     fun timeoutIsNetwork() {
-        val c = client(timeoutMs = 100) {
-            delay(2_000)
-            it.respond("""{"ok":true}""", HttpStatusCode.OK, json)
-        }
+        val c =
+            client(timeoutMs = 100) {
+                delay(2_000)
+                it.respond("""{"ok":true}""", HttpStatusCode.OK, json)
+            }
         assertEquals(Resource.Error(AppError.Network), call(c))
     }
 

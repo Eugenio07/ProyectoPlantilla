@@ -21,19 +21,19 @@ private var koinApplication: KoinApplication? = null
  * Arranca Koin en iOS, que no tiene `Application`. Vive en el paquete raíz (raíz de composición) porque registra
  * `uiModule`, y nada de `core` depende de `ui`.
  *
- * Swift la llama en el `init()` del `@main` con TODOS los argumentos y el gate `#if DEBUG` en las dos ramas: `true/true`
- * en DEBUG, `false/false` en el else (los valores por defecto de Kotlin no llegan a Swift). Idempotente; guarda el `Koin`
- * aquí porque en iOS no se usa `GlobalContext` (trampa 5 de v2).
+ * Swift la llama en el `init()` del `@main` con TODOS los argumentos y el gate `#if DEBUG` en las dos ramas:
+ * `true/true` en DEBUG, `false/false` en el else (los valores por defecto de Kotlin no llegan a Swift).
+ * Idempotente; guarda el `Koin` aquí porque en iOS no se usa `GlobalContext` (trampa 5 de v2).
  */
-fun startKoinIos(baseUrl: String, useMockConfig: Boolean, isDebug: Boolean): Koin {
+fun startKoinIos(
+    baseUrl: String,
+    useMockConfig: Boolean,
+    isDebug: Boolean,
+): Koin {
     koinApplication?.let { return it.koin }
     val engine = if (useMockConfig) configMockEngine() else null
-    val app = initKoin(
-        listOf(
-            iosPlatformModule(NetworkConfig(baseUrl = baseUrl, enableLogging = isDebug), engine, AppBuildInfo(isDebug)),
-            uiModule,
-        ),
-    )
+    val config = NetworkConfig(baseUrl = baseUrl, enableLogging = isDebug)
+    val app = initKoin(listOf(iosPlatformModule(config, engine, AppBuildInfo(isDebug)), uiModule))
     koinApplication = app
     app.koin.get<GlobalCrashHandler>().install()
     return app.koin
@@ -42,7 +42,12 @@ fun startKoinIos(baseUrl: String, useMockConfig: Boolean, isDebug: Boolean): Koi
 /** Elige el escenario del stub (solo tiene efecto con `useMockConfig: true`). Swift la llama solo en DEBUG. */
 fun selectConfigMockScenario(name: String?) = ConfigMockScenario.select(name)
 
-private fun configMockEngine() = MockEngine {
-    val scenario = ConfigMockScenario.selected
-    respond(scenario.body, HttpStatusCode.fromValue(scenario.status), headersOf(HttpHeaders.ContentType, "application/json"))
-}
+private fun configMockEngine() =
+    MockEngine {
+        val scenario = ConfigMockScenario.selected
+        respond(
+            scenario.body,
+            HttpStatusCode.fromValue(scenario.status),
+            headersOf(HttpHeaders.ContentType, "application/json"),
+        )
+    }

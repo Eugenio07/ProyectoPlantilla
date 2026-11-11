@@ -1,9 +1,15 @@
 package org.example.proyecto_plantilla.core.crash
 
 /** Ventanas del breaker. Una vida sana más corta que la ventana borraría la racha antes de que pudiera contarse. */
-data class CrashBreakerConfig(val threshold: Int, val windowMs: Long, val healthyUptimeMs: Long) {
+data class CrashBreakerConfig(
+    val threshold: Int,
+    val windowMs: Long,
+    val healthyUptimeMs: Long,
+) {
     init {
-        require(healthyUptimeMs > windowMs) { "healthyUptimeMs ($healthyUptimeMs) debe ser mayor que windowMs ($windowMs)" }
+        require(
+            healthyUptimeMs > windowMs,
+        ) { "healthyUptimeMs ($healthyUptimeMs) debe ser mayor que windowMs ($windowMs)" }
     }
 }
 
@@ -14,7 +20,10 @@ interface CrashCounterStore {
     /** Hora (ms) del primer crash de la racha; 0 si no hay racha. */
     val firstCrashAtMs: Long
 
-    fun save(count: Int, firstCrashAtMs: Long)
+    fun save(
+        count: Int,
+        firstCrashAtMs: Long,
+    )
 
     fun clear()
 }
@@ -24,7 +33,9 @@ class CrashCircuitBreaker(
     private val config: CrashBreakerConfig,
     private val now: () -> Long,
 ) {
-    /** Cuenta un crash. Ventana DESLIZANTE anclada al primer crash de la racha: fuera de ella, empieza una racha nueva. */
+    /**
+     * Cuenta un crash. Ventana DESLIZANTE anclada al primer crash de la racha: fuera de ella, empieza una racha nueva.
+     */
     fun recordCrash() {
         val t = now()
         val first = store.firstCrashAtMs

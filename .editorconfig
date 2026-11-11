@@ -1,0 +1,14 @@
+# Copia para el IDE de la autoridad de formato (spotless + ktlint en build.gradle.kts). Si cambias una, cambias la otra.
+root = true
+
+[*.{kt,kts}]
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+max_line_length = 120
+ktlint_code_style = ktlint_official
+# Los @Composable se nombran en PascalCase por convención de Compose.
+ktlint_function_naming_ignore_when_annotated_with = Composable
+# El paquete `org.example.proyecto_plantilla` lleva guion bajo por decisión de quien decide (renombrado del 2026-11-11,
+# «cambia projecto a proyecto»). Renombrarlo es una decisión de producto, no de formato.
+ktlint_standard_package-name = disabled

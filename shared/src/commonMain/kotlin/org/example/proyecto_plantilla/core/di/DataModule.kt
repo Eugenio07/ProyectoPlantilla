@@ -11,9 +11,17 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 /** APIs (Ktorfit), repositorios y casos de uso. Común a las dos plataformas. */
-val dataModule: Module = module {
-    single { Ktorfit.Builder().baseUrl(get<NetworkConfig>().baseUrl).httpClient(get<io.ktor.client.HttpClient>()).build() }
-    single<ConfigApi> { get<Ktorfit>().createConfigApi() }
-    single<ConfigRepository> { ConfigRepositoryImpl(get(), get()) }
-    factory { CheckForceUpdateUseCase(get(), get(), get()) }
-}
+val dataModule: Module =
+    module {
+        single {
+            Ktorfit
+                .Builder()
+                .baseUrl(
+                    get<NetworkConfig>().baseUrl,
+                ).httpClient(get<io.ktor.client.HttpClient>())
+                .build()
+        }
+        single<ConfigApi> { get<Ktorfit>().createConfigApi() }
+        single<ConfigRepository> { ConfigRepositoryImpl(get(), get()) }
+        factory { CheckForceUpdateUseCase(get(), get(), get()) }
+    }

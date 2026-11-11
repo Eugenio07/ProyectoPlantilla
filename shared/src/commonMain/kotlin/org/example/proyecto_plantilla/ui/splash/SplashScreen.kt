@@ -31,7 +31,10 @@ import proyectoplantilla.shared.generated.resources.splash_loading
 
 /** Splash SIN diseño (v2 Fase 4): cada estado, su pantalla; `Ready` navega a Home (Fase 5) una sola vez. */
 @Composable
-fun SplashScreen(viewModel: SplashViewModel, onReady: () -> Unit) {
+fun SplashScreen(
+    viewModel: SplashViewModel,
+    onReady: () -> Unit,
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(state) {
         if (state == SplashUiState.Ready) onReady()
@@ -40,10 +43,17 @@ fun SplashScreen(viewModel: SplashViewModel, onReady: () -> Unit) {
 }
 
 @Composable
-fun SplashContent(state: SplashUiState, onRetry: () -> Unit) {
+fun SplashContent(
+    state: SplashUiState,
+    onRetry: () -> Unit,
+) {
     // liveRegion: el lector de pantalla anuncia el paso de Cargando a Error o a Actualización.
     Box(
-        modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(24.dp).semantics { liveRegion = LiveRegionMode.Polite },
+        modifier =
+            Modifier.fillMaxSize().safeDrawingPadding().padding(24.dp).semantics {
+                liveRegion =
+                    LiveRegionMode.Polite
+            },
         contentAlignment = Alignment.Center,
     ) {
         when (state) {
@@ -51,24 +61,33 @@ fun SplashContent(state: SplashUiState, onRetry: () -> Unit) {
                 val label = stringResource(Res.string.splash_loading)
                 CircularProgressIndicator(modifier = Modifier.semantics { contentDescription = label })
             }
+
             // Ready: la navegación sustituye esta pantalla (onReady); mientras tanto, el mismo indicador que Loading.
-            SplashUiState.Ready -> CircularProgressIndicator()
-            is SplashUiState.ForceUpdate -> Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Text(
-                    stringResource(Res.string.splash_force_update_title),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.semantics { heading() },
-                )
-                Text(
-                    stringResource(Res.string.splash_force_update_body, state.minVersion),
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center,
-                )
+            SplashUiState.Ready -> {
+                CircularProgressIndicator()
             }
-            is SplashUiState.Error -> ErrorState(kind = state.kind, onRetry = onRetry)
+
+            is SplashUiState.ForceUpdate -> {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    Text(
+                        stringResource(Res.string.splash_force_update_title),
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                    Text(
+                        stringResource(Res.string.splash_force_update_body, state.minVersion),
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+
+            is SplashUiState.Error -> {
+                ErrorState(kind = state.kind, onRetry = onRetry)
+            }
         }
     }
 }

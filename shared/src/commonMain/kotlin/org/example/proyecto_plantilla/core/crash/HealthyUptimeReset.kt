@@ -6,7 +6,8 @@ import kotlinx.coroutines.launch
 
 /**
  * Android: si el proceso sigue vivo `healthyUptimeMs`, la racha se borra. Una vez por proceso. En iOS el único reset es
- * el botón de la pantalla segura (la reapertura es manual y no hay «vida sana» que medir antes de que la persona vuelva).
+ * el botón de la pantalla segura (la reapertura es manual y no hay «vida sana» que medir antes de que la persona
+ * vuelva).
  */
 class HealthyUptimeReset(
     private val breaker: CrashCircuitBreaker,

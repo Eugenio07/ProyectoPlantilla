@@ -8,8 +8,15 @@ import kotlin.test.assertTrue
 class SemanticVersionComparatorTest {
     private val c = SemanticVersionComparator
 
-    private fun assertLess(a: String, b: String) = assertTrue(c.compare(a, b) < 0, "$a < $b")
-    private fun assertSameVersion(a: String, b: String) = assertEquals(0, c.compare(a, b), "$a == $b")
+    private fun assertLess(
+        a: String,
+        b: String,
+    ) = assertTrue(c.compare(a, b) < 0, "$a < $b")
+
+    private fun assertSameVersion(
+        a: String,
+        b: String,
+    ) = assertEquals(0, c.compare(a, b), "$a == $b")
 
     @Test
     fun comparesSegmentsNumericallyNotAsText() = assertLess("1.9.0", "1.10.0")

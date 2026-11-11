@@ -10,7 +10,10 @@ class UserDefaultsCrashCounterStore : CrashCounterStore {
 
     override val firstCrashAtMs: Long get() = defaults.doubleForKey(KEY_FIRST).toLong()
 
-    override fun save(count: Int, firstCrashAtMs: Long) {
+    override fun save(
+        count: Int,
+        firstCrashAtMs: Long,
+    ) {
         defaults.setInteger(count.toLong(), KEY_COUNT)
         defaults.setDouble(firstCrashAtMs.toDouble(), KEY_FIRST)
         defaults.synchronize()

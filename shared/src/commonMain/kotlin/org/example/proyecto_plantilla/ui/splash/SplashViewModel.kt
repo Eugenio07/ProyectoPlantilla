@@ -27,13 +27,19 @@ class SplashViewModel(
     private fun load() {
         _state.value = SplashUiState.Loading
         viewModelScope.launch {
-            _state.value = when (val result = checkForceUpdate()) {
-                is Resource.Error -> SplashUiState.Error(errorKind.map(result.error))
-                is Resource.Success -> when (val status = result.data) {
-                    ForceUpdateStatus.UpToDate -> SplashUiState.Ready
-                    is ForceUpdateStatus.UpdateRequired -> SplashUiState.ForceUpdate(status.minVersion)
+            _state.value =
+                when (val result = checkForceUpdate()) {
+                    is Resource.Error -> {
+                        SplashUiState.Error(errorKind.map(result.error))
+                    }
+
+                    is Resource.Success -> {
+                        when (val status = result.data) {
+                            ForceUpdateStatus.UpToDate -> SplashUiState.Ready
+                            is ForceUpdateStatus.UpdateRequired -> SplashUiState.ForceUpdate(status.minVersion)
+                        }
+                    }
                 }
-            }
         }
     }
 }

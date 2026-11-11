@@ -9,11 +9,16 @@ package org.example.proyecto_plantilla.core.error
 sealed interface AppError {
     data object Network : AppError
 
-    data class Http(val status: Int) : AppError
+    data class Http(
+        val status: Int,
+    ) : AppError
 
     data object Serialization : AppError
 
-    data class Server(val code: String, val message: String) : AppError
+    data class Server(
+        val code: String,
+        val message: String,
+    ) : AppError
 
     data object Unknown : AppError
 }

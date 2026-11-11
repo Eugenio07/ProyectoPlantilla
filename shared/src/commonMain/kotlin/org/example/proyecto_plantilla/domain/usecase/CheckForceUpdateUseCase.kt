@@ -26,7 +26,10 @@ class CheckForceUpdateUseCase(
             is Resource.Success -> Resource.Success(decide(config.data.minVersion, appVersion.versionName()))
         }
 
-    private fun decide(minVersion: String?, local: String): ForceUpdateStatus {
+    private fun decide(
+        minVersion: String?,
+        local: String,
+    ): ForceUpdateStatus {
         val v = SemanticVersionComparator
         return when {
             !v.isValid(local) -> failOpen(WARN_LOCAL_VERSION_INVALID)

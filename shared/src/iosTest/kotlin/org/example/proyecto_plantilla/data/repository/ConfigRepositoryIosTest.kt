@@ -19,12 +19,25 @@ import kotlin.test.assertEquals
 
 /** Ktorfit (código generado) en Kotlin/Native, en el simulador: mide `#PP1` en iOS. */
 class ConfigRepositoryIosTest {
-    private fun get(status: HttpStatusCode, body: String): Resource<AppConfig> {
+    private fun get(
+        status: HttpStatusCode,
+        body: String,
+    ): Resource<AppConfig> {
         val base = "https://example.test/"
-        val client = HttpClientFactory(NetworkConfig(base, enableLogging = false)).create(
-            MockEngine { respond(body, status, headersOf(HttpHeaders.ContentType, "application/json")) },
-        )
-        val repo = ConfigRepositoryImpl(Ktorfit.Builder().baseUrl(base).httpClient(client).build().createConfigApi(), NetworkErrorMapper())
+        val client =
+            HttpClientFactory(NetworkConfig(base, enableLogging = false)).create(
+                MockEngine { respond(body, status, headersOf(HttpHeaders.ContentType, "application/json")) },
+            )
+        val repo =
+            ConfigRepositoryImpl(
+                Ktorfit
+                    .Builder()
+                    .baseUrl(base)
+                    .httpClient(client)
+                    .build()
+                    .createConfigApi(),
+                NetworkErrorMapper(),
+            )
         return runBlocking { repo.getConfig() }
     }
 

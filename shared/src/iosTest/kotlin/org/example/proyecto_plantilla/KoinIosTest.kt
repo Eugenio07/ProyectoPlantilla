@@ -4,7 +4,6 @@ import io.ktor.client.HttpClient
 import org.example.proyecto_plantilla.core.crash.CrashBreakerConfig
 import org.example.proyecto_plantilla.core.crash.CrashCircuitBreaker
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
-import kotlin.test.assertEquals
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
@@ -15,6 +14,7 @@ import org.example.proyecto_plantilla.ui.home.HomeViewModel
 import org.example.proyecto_plantilla.ui.splash.SplashViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
 

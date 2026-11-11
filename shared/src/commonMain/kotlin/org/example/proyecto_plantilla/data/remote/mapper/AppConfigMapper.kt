@@ -9,10 +9,12 @@ import org.example.proyecto_plantilla.domain.model.AppConfig
  * `isValid` después: fail-open); ausente o `null` → `null`. (Un `null` JSON llega como `null` de Kotlin, no como
  * `JsonNull`: medido con una mutación, 2026-11-11.)
  */
-fun AppConfigDto.toDomain(): AppConfig = AppConfig(
-    minVersion = when (val v = minVersion) {
-        null -> null
-        is JsonPrimitive -> v.content
-        else -> v.toString()
-    },
-)
+fun AppConfigDto.toDomain(): AppConfig =
+    AppConfig(
+        minVersion =
+            when (val v = minVersion) {
+                null -> null
+                is JsonPrimitive -> v.content
+                else -> v.toString()
+            },
+    )

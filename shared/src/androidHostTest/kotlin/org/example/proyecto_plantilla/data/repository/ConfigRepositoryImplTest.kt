@@ -23,14 +23,24 @@ class ConfigRepositoryImplTest {
     private val baseUrl = "https://example.test/"
     var lastPath: String? = null
 
-    private fun repo(status: HttpStatusCode, body: String): ConfigRepositoryImpl {
-        val client = HttpClientFactory(NetworkConfig(baseUrl, enableLogging = false)).create(
-            MockEngine { request ->
-                lastPath = request.url.encodedPath
-                respond(body, status, jsonHeaders)
-            },
-        )
-        val api = Ktorfit.Builder().baseUrl(baseUrl).httpClient(client).build().createConfigApi()
+    private fun repo(
+        status: HttpStatusCode,
+        body: String,
+    ): ConfigRepositoryImpl {
+        val client =
+            HttpClientFactory(NetworkConfig(baseUrl, enableLogging = false)).create(
+                MockEngine { request ->
+                    lastPath = request.url.encodedPath
+                    respond(body, status, jsonHeaders)
+                },
+            )
+        val api =
+            Ktorfit
+                .Builder()
+                .baseUrl(baseUrl)
+                .httpClient(client)
+                .build()
+                .createConfigApi()
         return ConfigRepositoryImpl(api, NetworkErrorMapper())
     }
 
@@ -47,10 +57,11 @@ class ConfigRepositoryImplTest {
         assertEquals(Resource.Success(AppConfig(null)), get(repo(HttpStatusCode.OK, "{}")))
 
     @Test
-    fun serverErrorWithEnvelopeIsErrorNotThrow() = assertEquals(
-        Resource.Error(AppError.Server("MAINTENANCE", "m")),
-        get(repo(HttpStatusCode.ServiceUnavailable, """{"code":"MAINTENANCE","message":"m"}""")),
-    )
+    fun serverErrorWithEnvelopeIsErrorNotThrow() =
+        assertEquals(
+            Resource.Error(AppError.Server("MAINTENANCE", "m")),
+            get(repo(HttpStatusCode.ServiceUnavailable, """{"code":"MAINTENANCE","message":"m"}""")),
+        )
 
     @Test
     fun emptyJsonBodyIsSerializationNotThrow() =

@@ -12,4 +12,6 @@ data object SplashRoute
 data object HomeRoute
 
 @Serializable
-data class DetailRoute(val id: String)
+data class DetailRoute(
+    val id: String,
+)
