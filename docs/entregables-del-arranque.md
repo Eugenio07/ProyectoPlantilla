@@ -20,3 +20,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 0 | `.githooks/pre-commit` | Rechaza ficheros prohibidos en el índice |
 | 1 | `docs/ARCHITECTURE.md` | Paquetes y regla de dependencias |
 | 0 | `docs/mediciones/2026-11-11-matriz-de-versiones.md` | La matriz de versiones (PROMPT 1) |
+| 3 | `docs/contracts/config-endpoint.md` | Borrador del contrato de config |
+| 3 | `docs/contracts/api-errors.md` | Borrador del envelope de errores |
