@@ -62,12 +62,52 @@ class CrashCircuitBreakerTest {
     }
 
     @Test
-    fun trippedExpiresWhenTheWindowPasses() {
+    fun trippedStaysUntilReset() {
         crashAt(1_000_000)
         crashAt(1_001_000)
         crashAt(1_002_000)
-        clock = 1_011_000
-        assertFalse(breaker.isTripped())
+        clock = 1_000_000 + 3_600_000 // una hora después: sigue disparado hasta un reset (#PP10)
+        assertTrue(breaker.isTripped())
+    }
+
+    @Test
+    fun aCrashAfterTrippingDoesNotStartANewStreak() {
+        crashAt(1_000_000)
+        crashAt(1_001_000)
+        crashAt(1_002_000)
+        crashAt(1_100_000) // fuera de la ventana, pero ya estaba disparado
+        assertTrue(breaker.isTripped())
+    }
+
+    @Test
+    fun withoutWindowASlowLoopTrips() {
+        // Android (#PP10): un crash a los ~5 s de cada arranque. Con ventana de 10 s nunca se juntarían 3.
+        val sinVentana =
+            CrashCircuitBreaker(
+                store,
+                CrashBreakerConfig(threshold = 3, windowMs = null, healthyUptimeMs = 15_000),
+            ) { clock }
+        clock = 1_000_000
+        sinVentana.recordCrash()
+        clock = 1_006_000
+        sinVentana.recordCrash()
+        clock = 1_012_000
+        sinVentana.recordCrash()
+        assertTrue(sinVentana.isTripped())
+    }
+
+    @Test
+    fun withoutWindowTwoCrashesDoNotTrip() {
+        val sinVentana =
+            CrashCircuitBreaker(
+                store,
+                CrashBreakerConfig(threshold = 3, windowMs = null, healthyUptimeMs = 15_000),
+            ) { clock }
+        clock = 1_000_000
+        sinVentana.recordCrash()
+        clock = 1_600_000
+        sinVentana.recordCrash()
+        assertFalse(sinVentana.isTripped())
     }
 
     @Test

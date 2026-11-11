@@ -3,13 +3,18 @@ package org.example.proyecto_plantilla.core.crash
 /** Ventanas del breaker. Una vida sana más corta que la ventana borraría la racha antes de que pudiera contarse. */
 data class CrashBreakerConfig(
     val threshold: Int,
-    val windowMs: Long,
+    /**
+     * Ventana de la racha, anclada al primer crash; `null` = SIN ventana: la racha son los crashes seguidos sin
+     * vida sana entre medias (Android, donde `HealthyUptimeReset` la borra). Con ventana, un bucle lento (un crash
+     * a los 5 s de cada arranque) nunca junta los crashes dentro de ella (#PP10).
+     */
+    val windowMs: Long?,
     val healthyUptimeMs: Long,
 ) {
     init {
-        require(
-            healthyUptimeMs > windowMs,
-        ) { "healthyUptimeMs ($healthyUptimeMs) debe ser mayor que windowMs ($windowMs)" }
+        require(windowMs == null || healthyUptimeMs > windowMs) {
+            "healthyUptimeMs ($healthyUptimeMs) debe ser mayor que windowMs ($windowMs)"
+        }
     }
 }
 
@@ -34,20 +39,24 @@ class CrashCircuitBreaker(
     private val now: () -> Long,
 ) {
     /**
-     * Cuenta un crash. Ventana DESLIZANTE anclada al primer crash de la racha: fuera de ella, empieza una racha nueva.
+     * Cuenta un crash. Con ventana (iOS): la racha se ancla al primer crash y uno fuera de ella empieza otra. Sin
+     * ventana (Android): la racha solo la borra un reset (la vida sana). Una vez disparado, ningún crash empieza
+     * racha nueva.
      */
     fun recordCrash() {
         val t = now()
         val first = store.firstCrashAtMs
-        if (store.count == 0 || t - first > config.windowMs) {
+        val window = config.windowMs
+        val nuevaRacha = store.count < config.threshold && (store.count == 0 || (window != null && t - first > window))
+        if (nuevaRacha) {
             store.save(count = 1, firstCrashAtMs = t)
         } else {
             store.save(count = store.count + 1, firstCrashAtMs = first)
         }
     }
 
-    /** `threshold` crashes dentro de la ventana del primero → la app muestra la pantalla segura. */
-    fun isTripped(): Boolean = store.count >= config.threshold && now() - store.firstCrashAtMs <= config.windowMs
+    /** `threshold` crashes en racha → pantalla segura, que se MANTIENE hasta un reset (#PP10). */
+    fun isTripped(): Boolean = store.count >= config.threshold
 
     fun reset() = store.clear()
 }

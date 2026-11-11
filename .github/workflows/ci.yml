@@ -181,7 +181,9 @@ jobs:
     needs: [alcance]
     if: ${{ !cancelled() && github.event_name == 'pull_request' && contains(fromJSON('["main","develop"]'), github.base_ref) && needs.alcance.outputs.solo_docs != 'true' }}
     runs-on: macos-latest
-    timeout-minutes: 45
+    # 25 y no 45: el primer arranque real tardó ~15 min (10 de construir la app con el SDK de Firebase por SwiftPM);
+    # un job que se cuelgue de verdad no debe facturar tres cuartos de hora de macOS (×10).
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
         with:
@@ -234,6 +236,7 @@ jobs:
           # Destino por UDID, no por nombre (name= sin versión se completa con OS:latest).
           UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys; d=[x for r in json.load(sys.stdin)['devices'].values() for x in r if x['name'].startswith('iPhone')]; print(d[0]['udid'])")
           echo "Simulador: $UDID"
+          echo "UDID=$UDID" >> "$GITHUB_ENV"
           xcrun simctl boot "$UDID" || true
           xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug \
             -destination "platform=iOS Simulator,id=$UDID" -derivedDataPath "$RUNNER_TEMP/dd" \
@@ -248,3 +251,12 @@ jobs:
           else
             echo "La app NO está viva a los 15 s: no arrancó o murió."; exit 1
           fi
+      # Cierra SIEMPRE la app y el simulador (higiene del runner). NO arregla un «colgado»: el job del run 43093127544
+      # que parecía colgado había terminado a las 20:20:20 (9 s tras «Complete job"); GitHub tardó más de una hora en
+      # mostrarlo (medido 2026-11-11). La hipótesis «el runner espera a la app» resultó falsa.
+      - name: Cerrar la app y apagar el simulador
+        if: always() && steps.filtro.outputs.arrancar == 'true'
+        run: |
+          xcrun simctl terminate "${UDID:-booted}" org.example.proyectoplantilla.ProyectoPlantilla || true
+          xcrun simctl shutdown all || true
+          echo "Simulador apagado."

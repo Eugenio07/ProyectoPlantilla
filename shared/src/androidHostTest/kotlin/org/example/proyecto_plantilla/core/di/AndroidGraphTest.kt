@@ -52,7 +52,7 @@ class AndroidGraphTest {
         assertNotNull(koin.getOrNull<CrashReporter>(), "CrashReporter")
         assertNotNull(koin.getOrNull<CrashCircuitBreaker>(), "CrashCircuitBreaker")
         assertNotNull(koin.getOrNull<HealthyUptimeReset>(), "HealthyUptimeReset")
-        assertEquals(10_000, koin.get<CrashBreakerConfig>().windowMs, "ventana de Android")
+        assertEquals(null, koin.get<CrashBreakerConfig>().windowMs, "Android: sin ventana (#PP10)")
         assertNotNull(koin.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")
