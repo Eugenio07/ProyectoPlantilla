@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  EJEMPLO, sin valores reales. El de verdad se descarga de la consola de Firebase (con el bundle id EXACTO de
+  iosApp/Configuration/Config.xcconfig) y se COPIA DESDE FINDER a iosApp/iosApp/ (nunca con «Add Files» de Xcode, que
+  fuerza el staging). Esa carpeta es un grupo sincronizado: entra solo en Resources. No se commitea (.gitignore y el
+  pre-commit lo rechazan).
+  OJO: con ESTOS valores la app CRASHEA al arrancar en iOS («Could not configure Firebase Installations», medido
+  2026-11-11): FirebaseInstallations valida el formato de la clave. Sirve de plantilla de forma, no para probar.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>VALOR-DE-EJEMPLO-NO-ES-UNA-CLAVE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>000000000000</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.example.proyectoplantilla.ProyectoPlantilla</string>
+	<key>PROJECT_ID</key>
+	<string>proyecto-plantilla-ejemplo</string>
+	<key>STORAGE_BUCKET</key>
+	<string>proyecto-plantilla-ejemplo.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:000000000000:ios:0000000000000000000000</string>
+</dict>
+</plist>
