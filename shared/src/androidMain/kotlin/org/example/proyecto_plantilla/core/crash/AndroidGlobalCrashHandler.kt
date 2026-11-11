@@ -10,6 +10,7 @@ class AndroidGlobalCrashHandler(
     private val context: Context,
     private val buildInfo: AppBuildInfo,
     private val logger: Logger,
+    private val breaker: CrashCircuitBreaker,
 ) : GlobalCrashHandler {
     private var installed = false
 
@@ -25,6 +26,7 @@ class AndroidGlobalCrashHandler(
             }
             try {
                 logger.error(TAG, "crash no gestionado; se relanza en Home", throwable)
+                breaker.recordCrash() // síncrono: antes de morir
                 relaunchAtHome()
             } finally {
                 exitProcess(0)

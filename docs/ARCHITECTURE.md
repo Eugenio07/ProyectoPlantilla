@@ -60,6 +60,9 @@ Cada excepción se enumera aquí junto a la regla que exceptúa; una regla sin s
   Gradle, así que el stub de config viaja en el framework de release. Lo apaga Swift: `useMockConfig: false` en la rama
   no-`DEBUG` de `iOSApp.swift`. En Android el stub es `debugImplementation` y no llega a release (comprobado en
   `releaseRuntimeClasspath`).
+- **`CrashSafeScreen` con la copy escrita en el código** (excepción a «la copy vive en los recursos», v2 §2): la
+  pantalla segura es autocontenida (sin DI, sin red, sin config remota, sin recursos), porque cualquiera de esas piezas
+  puede ser la que está fallando. Es la única.
 
 ## Configuración por plataforma
 
