@@ -22,6 +22,19 @@ SINPY="$(mktemp -d)"; for b in bash cat basename dirname tr printf; do p="$(comm
 [ "$(guard "$(json "$PWD/local.properties")" "$SINPY" | decision)" = "ask" ] && ok "guard: sin python3 en el PATH → ask (sigue sin dejar pasar)" || ko "guard: sin python3"
 rm -rf "$SINPY"
 
+# --- Filtro del auditor (deniega: falla cerrado)
+F=.claude/hooks/auditor-deny-github.sh
+filtro() { printf '%s' "$1" | PATH="${2:-$PATH}" bash "$F"; }
+bashjson() { python3 -I -c 'import json,sys; print(json.dumps({"tool_name":"Bash","tool_input":{"command":sys.argv[1]}}))' "$1"; }
+[ "$(filtro "$(bashjson 'gh --version')" | decision)" = "deny" ] && ok "auditor: gh → deny" || ko "auditor: gh"
+[ "$(filtro "$(bashjson 'curl -s https://api.github.com/repos/x/y')" | decision)" = "deny" ] && ok "auditor: api.github.com → deny" || ko "auditor: api.github.com"
+[ "$(filtro "$(bashjson 'cd x && GH --help')" | decision)" = "deny" ] && ok "auditor: GH en mayúsculas → deny" || ko "auditor: mayúsculas"
+[ "$(filtro "$(bashjson 'grep -rn high shared/src')" | decision)" = "pasa" ] && ok "auditor: grep (contiene «gh» dentro de otra palabra) → pasa" || ko "auditor: falso positivo"
+[ "$(filtro 'no es json' | decision)" = "deny" ] && ok "auditor: JSON ilegible → deny (cerrado)" || ko "auditor: JSON ilegible"
+SINPY="$(mktemp -d)"; for b in bash cat tr printf grep; do p="$(command -v $b)"; [ -n "$p" ] && ln -s "$p" "$SINPY/$b"; done
+[ "$(filtro "$(bashjson 'gh --version')" "$SINPY" | decision)" = "deny" ] && ok "auditor: sin python3 en el PATH → deny" || ko "auditor: sin python3"
+rm -rf "$SINPY"
+
 # --- Stop (informan: fallan abierto)
 for h in stop-run-jvm-tests.sh stop-verificadores.sh stop-ui-audit-reminder.sh; do
   printf 'basura' | bash "$H/$h" >/dev/null 2>&1; c=$?

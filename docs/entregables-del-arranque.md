@@ -64,3 +64,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 11 | `.claude/validaciones.md` | Registro de la validación en tres pasos |
 | 11 | `config/checks/validaciones.py` | Verificador del registro (comprobación declarada) |
 | 11 | `config/checks/skills_de_cierre.py` | Las skills de la lista de cierre resuelven |
+| 12 | `.claude/agents/auditor-sin-contexto.md` | El auditor sin contexto como subagente |
+| 12 | `.claude/hooks/auditor-deny-github.sh` | Filtro que le niega GitHub (falla cerrado) |
