@@ -32,12 +32,13 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 
 ## §3 · Stack
 
-- Pon las versiones solo en `gradle/libs.versions.toml`; nunca las copies a otro documento. Prueba: `grep` de un número
-  de versión fuera del catálogo y de `docs/mediciones/`.
+- Pon las versiones solo en `gradle/libs.versions.toml`; nunca las copies a otro documento. Prueba:
+  `config/checks/versiones.py` (documentos vivos; las mediciones y la cola son registros con fecha).
 - Antes de subir Kotlin, comprueba Ktorfit, KSP y los klibs de iOS (`docs/mediciones/2026-11-11-matriz-de-versiones.md`).
   Prueba: la puerta (los tests de iOS enlazan y corren).
-- Mantén Ktor en 3.5.x mientras Ktorfit 2.7.x sea la de Ktor 3.5. Por qué: `wiki/decisiones/ktor-35.md`.
-- Usa detekt 2.0.0-alpha.6 hasta que haya una estable para Kotlin 2.4 (`#PP2`). Por qué:
+- Mantén Ktor en la línea con la que se construyó Ktorfit (el comentario del catálogo dice cuál). Por qué:
+  `wiki/decisiones/ktor-35.md`.
+- Usa la alpha de detekt del catálogo hasta que haya una estable para nuestra Kotlin (`#PP2`). Por qué:
   `wiki/decisiones/detekt-alpha.md`.
 
 ## §4 · La puerta y el commit
@@ -147,4 +148,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 - `CrashSafeScreen` lleva su copy en el código.
 - Supresiones en el sitio con su motivo: `TooGenericExceptionCaught` en `safeApiCall`, `FunctionOnlyReturningConstant`
   en el `provideConfigEngine` de release, `FunctionNaming` en `MainViewController` (Swift lo llama así).
+- El `pbxproj` y `Package.resolved` fijan la versión del SDK de Firebase de iOS: SwiftPM no lee el catálogo de Gradle.
+  Se sube a mano junto con GitLive (el comentario del catálogo dice la pareja).
+- El guard mira `Bash` por heurística: deniega un comando que nombra un protegido y escribe. No ve uno que no se
+  nombra (variable, glob); el pre-commit y el CI siguen siendo la red. Prueba: `config/checks/hooks_test.sh`.
 - La puerta corre también los tests de iOS en el simulador. Por qué: `wiki/decisiones/tests-ios-en-la-puerta.md`.

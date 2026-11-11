@@ -68,3 +68,6 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 12 | `.claude/hooks/auditor-deny-github.sh` | Filtro que le niega GitHub (falla cerrado) |
 | 12 | `docs/historico/auditorias/AUDIT-2026-11-11.md` | Informe de la auditoría integral (fase A) |
 | — | `docs/manuales/notas-del-arranque-2026-11-11.md` | Preguntas y desviaciones del arranque, para la versión siguiente de los manuales |
+| 12 B | `config/checks/recuento_tests_test.sh` | Pruebas del recuento con `--exige` (`#PP15`) |
+| 12 B | `config/checks/versiones.py` | Ningún número de versión en los documentos vivos (`#PP16`) |
+| 12 B | `config/checks/versiones_test.sh` | Pruebas de `versiones.py` (`#PP16`) |

@@ -16,7 +16,8 @@ except Exception:
     sys.exit(1)
 ' 2>/dev/null)" || deny "auditor: no pude leer el comando (falla cerrado)"
 [ -n "$cmd" ] || deny "auditor: comando vacío (falla cerrado)"
-baja="$(printf '%s' "$cmd" | tr '[:upper:]' '[:lower:]')"
+# Sin comillas ni barras invertidas: 'gh', "gh" y \gh los ejecuta el shell igual que gh (#PP18).
+baja="$(printf '%s' "$cmd" | tr '[:upper:]' '[:lower:]' | tr -d "'\"\\\\")"
 if printf '%s' "$baja" | grep -qE '(^|[^a-z0-9_-])gh([[:space:]]|$)|github\.com|githubusercontent|api\.github'; then
   deny "auditor: GitHub está fuera de su alcance; lo que solo se sabría por ahí va a «Lo que no pude comprobar»"
 fi

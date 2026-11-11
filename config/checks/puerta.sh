@@ -13,7 +13,8 @@
 #
 #   a) formato        spotlessCheck (la puerta NO reescribe ficheros)
 #   b) detekt         por source set + androidApp
-#   c) verdes         los cuatro verdes + los tests de iOS en el simulador, en UNA invocación de Gradle,
+#   c) verdes         los cuatro verdes + los tests de iOS en el simulador + release de Android compilado (#PP13) +
+#                     sin stub en release (#PP12), en UNA invocación de Gradle,
 #                     con --rerun-tasks y --console=plain (--rapido quita --rerun-tasks para iterar; la puerta de un PR
 #                     se pasa sin él)
 #   d) verificadores  cada guion de config/checks/ que es paso de la puerta, por separado
@@ -60,10 +61,10 @@ for s in AndroidMain AndroidHostTest CommonMain CommonTest IosMain IosTest; do
   DETEKT_TAREAS="$DETEKT_TAREAS :shared:detekt${s}SourceSet"
 done
 
-VERDES=":shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :shared:testAndroidHostTest :shared:compileKotlinIosSimulatorArm64 :shared:iosSimulatorArm64Test"
+VERDES=":shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :androidApp:assembleRelease :androidApp:verificarSinStubEnRelease :shared:testAndroidHostTest :shared:compileKotlinIosSimulatorArm64 :shared:iosSimulatorArm64Test"
 
 # Verificadores que son paso de la puerta (los informativos, como que_va_ahora.py, no van aquí).
-VERIFICADORES="entregables.py cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py hooks_test.sh skills_de_cierre.py"
+VERIFICADORES="entregables.py recuento_tests_test.sh versiones.py versiones_test.sh cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py hooks_test.sh skills_de_cierre.py"
 # validaciones.py entra aquí cuando se cierre #PP7 (hoy saldría rojo: la validación en tres pasos no se pudo correr).
 
 paso "a) formato"
@@ -101,7 +102,7 @@ for v in $VERIFICADORES; do
 done
 
 paso "e) recuento de tests"
-python3 -I config/checks/recuento_tests.py "$RESULTADOS"
+python3 -I config/checks/recuento_tests.py --exige testAndroidHostTest,iosSimulatorArm64Test "$RESULTADOS"
 c=$?; [ "$c" -eq 0 ] || rojo "e) recuento de tests" "$c"
 
 # En modo --commit se indexa AQUÍ lo que se va a commitear, para que f) mire exactamente eso (un marcador en un fichero

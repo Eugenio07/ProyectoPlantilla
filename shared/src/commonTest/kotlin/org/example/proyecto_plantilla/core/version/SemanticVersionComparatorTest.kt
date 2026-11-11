@@ -24,6 +24,14 @@ class SemanticVersionComparatorTest {
     @Test
     fun majorDominatesMinorAndPatch() = assertLess("1.99.99", "2.0.0")
 
+    // #PP14: un segmento que no cabe en un Int no puede valer 0 (desactivaría el force-update sin aviso).
+    @Test
+    fun hugeSegmentsCompareNumerically() {
+        assertLess("1.0.0", "99999999999.0.0")
+        assertLess("1.2.99999999999", "1.2.100000000000")
+        assertSameVersion("1.02.0", "1.2.0")
+    }
+
     @Test
     fun missingSegmentsCountAsZero() {
         assertSameVersion("1.2", "1.2.0")

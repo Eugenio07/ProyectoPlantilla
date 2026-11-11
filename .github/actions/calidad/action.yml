@@ -23,6 +23,12 @@ runs:
     - name: Entregables del arranque
       shell: bash
       run: python3 -I config/checks/entregables.py
+    - name: Pruebas del recuento de tests (#PP15)
+      shell: bash
+      run: bash config/checks/recuento_tests_test.sh
+    - name: Sin números de versión en los documentos vivos (#PP16)
+      shell: bash
+      run: python3 -I config/checks/versiones.py && bash config/checks/versiones_test.sh
     - name: La cola (necesita el historial completo; con uno superficial sale 3)
       shell: bash
       run: python3 -I config/checks/cola.py

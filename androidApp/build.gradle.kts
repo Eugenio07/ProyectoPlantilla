@@ -1,3 +1,5 @@
+import org.gradle.api.artifacts.result.ResolvedComponentResult
+import org.gradle.api.artifacts.result.ResolvedDependencyResult
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -30,6 +32,32 @@ tasks.register("verificarFirebase") {
     }
 }
 
+// #PP12: el stub de config (ktor-client-mock) NUNCA en los classpaths de release de la app. Lo mira el grafo resuelto
+// (rootComponent: un proveedor, compatible con la configuration cache), no una medición única. Solo androidApp: en iOS el
+// stub viaja a propósito (CLAUDE.md §13) y el de commonTest es de tests. Paso de la puerta y del job `android`.
+tasks.register("verificarSinStubEnRelease") {
+    description = "Falla si ktor-client-mock entra en releaseRuntimeClasspath o releaseLocalRuntimeClasspath."
+    val raices =
+        listOf("releaseRuntimeClasspath", "releaseLocalRuntimeClasspath").map { nombre ->
+            nombre to configurations.named(nombre).flatMap { it.incoming.resolutionResult.rootComponent }
+        }
+    doLast {
+        fun modulos(raiz: ResolvedComponentResult): Set<String> {
+            val vistos = mutableSetOf<ResolvedComponentResult>()
+            val pendientes = ArrayDeque(listOf(raiz))
+            while (pendientes.isNotEmpty()) {
+                val c = pendientes.removeFirst()
+                if (!vistos.add(c)) continue
+                c.dependencies.filterIsInstance<ResolvedDependencyResult>().forEach { pendientes.add(it.selected) }
+            }
+            return vistos.mapNotNull { it.moduleVersion?.let { m -> "${m.group}:${m.name}" } }.toSet()
+        }
+        val malos = raices.filter { (_, raiz) -> "io.ktor:ktor-client-mock" in modulos(raiz.get()) }.map { it.first }
+        check(malos.isEmpty()) { "El stub de config (io.ktor:ktor-client-mock) está en: $malos" }
+        println("Sin stub en release: ${raices.map { it.first }}")
+    }
+}
+
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_11
@@ -43,7 +71,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.koin.android)
     implementation(libs.ktor.client.core)
-    // El stub de config, SOLO en debug (v2 Fase 4). Nunca en release: lo comprueba la dependencia de releaseRuntimeClasspath.
+    // El stub de config, SOLO en debug (v2 Fase 4). Nunca en release: lo comprueba :androidApp:verificarSinStubEnRelease.
     debugImplementation(libs.ktor.client.mock)
 
     implementation(libs.compose.uiToolingPreview)
