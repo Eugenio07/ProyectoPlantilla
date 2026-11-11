@@ -7,7 +7,7 @@ import kotlin.experimental.ExperimentalNativeApi
  * iOS: SOLO registra; no hay recuperación. `setUnhandledExceptionHook` y no `NSSetUncaughtExceptionHandler`, que exige
  * `staticCFunction` y no captura closures.
  */
-class IosGlobalCrashHandler(private val logger: Logger) : GlobalCrashHandler {
+class IosGlobalCrashHandler(private val logger: Logger, private val breaker: CrashCircuitBreaker) : GlobalCrashHandler {
     private var installed = false
 
     @OptIn(ExperimentalNativeApi::class)
@@ -16,6 +16,7 @@ class IosGlobalCrashHandler(private val logger: Logger) : GlobalCrashHandler {
         installed = true
         setUnhandledExceptionHook { throwable ->
             logger.error(TAG, "crash no gestionado (iOS: solo se registra)", throwable)
+            breaker.recordCrash()
         }
     }
 

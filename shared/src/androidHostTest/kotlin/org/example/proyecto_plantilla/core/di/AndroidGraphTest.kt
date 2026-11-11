@@ -5,7 +5,11 @@ import io.ktor.client.HttpClient
 import io.mockk.mockk
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.koin.android.ext.koin.androidContext
+import org.example.proyecto_plantilla.core.crash.CrashBreakerConfig
+import org.example.proyecto_plantilla.core.crash.CrashCircuitBreaker
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
+import org.example.proyecto_plantilla.core.crash.HealthyUptimeReset
+import kotlin.test.assertEquals
 import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.platform.AppBuildInfo
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
@@ -34,6 +38,9 @@ class AndroidGraphTest {
         }.koin
         assertNotNull(koin.getOrNull<HttpClient>(), "HttpClient")
         assertNotNull(koin.getOrNull<GlobalCrashHandler>(), "GlobalCrashHandler")
+        assertNotNull(koin.getOrNull<CrashCircuitBreaker>(), "CrashCircuitBreaker")
+        assertNotNull(koin.getOrNull<HealthyUptimeReset>(), "HealthyUptimeReset")
+        assertEquals(10_000, koin.get<CrashBreakerConfig>().windowMs, "ventana de Android")
         assertNotNull(koin.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")

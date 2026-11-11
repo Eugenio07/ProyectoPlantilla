@@ -3,7 +3,13 @@ package org.example.proyecto_plantilla.core.di
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
 import org.example.proyecto_plantilla.core.crash.AndroidGlobalCrashHandler
+import org.example.proyecto_plantilla.core.crash.CrashCounterStore
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
+import org.example.proyecto_plantilla.core.crash.HealthyUptimeReset
+import org.example.proyecto_plantilla.core.crash.SharedPrefsCrashCounterStore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.example.proyecto_plantilla.core.log.AndroidLogger
 import org.example.proyecto_plantilla.core.log.Logger
 import org.example.proyecto_plantilla.core.network.NetworkConfig
@@ -21,7 +27,9 @@ import org.koin.dsl.module
 fun androidPlatformModule(config: NetworkConfig, engineOverride: HttpClientEngine?, buildInfo: AppBuildInfo): Module = module {
     single { config }
     single { buildInfo }
-    single<GlobalCrashHandler> { AndroidGlobalCrashHandler(androidContext(), get(), get()) }
+    single<GlobalCrashHandler> { AndroidGlobalCrashHandler(androidContext(), get(), get(), get()) }
+    single<CrashCounterStore> { SharedPrefsCrashCounterStore(androidContext()) }
+    single { HealthyUptimeReset(get(), get(), CoroutineScope(SupervisorJob() + Dispatchers.Default)) }
     single<HttpClientEngine> { engineOverride ?: OkHttp.create() }
     single<AppVersionProvider> { AndroidAppVersionProvider(androidContext()) }
     single<Logger> { AndroidLogger() }
