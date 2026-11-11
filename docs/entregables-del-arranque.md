@@ -52,3 +52,9 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 9 | `config/checks/claude_md_excepciones.txt` | Reglas que pueden pasarse del umbral, con su motivo |
 | 9 | `docs/overviews/README.md` | Qué es un overview y cuándo se actualiza |
 | 9 | `docs/reversiones/_plantilla.md` | Fichero de reversión de una escritura reversible |
+| 10 | `.claude/settings.json` | Registro de los hooks del proyecto |
+| 10 | `.claude/hooks/guard-protected-files.sh` | Guard PreToolUse (falla cerrado) |
+| 10 | `.claude/hooks/stop-run-jvm-tests.sh` | Stop: tests JVM (falla abierto) |
+| 10 | `.claude/hooks/stop-verificadores.sh` | Stop: verificadores de la puerta sin Gradle |
+| 10 | `.claude/hooks/stop-ui-audit-reminder.sh` | Stop: recordatorio de la auditoría visual |
+| 10 | `config/checks/hooks_test.sh` | Pruebas de los hooks |

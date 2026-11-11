@@ -51,6 +51,9 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 - Comprueba que un verde es de una ejecución: `config/checks/corrio.sh` (puerta y CI). Por qué:
   `wiki/trampas/puerta-tarea-sin-acciones.md`.
 
+- Deja que los hooks de `.claude/` informen (Stop: fallan abiertos) y que el guard deniegue (falla cerrado). Prueba:
+  `config/checks/hooks_test.sh --completo`.
+
 ## §5 · Arquitectura y red
 
 - Respeta la regla de dependencias de `domain`: depende solo de `core/error`, `core/result`, `core/log` (interfaz),

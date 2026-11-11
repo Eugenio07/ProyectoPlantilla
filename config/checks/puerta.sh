@@ -63,7 +63,7 @@ done
 VERDES=":shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :shared:testAndroidHostTest :shared:compileKotlinIosSimulatorArm64 :shared:iosSimulatorArm64Test"
 
 # Verificadores que son paso de la puerta (los informativos, como que_va_ahora.py, no van aquí).
-VERIFICADORES="entregables.py cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py"
+VERIFICADORES="entregables.py cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py hooks_test.sh"
 
 paso "a) formato"
 ./gradlew spotlessCheck --console=plain -q
@@ -92,7 +92,10 @@ fi
 paso "d) verificadores"
 for v in $VERIFICADORES; do
   echo "--- $v"
-  python3 -I "config/checks/$v"
+  case "$v" in
+    *.sh) bash "config/checks/$v" ;;
+    *) python3 -I "config/checks/$v" ;;
+  esac
   c=$?; [ "$c" -eq 0 ] || rojo "d) verificador $v" "$c"
 done
 
