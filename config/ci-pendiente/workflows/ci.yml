@@ -1,0 +1,249 @@
+# CI de la plantilla (v2, Fase 7).
+#
+# RANURA «dónde corre»: runners ALOJADOS de GitHub (no hay runner propio). Decisión con estimación, sin datos de
+# facturación todavía: se reabre con el método de la Fase 7 (gh api de ejecuciones y jobs, ceil(s/60) por job,
+# contrastado con la API de facturación) cuando haya un mes de ejecuciones.
+# COSTE: se optimiza por MINUTOS FACTURADOS, no por tiempo de reloj. Cada job paga su montaje y su redondeo al minuto,
+# y macOS factura ×10: NO se parte un job «para que tarde menos». Un job saltado por un `if` cuesta 0.
+# NO on.paths en ningún job que pueda ser requerido: un workflow no disparado deja el check en «Expected» para siempre.
+# La puerta local (config/checks/puerta.sh) corre MÁS que el CI: el candado, el recuento de tests de los XML y los tests
+# de iOS en simulador solo corren en local; el PR dice qué no corrió aquí.
+
+name: ci
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Solo se cancela un PR que recibe otro push; un push a develop/main se verifica entero.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  # ALCANCE (solo PR): si el diff es SOLO documentación, se saltan los jobs que compilan y calidad corre sus guiones
+  # sin Gradle. alcance.sh sale 3 si no puede listar el diff → se corre todo. Ubuntu: coste mínimo (1 minuto).
+  alcance:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    outputs:
+      solo_docs: ${{ steps.a.outputs.solo_docs }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: a
+        run: config/checks/alcance.sh "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" | tee -a "$GITHUB_OUTPUT" || true
+
+  # SELLO DEL ÁRBOL (solo push a develop): si el árbol es IDÉNTICO byte a byte a uno sellado por un PR (artefacto
+  # verificado-<job>-<árbol>), se saltan android y calidad. Ante cualquier duda (API caída, el push toca Gradle) se
+  # verifica. main se verifica SIEMPRE (no pasa por aquí). workflow_dispatch fuerza la verificación.
+  arbol:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      saltar: ${{ steps.s.outputs.saltar }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: s
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ANTES: ${{ github.event.before }}
+          DESPUES: ${{ github.sha }}
+        run: |
+          arbol=$(git rev-parse "$DESPUES^{tree}")
+          if ! cambios=$(git diff --name-only "$ANTES" "$DESPUES"); then
+            echo "No pude listar el push: se verifica."; echo "saltar=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          if printf '%s\n' "$cambios" | grep -qE '(\.gradle\.kts$|^gradle/)'; then
+            echo "El push toca Gradle: se verifica."; echo "saltar=false" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          for job in android calidad; do
+            n=$(gh api "repos/${{ github.repository }}/actions/artifacts?name=verificado-$job-$arbol" --jq .total_count) || n=0
+            if [ "$n" -lt 1 ]; then
+              echo "Sin sello de $job para el árbol $arbol: se verifica."; echo "saltar=false" >> "$GITHUB_OUTPUT"; exit 0
+            fi
+          done
+          echo "Árbol $arbol sellado por android y calidad en su PR: se salta."; echo "saltar=true" >> "$GITHUB_OUTPUT"
+          echo "ℹ️ android y calidad saltados: el árbol \`$arbol\` es idéntico al verificado en su PR." >> "$GITHUB_STEP_SUMMARY"
+
+  # Dónde: ubuntu alojado. Por qué: los tres primeros verdes no necesitan macOS (×10). Si se moviera a otra máquina,
+  # dejaría de comprobarse fuera de la máquina de trabajo la compilación de Android y los tests JVM.
+  android:
+    needs: [alcance, arbol]
+    if: ${{ !cancelled() && needs.alcance.outputs.solo_docs != 'true' && needs.arbol.outputs.saltar != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          # gradle/gradle-daemon-jvm.properties pide Azul (Zulu) 21 para el daemon (el manual dice Temurin 17: gana lo
+          # que encuentras). Con otro vendor Gradle descargaría el suyo en cada job.
+          distribution: zulu
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew
+      - name: Guard de ficheros prohibidos RASTREADOS
+        run: |
+          rastreados=$(git ls-files)   # si git falla, el paso falla (bash -e): no se tapa con || true
+          malos=$(printf '%s\n' "$rastreados" | awk -F/ '{print tolower($NF)}' | grep -E '^(google-services\.json|googleservice-info\.plist|local\.properties|.*\.jks|.*\.keystore)$' || true)
+          if [ -n "$malos" ]; then echo "Ficheros prohibidos rastreados:"; echo "$malos"; exit 1; fi
+      # --no-build-cache: «verde no es corrió». Cada verde se registra y corrio.sh falla si una tarea que compila o
+      # testea salió UP-TO-DATE o FROM-CACHE.
+      - name: Verde 1 · commonMain aislado
+        run: |
+          ./gradlew :shared:compileCommonMainKotlinMetadata --no-build-cache --console=plain | tee "$RUNNER_TEMP/v1.log"
+          config/checks/corrio.sh "$RUNNER_TEMP/v1.log"
+      - name: Verde 2 · la app Android
+        run: |
+          ./gradlew :androidApp:assembleDebug --no-build-cache --console=plain | tee "$RUNNER_TEMP/v2.log"
+          config/checks/corrio.sh "$RUNNER_TEMP/v2.log"
+      - name: Verde 3 · tests JVM (commonTest + androidHostTest)
+        run: |
+          rm -rf shared/build/test-results
+          ./gradlew :shared:testAndroidHostTest --no-build-cache --console=plain | tee "$RUNNER_TEMP/v3.log"
+          config/checks/corrio.sh "$RUNNER_TEMP/v3.log"
+          python3 -I config/checks/recuento_tests.py shared/build/test-results
+      - name: Sello del árbol verificado
+        if: github.event_name == 'pull_request'
+        run: echo "${{ github.sha }}" > sello.txt && echo "ARBOL=$(git rev-parse HEAD^{tree})" >> "$GITHUB_ENV"
+      - if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: verificado-android-${{ env.ARBOL }}
+          path: sello.txt
+          retention-days: 30
+
+  # Dónde: ubuntu alojado, APARTE de android: un check dice lo que comprueba. checkout con fetch-depth: 0 porque cola.py
+  # necesita el historial completo (con uno superficial sale 3, nunca verde). Si se moviera, dejaría de comprobarse fuera
+  # de la máquina de trabajo el formato, detekt y los verificadores.
+  calidad:
+    needs: [alcance, arbol]
+    if: ${{ !cancelled() && needs.arbol.outputs.saltar != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew
+      - uses: ./.github/actions/calidad
+        with:
+          sin_gradle: ${{ needs.alcance.outputs.solo_docs == 'true' }}
+      - name: Sello del árbol verificado
+        if: github.event_name == 'pull_request' && needs.alcance.outputs.solo_docs != 'true'
+        run: echo "${{ github.sha }}" > sello.txt && echo "ARBOL=$(git rev-parse HEAD^{tree})" >> "$GITHUB_ENV"
+      - if: github.event_name == 'pull_request' && needs.alcance.outputs.solo_docs != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: verificado-calidad-${{ env.ARBOL }}
+          path: sello.txt
+          retention-days: 30
+
+  # VARADAS (tras cada push a develop): commits de ramas cuyo PR se fusionó o cerró que no están en develop, y ramas de
+  # más de una semana sin PR. Sin acceso a GitHub sale 3 («no pude preguntar»), que NO se lee como «hay varados».
+  varadas:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        run: config/checks/ramas_varadas.sh develop
+
+  # Dónde: macOS alojado (×10). Solo en PR a develop y main desde el día 1; en push se salta (el PR ya validó ese árbol).
+  # Compila Kotlin/Native siempre; construir y ARRANCAR la app en el simulador solo si el filtro lo pide. Si se moviera,
+  # dejaría de comprobarse fuera de la máquina de trabajo que iOS compila (los tres primeros verdes no lo cazan).
+  ios:
+    needs: [alcance]
+    if: github.event_name == 'pull_request' && contains(fromJSON('["main","develop"]'), github.base_ref) && needs.alcance.outputs.solo_docs != 'true'
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew
+      - name: Versión de Kotlin (clave de la caché de Kotlin/Native)
+        id: kotlin
+        run: echo "version=$(grep -E '^kotlin = ' gradle/libs.versions.toml | cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
+      - name: Caché de ~/.konan por versión de Kotlin (solo en runner alojado)
+        uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: konan-${{ runner.os }}-${{ steps.kotlin.outputs.version }}
+      - name: Verde 4 · Kotlin/Native para el simulador
+        run: |
+          ./gradlew :shared:compileKotlinIosSimulatorArm64 --no-build-cache --console=plain | tee "$RUNNER_TEMP/v4.log"
+          config/checks/corrio.sh "$RUNNER_TEMP/v4.log"
+      - name: Xcode del runner (la plantilla se hizo con Xcode 27; si este falla, es lo primero que se mira)
+        run: xcodebuild -version
+      # FILTRO POR PASO (no on.paths): ¿el diff toca algo que pueda romper el ARRANQUE de iOS? Es una APUESTA, no una
+      # garantía. Si no puede listar el diff, CORRE.
+      - name: Filtro · ¿hay que arrancar la app?
+        id: filtro
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if ! cambios=$(git diff --name-only "$BASE" "$HEAD"); then
+            echo "No pude listar el diff: corre."; echo "arrancar=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          # Cada ruta, con su porqué:
+          #   iosApp/                 el proyecto Xcode y el arranque en Swift (startKoinIos, #if DEBUG)
+          #   shared/src/iosMain/     el código que solo corre en iOS (crash hook, stores, logger)
+          #   shared/src/commonMain/  el grafo de Koin y la navegación (un enum como argumento de ruta mata el arranque)
+          #   *.gradle.kts, gradle/   versiones y plugins (un klib con otra Kotlin rompe iOS)
+          if echo "$cambios" | grep -qE '^(iosApp/|shared/src/iosMain/|shared/src/commonMain/|gradle/|.*\.gradle\.kts$)'; then
+            echo "arrancar=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "El diff no toca rutas de arranque: se salta."; echo "arrancar=false" >> "$GITHUB_OUTPUT"
+            echo "⚠️ **No se comprobó que la app iOS arranque**: el diff no toca rutas de arranque (filtro por paso; es una apuesta)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Construir la app y comprobar que ARRANCA en el simulador
+        if: steps.filtro.outputs.arrancar == 'true'
+        run: |
+          # Destino por UDID, no por nombre (name= sin versión se completa con OS:latest).
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys; d=[x for r in json.load(sys.stdin)['devices'].values() for x in r if x['name'].startswith('iPhone')]; print(d[0]['udid'])")
+          echo "Simulador: $UDID"
+          xcrun simctl boot "$UDID" || true
+          xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug \
+            -destination "platform=iOS Simulator,id=$UDID" -derivedDataPath "$RUNNER_TEMP/dd" \
+            CODE_SIGNING_ALLOWED=NO build -quiet
+          APP="$RUNNER_TEMP/dd/Build/Products/Debug-iphonesimulator/Proyecto Plantilla.app"
+          BID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP/Info.plist")
+          xcrun simctl install "$UDID" "$APP"
+          xcrun simctl launch "$UDID" "$BID" -mockScenario UP_TO_DATE
+          sleep 15
+          if xcrun simctl spawn "$UDID" launchctl list | grep -q "$BID"; then
+            echo "La app sigue viva a los 15 s."
+          else
+            echo "La app NO está viva a los 15 s: no arrancó o murió."; exit 1
+          fi

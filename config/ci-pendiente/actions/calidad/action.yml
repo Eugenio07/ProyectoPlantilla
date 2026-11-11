@@ -1,0 +1,31 @@
+# Los pasos de calidad, en UNA acción compuesta: si otro workflow los repite, dos copias derivan.
+name: calidad
+description: spotless, detekt y los verificadores que no necesitan nada externo
+inputs:
+  sin_gradle:
+    description: "true en un PR de solo documentación: corre los guiones, no Gradle"
+    default: "false"
+runs:
+  using: composite
+  steps:
+    - name: Formato (spotless + ktlint)
+      if: inputs.sin_gradle != 'true'
+      shell: bash
+      run: ./gradlew spotlessCheck --console=plain
+    - name: detekt (por source set)
+      if: inputs.sin_gradle != 'true'
+      shell: bash
+      run: >-
+        ./gradlew --console=plain --no-build-cache :androidApp:detekt
+        :shared:detektAndroidMainSourceSet :shared:detektAndroidHostTestSourceSet
+        :shared:detektCommonMainSourceSet :shared:detektCommonTestSourceSet
+        :shared:detektIosMainSourceSet :shared:detektIosTestSourceSet
+    - name: Entregables del arranque
+      shell: bash
+      run: python3 -I config/checks/entregables.py
+    - name: La cola (necesita el historial completo; con uno superficial sale 3)
+      shell: bash
+      run: python3 -I config/checks/cola.py
+    - name: Tope de los planes
+      shell: bash
+      run: python3 -I config/checks/tope_plan.py
