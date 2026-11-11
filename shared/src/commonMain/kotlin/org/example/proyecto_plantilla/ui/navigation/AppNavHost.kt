@@ -16,9 +16,9 @@ import org.koin.core.parameter.parametersOf
  * sale de la app. En iOS el back-swipe lo da el propio NavHost (sin transiciones propias, que lo desactivarían).
  */
 @Composable
-fun AppNavHost() {
+fun AppNavHost(startAtHome: Boolean) {
     val nav = rememberNavController()
-    NavHost(navController = nav, startDestination = SplashRoute) {
+    NavHost(navController = nav, startDestination = if (startAtHome) HomeRoute else SplashRoute) {
         composable<SplashRoute> {
             SplashScreen(
                 viewModel = koinViewModel(),

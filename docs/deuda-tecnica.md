@@ -73,6 +73,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. quien decide aprueba o cambia la acción por code de `api-errors.md`;
   3. quien decide dice qué salida ofrece la pantalla de actualización obligatoria (hoy ninguna: no hay URL de tienda).
      Hasta entonces la persona queda sin salida dentro de la app, que es lo que «bloqueante» pide.
+  4. la copy de `NETWORK` («No hay conexión…») afirma una causa que no siempre es la real: también cae ahí un servidor
+     que no resuelve (medido 2026-11-11: build `releaseLocal` contra `api.example.invalid` muestra «No hay conexión»
+     con la red del emulador funcionando). Manual de operación §10: el texto no afirma lo que no sabe.
 - **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar.
 
 ## Cerrados

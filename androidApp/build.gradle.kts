@@ -43,6 +43,14 @@ android {
         }
     }
     buildTypes {
+        // releaseLocal: SOLO para probar en local el comportamiento de release (Fase 6: el crash reabre en Home).
+        // Firmado con la clave de DEPURACIÓN: nunca se distribuye. `release` sigue sin firmar hasta la lista de release
+        // de Android (keystore real, Fase 8). El CI no construye esta variante.
+        create("releaseLocal") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += listOf("release")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -54,6 +62,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    sourceSets {
+        // releaseLocal usa el engine de release (sin stub).
+        getByName("releaseLocal").kotlin.directories.add("src/release/kotlin")
     }
     buildFeatures {
         compose = true

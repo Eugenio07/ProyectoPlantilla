@@ -5,10 +5,12 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
+import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.di.initKoin
 import org.example.proyecto_plantilla.core.di.iosPlatformModule
 import org.example.proyecto_plantilla.core.network.ConfigMockScenario
 import org.example.proyecto_plantilla.core.network.NetworkConfig
+import org.example.proyecto_plantilla.core.platform.AppBuildInfo
 import org.example.proyecto_plantilla.ui.uiModule
 import org.koin.core.Koin
 import org.koin.core.KoinApplication
@@ -27,9 +29,13 @@ fun startKoinIos(baseUrl: String, useMockConfig: Boolean, isDebug: Boolean): Koi
     koinApplication?.let { return it.koin }
     val engine = if (useMockConfig) configMockEngine() else null
     val app = initKoin(
-        listOf(iosPlatformModule(NetworkConfig(baseUrl = baseUrl, enableLogging = isDebug), engine), uiModule),
+        listOf(
+            iosPlatformModule(NetworkConfig(baseUrl = baseUrl, enableLogging = isDebug), engine, AppBuildInfo(isDebug)),
+            uiModule,
+        ),
     )
     koinApplication = app
+    app.koin.get<GlobalCrashHandler>().install()
     return app.koin
 }
 
