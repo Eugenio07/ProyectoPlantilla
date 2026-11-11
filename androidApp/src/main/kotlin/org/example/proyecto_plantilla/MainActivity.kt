@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import org.example.proyecto_plantilla.core.crash.AndroidGlobalCrashHandler
 import org.example.proyecto_plantilla.core.network.ConfigMockScenario
 
 class MainActivity : ComponentActivity() {
@@ -15,8 +16,11 @@ class MainActivity : ComponentActivity() {
             ConfigMockScenario.select(intent.getStringExtra("mockScenario"))
         }
 
+        // Solo en el primer onCreate: una recreación (giro, tema) no vuelve a saltarse la Splash.
+        val startAtHome = savedInstanceState == null &&
+            intent.getBooleanExtra(AndroidGlobalCrashHandler.EXTRA_START_AT_HOME, false)
         setContent {
-            App()
+            App(startAtHome = startAtHome)
         }
     }
 }

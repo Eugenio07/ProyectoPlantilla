@@ -1,6 +1,7 @@
 package org.example.proyecto_plantilla
 
 import io.ktor.client.HttpClient
+import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
@@ -22,6 +23,7 @@ class KoinIosTest {
         val second = startKoinIos(baseUrl = "https://example.test/", useMockConfig = false, isDebug = false)
         assertSame(first, second, "startKoinIos no es idempotente")
         assertNotNull(first.getOrNull<HttpClient>(), "HttpClient")
+        assertNotNull(first.getOrNull<GlobalCrashHandler>(), "GlobalCrashHandler")
         assertNotNull(first.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(first.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(first.getOrNull<AppVersionProvider>(), "AppVersionProvider")

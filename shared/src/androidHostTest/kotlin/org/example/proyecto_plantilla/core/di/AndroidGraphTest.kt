@@ -5,7 +5,9 @@ import io.ktor.client.HttpClient
 import io.mockk.mockk
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.koin.android.ext.koin.androidContext
+import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.network.NetworkConfig
+import org.example.proyecto_plantilla.core.platform.AppBuildInfo
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
@@ -27,10 +29,11 @@ class AndroidGraphTest {
 
     @Test
     fun androidGraphResolvesHttpClientAndMapper() {
-        val koin = initKoin(listOf(androidPlatformModule(NetworkConfig("https://example.test/", false), engineOverride = null), uiModule)) {
+        val koin = initKoin(listOf(androidPlatformModule(NetworkConfig("https://example.test/", false), engineOverride = null, buildInfo = AppBuildInfo(isDebug = false)), uiModule)) {
             androidContext(mockk<Context>(relaxed = true))
         }.koin
         assertNotNull(koin.getOrNull<HttpClient>(), "HttpClient")
+        assertNotNull(koin.getOrNull<GlobalCrashHandler>(), "GlobalCrashHandler")
         assertNotNull(koin.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")
