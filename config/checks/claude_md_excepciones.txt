@@ -1,0 +1,5 @@
+# Reglas de CLAUDE.md que pueden pasarse del umbral de líneas, una por línea:
+#   <sección (su prefijo §n)> | <primeras palabras de la regla> | <MOTIVO>
+# Se cuentan APARTE (no fallan por el umbral y no entran en la media). claude_md.py falla si una no tiene motivo o
+# nombra una regla que no existe, y avisa si ya no hace falta.
+§5 | Respeta la regla de dependencias de `domain` | enumera los paquetes permitidos: la versión corta genera falsos positivos y «correcciones» de código sano (v2, Fase 1)
