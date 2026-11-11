@@ -38,5 +38,8 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
   [medido 2026-11-11]. Lo que el manual llama `master` se lee `main` (gana lo que encuentras).
 - **Fusión sin protección de ramas** (Fase 7): no se usa `gh pr merge --auto`; se espera el verde y se fusiona a mano;
   antes de fusionar se comprueba que la cabeza de la rama es la revisada.
+- **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
+  `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
+- **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.
 - **Autorización del arranque:** quien decide autorizó construir la plantilla entera de forma autónoma, parando solo si
   hay un bloqueo (mensaje literal en `docs/mediciones/2026-11-11-autorizacion-del-arranque.md`).
