@@ -35,7 +35,7 @@ Contra el commit: `6fd9bc1`
 |---|---|---|---|
 | El botón existe solo en depuración | Verificable | `crashTestButtonOnlyInDebug` (rojo visto con el stub); el ramo `release` del mismo test es su brazo de control | Pasó |
 | …en las dos plataformas | Comprobación humana declarada | Ejecutor, 2026-11-11: Android debug lo muestra, `releaseLocal` no (uiautomator); iOS debug lo muestra (captura de la herramienta del simulador) | Declarado |
-| Removible por grep | Verificable | `grep -rn CRASH-TEST-SCAFFOLD shared/src androidApp/src iosApp/iosApp` → 5 líneas, en `HomeViewModel.kt`, `HomeScreen.kt` y `HomeViewModelTest.kt` | Pasó |
+| Removible por grep | Verificable | `grep -rn CRASH-TEST-SCAFFOLD shared/src androidApp/src iosApp/iosApp` → 6 líneas, en `HomeViewModel.kt`, `HomeScreen.kt` y `HomeViewModelTest.kt` | Pasó |
 | **iOS (de A):** el crash se registra | Comprobación humana declarada | Consola de `simctl launch --console-pty`: `E/CrashHandler: crash no gestionado (iOS: solo se registra) — kotlin.IllegalStateException: CRASH-TEST-SCAFFOLD…` | Declarado |
 | **iOS (de B):** 3 crashes + reaperturas en < 60 s → pantalla segura; Reintentar recupera | Comprobación humana declarada | iPhone 18 Pro (UDID explícito), depuración: tres toques + `simctl launch` → la cuarta apertura muestra la pantalla segura (`pantalla-segura-ios.png`); Reintentar → Splash → «Inicio» | Declarado |
 

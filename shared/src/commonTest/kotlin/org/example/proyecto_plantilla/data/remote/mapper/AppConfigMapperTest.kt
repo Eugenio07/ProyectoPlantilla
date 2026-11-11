@@ -23,7 +23,8 @@ class AppConfigMapperTest {
     fun numberKeepsItsTextSoValidationRejectsIt() = assertEquals("1.4", minVersionOf("""{"minVersion":1.4}"""))
 
     @Test
-    fun objectKeepsItsJsonSoValidationRejectsIt() = assertEquals("""{"a":1}""", minVersionOf("""{"minVersion":{"a":1}}"""))
+    fun objectKeepsItsJsonSoValidationRejectsIt() =
+        assertEquals("""{"a":1}""", minVersionOf("""{"minVersion":{"a":1}}"""))
 
     @Test
     fun arrayKeepsItsJsonSoValidationRejectsIt() = assertEquals("[1,4,0]", minVersionOf("""{"minVersion":[1,4,0]}"""))

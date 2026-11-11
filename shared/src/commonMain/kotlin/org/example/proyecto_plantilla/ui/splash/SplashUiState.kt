@@ -8,8 +8,12 @@ sealed interface SplashUiState {
     data object Ready : SplashUiState
 
     /** Bloqueante: no hay forma de seguir sin actualizar. */
-    data class ForceUpdate(val minVersion: String) : SplashUiState
+    data class ForceUpdate(
+        val minVersion: String,
+    ) : SplashUiState
 
     /** No se pudo traer la config: lo pinta `ErrorState`, con Reintentar si el tipo lo admite. */
-    data class Error(val kind: ErrorKind) : SplashUiState
+    data class Error(
+        val kind: ErrorKind,
+    ) : SplashUiState
 }

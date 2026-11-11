@@ -17,8 +17,9 @@ class MainActivity : ComponentActivity() {
         }
 
         // Solo en el primer onCreate: una recreación (giro, tema) no vuelve a saltarse la Splash.
-        val startAtHome = savedInstanceState == null &&
-            intent.getBooleanExtra(AndroidGlobalCrashHandler.EXTRA_START_AT_HOME, false)
+        val startAtHome =
+            savedInstanceState == null &&
+                intent.getBooleanExtra(AndroidGlobalCrashHandler.EXTRA_START_AT_HOME, false)
         setContent {
             App(startAtHome = startAtHome)
         }

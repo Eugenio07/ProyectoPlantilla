@@ -28,7 +28,11 @@ fun CrashSafeScreen(onRetry: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
     ) {
-        Text("Algo no salió bien", style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
+        Text(
+            "Algo no salió bien",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.semantics { heading() },
+        )
         Text(
             "La app se cerró varias veces seguidas. Puedes volver a intentarlo.",
             style = MaterialTheme.typography.bodyLarge,

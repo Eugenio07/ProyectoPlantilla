@@ -24,7 +24,10 @@ import proyectoplantilla.shared.generated.resources.home_title
 
 /** Placeholder SIN diseño (v2 Fase 5). */
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, onOpenDetail: (String) -> Unit) {
+fun HomeScreen(
+    viewModel: HomeViewModel,
+    onOpenDetail: (String) -> Unit,
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier.fillMaxSize().safeDrawingPadding().padding(24.dp),
@@ -37,8 +40,10 @@ fun HomeScreen(viewModel: HomeViewModel, onOpenDetail: (String) -> Unit) {
             modifier = Modifier.semantics { heading() },
         )
         Button(onClick = { onOpenDetail(state.sampleDetailId) }) { Text(stringResource(Res.string.home_open_detail)) }
-        // CRASH-TEST-SCAFFOLD: solo en depuración (Android y iOS). Prueba el GlobalCrashHandler y el breaker (v2 Fase 6 C).
-        // Retirar: `grep -rn CRASH-TEST-SCAFFOLD` y borrar cada bloque. Texto de herramienta, no de producto: va en el código.
+        // CRASH-TEST-SCAFFOLD: solo en depuración (Android y iOS). Prueba el GlobalCrashHandler y el breaker (v2 Fase 6
+        // C).
+        // Retirar: `grep -rn CRASH-TEST-SCAFFOLD` y borrar cada bloque. Texto de herramienta, no de producto: va en el
+        // código.
         if (state.showCrashTest) {
             OutlinedButton(onClick = { throw IllegalStateException("CRASH-TEST-SCAFFOLD: crash provocado") }) {
                 Text("Provocar crash (prueba)")

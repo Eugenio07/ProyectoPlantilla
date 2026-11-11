@@ -10,11 +10,24 @@ import kotlin.test.assertTrue
 class ErrorKindMapperTest {
     private class FakeLogger : Logger {
         val infos = mutableListOf<String>()
-        override fun info(tag: String, message: String) {
+
+        override fun info(
+            tag: String,
+            message: String,
+        ) {
             infos += message
         }
-        override fun warn(tag: String, message: String) = Unit
-        override fun error(tag: String, message: String, throwable: Throwable?) = Unit
+
+        override fun warn(
+            tag: String,
+            message: String,
+        ) = Unit
+
+        override fun error(
+            tag: String,
+            message: String,
+            throwable: Throwable?,
+        ) = Unit
     }
 
     private val logger = FakeLogger()
@@ -58,6 +71,8 @@ class ErrorKindMapperTest {
     fun onlyRejectionsThatRetryCannotChangeHideRetry() {
         assertFalse(ErrorKind.UNAUTHORIZED.canRetry)
         assertFalse(ErrorKind.VALIDATION.canRetry)
-        assertTrue(ErrorKind.entries.filter { it != ErrorKind.UNAUTHORIZED && it != ErrorKind.VALIDATION }.all { it.canRetry })
+        assertTrue(
+            ErrorKind.entries.filter { it != ErrorKind.UNAUTHORIZED && it != ErrorKind.VALIDATION }.all { it.canRetry },
+        )
     }
 }

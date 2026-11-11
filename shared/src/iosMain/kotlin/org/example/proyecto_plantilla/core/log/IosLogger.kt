@@ -8,10 +8,19 @@ package org.example.proyecto_plantilla.core.log
  * formato. El mensaje se compone en Kotlin y sale entero.
  */
 class IosLogger : Logger {
-    override fun info(tag: String, message: String) = println("I/$tag: $message")
+    override fun info(
+        tag: String,
+        message: String,
+    ) = println("I/$tag: $message")
 
-    override fun warn(tag: String, message: String) = println("W/$tag: $message")
+    override fun warn(
+        tag: String,
+        message: String,
+    ) = println("W/$tag: $message")
 
-    override fun error(tag: String, message: String, throwable: Throwable?) =
-        println("E/$tag: $message" + (throwable?.let { " — $it" } ?: ""))
+    override fun error(
+        tag: String,
+        message: String,
+        throwable: Throwable?,
+    ) = println("E/$tag: $message" + (throwable?.let { " — $it" } ?: ""))
 }

@@ -15,7 +15,10 @@ object SemanticVersionComparator {
 
     fun isValid(version: String): Boolean = strict.matches(version.trim())
 
-    fun compare(a: String, b: String): Int {
+    fun compare(
+        a: String,
+        b: String,
+    ): Int {
         val x = segments(a)
         val y = segments(b)
         for (i in 0 until maxOf(x.size, y.size)) {
@@ -26,7 +29,8 @@ object SemanticVersionComparator {
     }
 
     private fun segments(version: String): List<Int> =
-        version.trim()
+        version
+            .trim()
             .substringBefore('+')
             .substringBefore('-')
             .split('.')

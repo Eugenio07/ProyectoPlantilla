@@ -1,0 +1,19 @@
+# Solo las DIFERENCIAS con la configuración por defecto de detekt, cada una con su porqué.
+# No se relaja un umbral para poner el build en verde.
+
+naming:
+  FunctionNaming:
+    # Los @Composable se nombran en PascalCase (convención de Compose).
+    ignoreAnnotated: ['Composable']
+  PackageNaming:
+    # El paquete lleva guion bajo (`proyecto_plantilla`) por decisión de quien decide (renombrado del 2026-11-11).
+    # Es la misma excepción que la regla package-name de ktlint (build.gradle.kts).
+    packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9_]*)*'
+
+style:
+  MagicNumber:
+    # Los status HTTP de los escenarios del stub son el dato del escenario, no un número mágico.
+    ignoreEnums: true
+    # En los tests un número es el caso de prueba. detekt solo excluye `test/` por defecto; los source sets KMP se
+    # llaman distinto.
+    excludes: ['**/commonTest/**', '**/androidHostTest/**', '**/iosTest/**', '**/test/**']

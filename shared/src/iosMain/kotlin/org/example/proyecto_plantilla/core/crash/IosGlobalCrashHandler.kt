@@ -7,7 +7,10 @@ import kotlin.experimental.ExperimentalNativeApi
  * iOS: SOLO registra; no hay recuperación. `setUnhandledExceptionHook` y no `NSSetUncaughtExceptionHandler`, que exige
  * `staticCFunction` y no captura closures.
  */
-class IosGlobalCrashHandler(private val logger: Logger, private val breaker: CrashCircuitBreaker) : GlobalCrashHandler {
+class IosGlobalCrashHandler(
+    private val logger: Logger,
+    private val breaker: CrashCircuitBreaker,
+) : GlobalCrashHandler {
     private var installed = false
 
     @OptIn(ExperimentalNativeApi::class)

@@ -23,21 +23,37 @@ import kotlin.test.assertEquals
 class SplashViewModelTest {
     private var config: Resource<AppConfig> = Resource.Success(AppConfig("1.0.0"))
 
-    private val logger = object : Logger {
-        override fun info(tag: String, message: String) = Unit
-        override fun warn(tag: String, message: String) = Unit
-        override fun error(tag: String, message: String, throwable: Throwable?) = Unit
-    }
+    private val logger =
+        object : Logger {
+            override fun info(
+                tag: String,
+                message: String,
+            ) = Unit
 
-    private val useCase = CheckForceUpdateUseCase(
-        repository = object : ConfigRepository {
-            override suspend fun getConfig() = config
-        },
-        appVersion = object : AppVersionProvider {
-            override fun versionName() = "1.0.0"
-        },
-        logger = logger,
-    )
+            override fun warn(
+                tag: String,
+                message: String,
+            ) = Unit
+
+            override fun error(
+                tag: String,
+                message: String,
+                throwable: Throwable?,
+            ) = Unit
+        }
+
+    private val useCase =
+        CheckForceUpdateUseCase(
+            repository =
+                object : ConfigRepository {
+                    override suspend fun getConfig() = config
+                },
+            appVersion =
+                object : AppVersionProvider {
+                    override fun versionName() = "1.0.0"
+                },
+            logger = logger,
+        )
 
     private fun vm() = SplashViewModel(useCase, ErrorKindMapper(logger))
 

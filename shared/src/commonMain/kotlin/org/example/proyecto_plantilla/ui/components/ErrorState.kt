@@ -29,10 +29,18 @@ import proyectoplantilla.shared.generated.resources.error_validation
 
 /** Error a pantalla completa, reutilizable. Reintentar solo si [ErrorKind.canRetry]. SIN diseño (v2 Fase 5). */
 @Composable
-fun ErrorState(kind: ErrorKind, onRetry: () -> Unit, modifier: Modifier = Modifier) {
+fun ErrorState(
+    kind: ErrorKind,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = modifier.fillMaxSize().safeDrawingPadding().padding(24.dp)
-            .semantics { liveRegion = LiveRegionMode.Polite },
+        modifier =
+            modifier
+                .fillMaxSize()
+                .safeDrawingPadding()
+                .padding(24.dp)
+                .semantics { liveRegion = LiveRegionMode.Polite },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
     ) {
@@ -43,11 +51,12 @@ fun ErrorState(kind: ErrorKind, onRetry: () -> Unit, modifier: Modifier = Modifi
     }
 }
 
-private fun ErrorKind.message(): StringResource = when (this) {
-    ErrorKind.NETWORK -> Res.string.error_network
-    ErrorKind.MAINTENANCE -> Res.string.error_maintenance
-    ErrorKind.RATE_LIMITED -> Res.string.error_rate_limited
-    ErrorKind.UNAUTHORIZED -> Res.string.error_unauthorized
-    ErrorKind.VALIDATION -> Res.string.error_validation
-    ErrorKind.GENERIC -> Res.string.error_generic
-}
+private fun ErrorKind.message(): StringResource =
+    when (this) {
+        ErrorKind.NETWORK -> Res.string.error_network
+        ErrorKind.MAINTENANCE -> Res.string.error_maintenance
+        ErrorKind.RATE_LIMITED -> Res.string.error_rate_limited
+        ErrorKind.UNAUTHORIZED -> Res.string.error_unauthorized
+        ErrorKind.VALIDATION -> Res.string.error_validation
+        ErrorKind.GENERIC -> Res.string.error_generic
+    }

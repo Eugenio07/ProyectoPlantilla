@@ -2,9 +2,9 @@ package org.example.proyecto_plantilla.ui.home
 
 import org.example.proyecto_plantilla.core.platform.AppBuildInfo
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import kotlin.test.assertEquals
 
 class HomeViewModelTest {
     @Test
