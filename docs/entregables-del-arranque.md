@@ -36,3 +36,7 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 6.5 | `config/checks/tope_plan_exclusiones.txt` | Secciones excluidas del tope, con su motivo |
 | 6.5 | `config/checks/corrio.sh` | «Verde no es corrió»: ninguna tarea que compila o testea sale UP-TO-DATE/FROM-CACHE (puerta y CI) |
 | 6.5 | `config/checks/recuento_tests.py` | Recuento de tests en los XML (puerta y CI) |
+| 7 | `config/checks/alcance.sh` | ¿El diff es solo documentación? |
+| 7 | `config/checks/ramas_varadas.sh` | Commits varados y ramas sin PR |
+| 7 | `config/ci-pendiente/workflows/ci.yml` | El CI (pendiente de subir a `.github/`, `#PP6`) |
+| 7 | `config/ci-pendiente/actions/calidad/action.yml` | Acción compuesta de calidad (pendiente, `#PP6`) |
