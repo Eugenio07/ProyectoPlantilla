@@ -110,10 +110,12 @@ jobs:
       # testea salió UP-TO-DATE o FROM-CACHE.
       # Los tres verdes en UNA invocación de Gradle (como la puerta): separados, el tercero encontraría UP-TO-DATE lo que
       # compiló el segundo y corrio.sh saldría 1 siempre (auditoría 2026-11-11, P0-1).
+      # verificarSinStubEnRelease (#PP12): el stub de config no entra en los classpaths de release.
       - name: Verdes 1-3 · commonMain, la app Android y los tests JVM
         run: |
           rm -rf shared/build/test-results
           ./gradlew :shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :shared:testAndroidHostTest \
+            :androidApp:verificarSinStubEnRelease \
             --no-build-cache --console=plain | tee "$RUNNER_TEMP/verdes.log"
           config/checks/corrio.sh "$RUNNER_TEMP/verdes.log"
           python3 -I config/checks/recuento_tests.py shared/build/test-results
