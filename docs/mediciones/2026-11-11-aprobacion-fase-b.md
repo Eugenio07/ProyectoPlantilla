@@ -29,3 +29,14 @@ Android por vida sana. Respuesta literal de quien decide:
 **Lectura del ejecutor:** en Android la racha son los crashes seguidos sin vida sana (15 s) entre medias, sin ventana; en
 iOS se queda la ventana de 60 s (reapertura manual, sin vida sana). En las dos, una vez disparada, la pantalla segura se
 mantiene hasta un reset (Reintentar; en Android también la vida sana).
+
+## Nivel P2 y pesos de `#PP22` y `#PP23` (2026-11-11, misma conversación)
+
+Tras fusionar el P1 (PR #39), el ejecutor preguntó «¿Arranco el nivel P2 con los pesos de #PP22 y #PP23 como higiene?».
+Respuesta literal de quien decide:
+
+> Sí, arranca P2
+
+**Lectura del ejecutor:** el nivel P2 cubre `#PP12`–`#PP23` salvo `#PP11` (pendiente solo de un proyecto real); los
+pesos de `#PP22` y `#PP23` se firman como higiene; la fase B ya estaba autorizada (punto 1 de arriba), y `#PP21`–`#PP23`
+entran en ella por esta respuesta.
