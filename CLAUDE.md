@@ -21,8 +21,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   `wiki/decisiones/ci-alojado.md`.
 - Protección de ramas: no disponible (403). Rigen las reglas de fusión de §9. Por qué:
   `wiki/decisiones/fusion-sin-proteccion.md`.
-- Backend: ninguno → contratos en rama A (§12). Personas: una. Quien decide: Eugenio Martínez. Revisor externo: por
-  confirmar por quien decide.
+- Backend: ninguno → contratos en rama A (§12). Personas: una. Quien decide: Eugenio Martínez. Revisor externo: el
+  agente `revisor-externo` (otro modelo; juzga la Parte 1), lanzado en la puerta del plan si quien decide lo pide.
 - Ruta crítica, activo crítico y dónde vive: no aplican a la plantilla; **cada app derivada los rellena antes de su
   primera ficha**. Publicada: no. El ejecutor prueba contra: local (stub de §6). Bandeja: incidencias de GitHub
   (por confirmar). Zona horaria: America/Caracas.
