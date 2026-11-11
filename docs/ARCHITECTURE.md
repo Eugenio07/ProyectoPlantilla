@@ -16,6 +16,7 @@ Raíz: `shared/src/commonMain/kotlin/org/example/proyecto_plantilla/`
 | `core/error` | `AppError` (Kotlin puro) |
 | `core/result` | `Resource<T>` (Kotlin puro) |
 | `core/log` | La **interfaz** de logging (la implementación puede vivir fuera) |
+| `core/version` | `SemanticVersionComparator` (Kotlin puro) |
 | `core/platform` | **Contratos** de proveedores de plataforma (interfaces). Las implementaciones van en `androidMain`/`iosMain`, inyectadas con Koin |
 | `core/crash` | `GlobalCrashHandler`, `CrashCircuitBreaker`, `CrashCounterStore`, `CrashReporter` (contratos y lógica) |
 | `data/remote/dto` | DTOs serializables; la clave JSON es la del contrato (`@SerialName` si difiere) |
@@ -33,7 +34,7 @@ Raíz: `shared/src/commonMain/kotlin/org/example/proyecto_plantilla/`
 ## Regla de dependencias
 
 - **`domain` depende solo de estos paquetes de `core`**, enumerados: `core/error`, `core/result`, `core/log` (solo la
-  interfaz) y `core/platform` (solo contratos). **Nunca** de `core/network` ni de `core/di`, ni de `data` ni de `ui`.
+  interfaz), `core/platform` (solo contratos) y `core/version`. **Nunca** de `core/network` ni de `core/di`, ni de `data` ni de `ui`.
 - `data` → `domain` (y `core`).
 - `ui` → `domain` (y `core`).
 - **Nada depende de `ui`.**
@@ -44,7 +45,7 @@ puras») genera falsos positivos y «correcciones» de código sano.
 
 | Fecha | Paquete añadido | Firma | Por qué es puro |
 |---|---|---|---|
-| — | — | — | (sin ampliaciones todavía) |
+| 2026-11-11 | `core/version` | Ejecutor, bajo la autorización del arranque (`docs/plans/2026-11-11-f4-version.md`) | Solo `SemanticVersionComparator`: Kotlin puro, sin imports fuera de la stdlib (criterio de pureza en el plan). Lo usa `CheckForceUpdateUseCase` |
 
 ## Excepciones deliberadas
 

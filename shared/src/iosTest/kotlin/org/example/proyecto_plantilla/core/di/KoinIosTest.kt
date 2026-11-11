@@ -2,6 +2,7 @@ package org.example.proyecto_plantilla.core.di
 
 import io.ktor.client.HttpClient
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
+import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import kotlin.test.Test
 import kotlin.test.assertNotNull
@@ -17,5 +18,6 @@ class KoinIosTest {
         assertNotNull(first.getOrNull<HttpClient>(), "HttpClient")
         assertNotNull(first.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(first.getOrNull<ConfigRepository>(), "ConfigRepository")
+        assertNotNull(first.getOrNull<AppVersionProvider>(), "AppVersionProvider")
     }
 }
