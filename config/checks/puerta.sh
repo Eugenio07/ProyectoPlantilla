@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-# puerta.sh [--rapido]
+# puerta.sh [--rapido] [--commit <fichero-con-el-mensaje> [nuevo ...]]
+#
+# --commit: la puerta COMMITEA, y solo si pasa. `git add -u` + SOLO los ficheros nuevos nombrados (rechaza uno que no
+#   exista o que ya esté rastreado); se niega si queda algo fuera del índice en todo el árbol. El mensaje va SIEMPRE por
+#   fichero (heredoc <<'EOF'): dentro de comillas dobles, zsh ejecuta los backticks.
+#
+# LA PUERTA ES DUEÑA DEL ÁRBOL MIENTRAS CORRE: toma el candado de config/checks/candado.sh al empezar y lo suelta al
+# salir (trap). Con un candado VIVO aborta; con uno HUÉRFANO lo retira y lo anuncia.
 #
 # LA PUERTA. Un solo guion que para en el PRIMER fallo y dice cuál fue. Cualquier código distinto de 0 es rojo, incluido
 # el 3 («no pude medir»). Sin tuberías detrás de un paso: el código de salida se lee tal cual.
@@ -17,12 +24,33 @@ cd "$(dirname "$0")/../.." || exit 3
 RAIZ="$(pwd)"
 
 RERUN="--rerun-tasks"
-for arg in "$@"; do
-  case "$arg" in
+MENSAJE=""
+NUEVOS=()
+while [ "$#" -gt 0 ]; do
+  case "$1" in
     --rapido) RERUN="" ;;
-    *) echo "puerta: argumento desconocido: $arg" >&2; exit 2 ;;
+    --commit)
+      shift; [ "$#" -gt 0 ] || { echo "puerta: --commit necesita el fichero del mensaje" >&2; exit 2; }
+      MENSAJE="$1"; shift; NUEVOS=("$@"); break ;;
+    *) echo "puerta: argumento desconocido: $1" >&2; exit 2 ;;
   esac
+  shift
 done
+
+if [ -n "$MENSAJE" ]; then
+  [ -s "$MENSAJE" ] || { echo "puerta: el fichero del mensaje no existe o está vacío: $MENSAJE" >&2; exit 2; }
+  for f in "${NUEVOS[@]+"${NUEVOS[@]}"}"; do
+    [ -e "$f" ] || { echo "puerta: el fichero nuevo no existe: $f" >&2; exit 2; }
+    # «Rastreado» = está en HEAD. Uno que solo está en el índice (de un intento anterior rechazado) sigue siendo nuevo.
+    if git cat-file -e "HEAD:$f" 2>/dev/null; then
+      echo "puerta: «$f» ya está rastreado; no es nuevo (va por git add -u)" >&2; exit 2
+    fi
+  done
+fi
+
+config/checks/candado.sh tomar
+c=$?; [ "$c" -eq 0 ] || exit "$c"
+trap 'config/checks/candado.sh soltar' EXIT
 
 paso() { echo; echo "=== puerta · $1 ==="; }
 rojo() { echo; echo "PUERTA ROJA en «$1» (código $2)."; exit 1; }
@@ -98,4 +126,19 @@ echo "sin marcadores"
 
 echo
 echo "PUERTA VERDE."
+
+if [ -n "$MENSAJE" ]; then
+  paso "commit"
+  git add -u
+  for f in "${NUEVOS[@]+"${NUEVOS[@]}"}"; do git add -- "$f"; done
+  fuera="$(git status --porcelain --untracked-files=all | grep -v '^[MARD] ' || true)"
+  if [ -n "$fuera" ]; then
+    echo "$fuera"
+    echo "puerta: queda algo fuera del índice; nómbralo como nuevo o retíralo. No commiteo."
+    exit 1
+  fi
+  git commit -q -F "$MENSAJE"
+  c=$?; [ "$c" -eq 0 ] || rojo "commit" "$c"
+  git log --oneline -1
+fi
 exit 0
