@@ -12,11 +12,20 @@ final class SwiftCrashReporter: CrashReporter {
             print("W/CrashReporter: Firebase no está configurado: el crash no se informa")
             return
         }
-        let error = NSError(
-            domain: "KotlinException",
-            code: 0,
-            userInfo: [NSLocalizedDescriptionKey: throwable.message ?? throwable.description()]
+        // ExceptionModel y no un NSError: Crashlytics agrupa por tipo y por pila. Un NSError fijo juntaría todos los crashes
+        // en una sola incidencia sin traza (auditoría 2026-11-11, #PP11).
+        let modelo = ExceptionModel(
+            name: String(describing: type(of: throwable)),
+            reason: throwable.message ?? throwable.description()
         )
-        Crashlytics.crashlytics().record(error: error)
+        let pila = throwable.getStackTrace()
+        var frames: [StackFrame] = []
+        for i in 0..<pila.size {
+            if let simbolo = pila.get(index: i) {
+                frames.append(StackFrame(symbol: String(simbolo), file: "", line: 0))
+            }
+        }
+        modelo.stackTrace = frames
+        Crashlytics.crashlytics().record(exceptionModel: modelo)
     }
 }
