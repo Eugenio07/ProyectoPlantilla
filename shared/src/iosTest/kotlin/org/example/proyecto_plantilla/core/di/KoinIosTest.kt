@@ -4,6 +4,7 @@ import io.ktor.client.HttpClient
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
+import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
@@ -19,5 +20,6 @@ class KoinIosTest {
         assertNotNull(first.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(first.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(first.getOrNull<AppVersionProvider>(), "AppVersionProvider")
+        assertNotNull(first.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
     }
 }
