@@ -1,6 +1,6 @@
 # CI pendiente de subir (`#PP6`)
 
-El CI de la Fase 7 está escrito y auditado (`docs/plans/2026-11-11-f7-ci.md`, `docs/plans/2026-11-11-f7-git-flow.md`),
+El CI de la Fase 7 está escrito y auditado (`docs/historico/planes/2026-11-11-f7-ci.md`, `docs/historico/planes/2026-11-11-f7-git-flow.md`),
 pero GitHub rechaza crear ficheros en `.github/workflows/` con un token sin el permiso `workflow`. Vive aquí hasta que
 quien decide conceda el permiso:
 

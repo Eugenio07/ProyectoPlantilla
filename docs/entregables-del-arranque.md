@@ -5,7 +5,6 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 
 | Fase | Ruta | Qué es |
 |---|---|---|
-| 0 | `docs/para-claude-md.md` | Ranuras y reglas previas a CLAUDE.md (la Fase 9 lo absorbe y lo quita de esta lista) |
 | 0 | `docs/plans/_plantilla.md` | Plantilla de plan |
 | 0 | `docs/historico/README.md` | Regla del histórico |
 | 0 | `docs/historico/planes` | Planes fusionados |
@@ -45,3 +44,7 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 8 | `docs/reparto/_plantilla.md` | Plantilla de la lista de reparto |
 | 8 | `androidApp/google-services.json.example` | Forma del config de Firebase (Android) |
 | 8 | `iosApp/GoogleService-Info.plist.example` | Forma del config de Firebase (iOS) |
+| 9 | `CLAUDE.md` | Reglas operativas: regla + prueba + puntero |
+| 9 | `wiki/README.md` | Una página por porqué |
+| 9 | `config/checks/wiki.py` | Campos de wiki/ y punteros de CLAUDE.md |
+| 9 | `config/checks/sin_para_claude_md.py` | Una sola fuente de reglas |

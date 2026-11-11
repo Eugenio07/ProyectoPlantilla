@@ -49,7 +49,7 @@ puras») genera falsos positivos y «correcciones» de código sano.
 
 | Fecha | Paquete añadido | Firma | Por qué es puro |
 |---|---|---|---|
-| 2026-11-11 | `core/version` | Ejecutor, bajo la autorización del arranque (`docs/plans/2026-11-11-f4-version.md`) | Solo `SemanticVersionComparator`: Kotlin puro, sin imports fuera de la stdlib (criterio de pureza en el plan). Lo usa `CheckForceUpdateUseCase` |
+| 2026-11-11 | `core/version` | Ejecutor, bajo la autorización del arranque (`docs/historico/planes/2026-11-11-f4-version.md`) | Solo `SemanticVersionComparator`: Kotlin puro, sin imports fuera de la stdlib (criterio de pureza en el plan). Lo usa `CheckForceUpdateUseCase` |
 
 ## Excepciones deliberadas
 
