@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,10 +22,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.example.proyecto_plantilla.ui.components.ErrorState
 import org.jetbrains.compose.resources.stringResource
 import proyectoplantilla.shared.generated.resources.Res
-import proyectoplantilla.shared.generated.resources.action_retry
-import proyectoplantilla.shared.generated.resources.splash_error_body
 import proyectoplantilla.shared.generated.resources.splash_force_update_body
 import proyectoplantilla.shared.generated.resources.splash_force_update_title
 import proyectoplantilla.shared.generated.resources.splash_loading
@@ -70,13 +68,7 @@ fun SplashContent(state: SplashUiState, onRetry: () -> Unit) {
                     textAlign = TextAlign.Center,
                 )
             }
-            is SplashUiState.Error -> Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                Text(stringResource(Res.string.splash_error_body), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
-                Button(onClick = onRetry) { Text(stringResource(Res.string.action_retry)) }
-            }
+            is SplashUiState.Error -> ErrorState(kind = state.kind, onRetry = onRetry)
         }
     }
 }

@@ -9,6 +9,7 @@ import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
+import org.example.proyecto_plantilla.ui.components.ErrorKindMapper
 import org.example.proyecto_plantilla.ui.detail.DetailViewModel
 import org.example.proyecto_plantilla.ui.home.HomeViewModel
 import org.example.proyecto_plantilla.ui.splash.SplashViewModel
@@ -34,6 +35,7 @@ class AndroidGraphTest {
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")
         assertNotNull(koin.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
+        assertNotNull(koin.getOrNull<ErrorKindMapper>(), "ErrorKindMapper")
         assertNotNull(koin.getOrNull<SplashViewModel>(), "SplashViewModel")
         assertNotNull(koin.getOrNull<HomeViewModel>(), "HomeViewModel")
         assertNotNull(koin.getOrNull<DetailViewModel> { parametersOf("42") }, "DetailViewModel")

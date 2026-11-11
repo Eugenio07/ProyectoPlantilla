@@ -68,7 +68,8 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Disparador:** cuando quien decide revise los textos — estado medido 2026-11-11: no revisados. **Fecha de revisión:**
   antes de la primera versión publicada.
 - **Vigente hasta que:**
-  1. quien decide aprueba o cambia cada texto de `strings.xml`, con su firma;
+  1. quien decide aprueba o cambia cada texto de `strings.xml` (incluida la copy de cada `ErrorKind` y los
+     placeholders de Home y Detail), con su firma;
   2. quien decide aprueba o cambia la acción por code de `api-errors.md`;
   3. quien decide dice qué salida ofrece la pantalla de actualización obligatoria (hoy ninguna: no hay URL de tienda).
      Hasta entonces la persona queda sin salida dentro de la app, que es lo que «bloqueante» pide.

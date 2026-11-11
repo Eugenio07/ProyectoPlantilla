@@ -5,6 +5,7 @@ import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
+import org.example.proyecto_plantilla.ui.components.ErrorKindMapper
 import org.example.proyecto_plantilla.ui.detail.DetailViewModel
 import org.example.proyecto_plantilla.ui.home.HomeViewModel
 import org.example.proyecto_plantilla.ui.splash.SplashViewModel
@@ -25,6 +26,7 @@ class KoinIosTest {
         assertNotNull(first.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(first.getOrNull<AppVersionProvider>(), "AppVersionProvider")
         assertNotNull(first.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
+        assertNotNull(first.getOrNull<ErrorKindMapper>(), "ErrorKindMapper")
         assertNotNull(first.getOrNull<SplashViewModel>(), "SplashViewModel")
         assertNotNull(first.getOrNull<HomeViewModel>(), "HomeViewModel")
         assertNotNull(first.getOrNull<DetailViewModel> { parametersOf("42") }, "DetailViewModel")

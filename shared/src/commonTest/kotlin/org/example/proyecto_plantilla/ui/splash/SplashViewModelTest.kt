@@ -12,6 +12,8 @@ import org.example.proyecto_plantilla.core.result.Resource
 import org.example.proyecto_plantilla.domain.model.AppConfig
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
+import org.example.proyecto_plantilla.ui.components.ErrorKind
+import org.example.proyecto_plantilla.ui.components.ErrorKindMapper
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -21,6 +23,12 @@ import kotlin.test.assertEquals
 class SplashViewModelTest {
     private var config: Resource<AppConfig> = Resource.Success(AppConfig("1.0.0"))
 
+    private val logger = object : Logger {
+        override fun info(tag: String, message: String) = Unit
+        override fun warn(tag: String, message: String) = Unit
+        override fun error(tag: String, message: String, throwable: Throwable?) = Unit
+    }
+
     private val useCase = CheckForceUpdateUseCase(
         repository = object : ConfigRepository {
             override suspend fun getConfig() = config
@@ -28,12 +36,10 @@ class SplashViewModelTest {
         appVersion = object : AppVersionProvider {
             override fun versionName() = "1.0.0"
         },
-        logger = object : Logger {
-            override fun info(tag: String, message: String) = Unit
-            override fun warn(tag: String, message: String) = Unit
-            override fun error(tag: String, message: String, throwable: Throwable?) = Unit
-        },
+        logger = logger,
     )
+
+    private fun vm() = SplashViewModel(useCase, ErrorKindMapper(logger))
 
     @BeforeTest
     fun setUp() = Dispatchers.setMain(UnconfinedTestDispatcher())
@@ -43,25 +49,25 @@ class SplashViewModelTest {
 
     @Test
     fun upToDateIsReady() {
-        assertEquals(SplashUiState.Ready, SplashViewModel(useCase).state.value)
+        assertEquals(SplashUiState.Ready, vm().state.value)
     }
 
     @Test
     fun olderVersionIsForceUpdate() {
         config = Resource.Success(AppConfig("2.0.0"))
-        assertEquals(SplashUiState.ForceUpdate("2.0.0"), SplashViewModel(useCase).state.value)
+        assertEquals(SplashUiState.ForceUpdate("2.0.0"), vm().state.value)
     }
 
     @Test
     fun configThatCannotBeFetchedIsError() {
         config = Resource.Error(AppError.Network)
-        assertEquals(SplashUiState.Error(AppError.Network), SplashViewModel(useCase).state.value)
+        assertEquals(SplashUiState.Error(ErrorKind.NETWORK), vm().state.value)
     }
 
     @Test
     fun retryAfterErrorLoadsAgain() {
         config = Resource.Error(AppError.Network)
-        val vm = SplashViewModel(useCase)
+        val vm = vm()
         config = Resource.Success(AppConfig("1.0.0"))
         vm.retry()
         assertEquals(SplashUiState.Ready, vm.state.value)
