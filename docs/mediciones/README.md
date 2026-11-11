@@ -27,8 +27,16 @@ commitearla, por si trae un dato personal.
 | `2026-11-11-splash-and-min-version-absent.png` | Android (Pixel_10_Pro, emulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `MIN_VERSION_ABSENT`: «Inicio» (fail-open; aviso `W/ForceUpdate: minVersion ausente…` en el registro) |
 | `2026-11-11-splash-and-min-version-malformed.png` | Android (Pixel_10_Pro, emulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `MIN_VERSION_MALFORMED`: «Inicio» (fail-open; aviso `minVersion malformado…`) |
 | `2026-11-11-splash-and-server-error.png` | Android (Pixel_10_Pro, emulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `SERVER_ERROR`: «No se pudo completar la carga.» + botón «Reintentar» |
-| `2026-11-11-splash-ios-up-to-date.png` | iOS (iPhone 17 Pro, simulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `UP_TO_DATE`: «Inicio» centrado (al día; sin aviso) |
-| `2026-11-11-splash-ios-update-required.png` | iOS (iPhone 17 Pro, simulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `UPDATE_REQUIRED`: «Actualización necesaria» + cuerpo con «999.0.0» (bloqueante, sin acción) |
-| `2026-11-11-splash-ios-min-version-absent.png` | iOS (iPhone 17 Pro, simulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `MIN_VERSION_ABSENT`: «Inicio» (fail-open; aviso `W/ForceUpdate: minVersion ausente…` en el registro) |
-| `2026-11-11-splash-ios-min-version-malformed.png` | iOS (iPhone 17 Pro, simulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `MIN_VERSION_MALFORMED`: «Inicio» (fail-open; aviso `minVersion malformado…`) |
-| `2026-11-11-splash-ios-server-error.png` | iOS (iPhone 17 Pro, simulador) | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `SERVER_ERROR`: «No se pudo completar la carga.» + botón «Reintentar» |
+| `2026-11-11-splash-ios-up-to-date.png` | iOS (iPhone 18 Pro, simulador) ¹ | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `UP_TO_DATE`: «Inicio» centrado (al día; sin aviso) |
+| `2026-11-11-splash-ios-update-required.png` | iOS (iPhone 18 Pro, simulador) ¹ | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `UPDATE_REQUIRED`: «Actualización necesaria» + cuerpo con «999.0.0» (bloqueante, sin acción) |
+| `2026-11-11-splash-ios-min-version-absent.png` | iOS (iPhone 18 Pro, simulador) ¹ | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `MIN_VERSION_ABSENT`: «Inicio» (fail-open; aviso `W/ForceUpdate: minVersion ausente…` en el registro) |
+| `2026-11-11-splash-ios-min-version-malformed.png` | iOS (iPhone 18 Pro, simulador) ¹ | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `MIN_VERSION_MALFORMED`: «Inicio» (fail-open; aviso `minVersion malformado…`) |
+| `2026-11-11-splash-ios-server-error.png` | iOS (iPhone 18 Pro, simulador) ¹ | depuración | `f7ae93e` + rama `f4/stub-splash` | 2026-11-11 13:20 | Escenario `SERVER_ERROR`: «No se pudo completar la carga.» + botón «Reintentar» |
+| `2026-11-11-nav-android-home.png` | Android (Pixel_10_Pro, emulador) | depuración | `8af50aa` + rama `f5/navhost` | 2026-11-11 13:25 | Home tras la Splash (`UP_TO_DATE`): «Inicio» + botón «Ver detalle» |
+| `2026-11-11-nav-android-detail.png` | Android (Pixel_10_Pro, emulador) | depuración | `8af50aa` + rama `f5/navhost` | 2026-11-11 13:25 | Detail tras tocar «Ver detalle»: «Detalle 42» (el id de la ruta llegó al ViewModel) |
+| `2026-11-11-nav-ios-detail.png` | iOS (iPhone 18 Pro, simulador) | depuración | `8af50aa` + rama `f5/navhost` | 2026-11-11 13:27 | Detail: «Detalle 42» |
+| `2026-11-11-nav-ios-home-tras-swipe.png` | iOS (iPhone 18 Pro, simulador) | depuración | `8af50aa` + rama `f5/navhost` | 2026-11-11 13:27 | Home tras un back-swipe desde Detail |
+
+¹ **Corrección 2026-11-11:** estas filas decían «iPhone 17 Pro». Con dos simuladores arrancados, `simctl … booted`
+resolvía al iPhone 18 Pro (`7DA267B4…`), que arrancó la tarea `iosSimulatorArm64Test`; medido con
+`simctl getenv booted SIMULATOR_UDID`. Desde aquí las capturas de iOS usan el UDID explícito.

@@ -32,6 +32,7 @@ Raíz: `shared/src/commonMain/kotlin/org/example/proyecto_plantilla/`
 | `ui/navigation` | NavHost y rutas type-safe (`@Serializable`) |
 | `ui/components` | Componentes reutilizables (`ErrorState`…) |
 | `ui/splash` | Splash y su ViewModel |
+| `ui/home`, `ui/detail` | Una pantalla por paquete, con su ViewModel y su `UiState` (placeholders del arranque) |
 | `ui/safemode` | `CrashSafeScreen`, autocontenida |
 
 ## Regla de dependencias

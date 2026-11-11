@@ -5,7 +5,10 @@ import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
+import org.example.proyecto_plantilla.ui.detail.DetailViewModel
+import org.example.proyecto_plantilla.ui.home.HomeViewModel
 import org.example.proyecto_plantilla.ui.splash.SplashViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertSame
@@ -23,5 +26,7 @@ class KoinIosTest {
         assertNotNull(first.getOrNull<AppVersionProvider>(), "AppVersionProvider")
         assertNotNull(first.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
         assertNotNull(first.getOrNull<SplashViewModel>(), "SplashViewModel")
+        assertNotNull(first.getOrNull<HomeViewModel>(), "HomeViewModel")
+        assertNotNull(first.getOrNull<DetailViewModel> { parametersOf("42") }, "DetailViewModel")
     }
 }

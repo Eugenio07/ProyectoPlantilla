@@ -11,6 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,16 +26,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.jetbrains.compose.resources.stringResource
 import proyectoplantilla.shared.generated.resources.Res
 import proyectoplantilla.shared.generated.resources.action_retry
-import proyectoplantilla.shared.generated.resources.home_placeholder
 import proyectoplantilla.shared.generated.resources.splash_error_body
 import proyectoplantilla.shared.generated.resources.splash_force_update_body
 import proyectoplantilla.shared.generated.resources.splash_force_update_title
 import proyectoplantilla.shared.generated.resources.splash_loading
 
-/** Splash SIN diseño (v2 Fase 4): cada estado, su pantalla. La navegación a Home llega en la Fase 5. */
+/** Splash SIN diseño (v2 Fase 4): cada estado, su pantalla; `Ready` navega a Home (Fase 5) una sola vez. */
 @Composable
-fun SplashScreen(viewModel: SplashViewModel) {
+fun SplashScreen(viewModel: SplashViewModel, onReady: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(state) {
+        if (state == SplashUiState.Ready) onReady()
+    }
     SplashContent(state = state, onRetry = viewModel::retry)
 }
 
@@ -50,7 +53,8 @@ fun SplashContent(state: SplashUiState, onRetry: () -> Unit) {
                 val label = stringResource(Res.string.splash_loading)
                 CircularProgressIndicator(modifier = Modifier.semantics { contentDescription = label })
             }
-            SplashUiState.Ready -> Text(stringResource(Res.string.home_placeholder), style = MaterialTheme.typography.titleLarge)
+            // Ready: la navegación sustituye esta pantalla (onReady); mientras tanto, el mismo indicador que Loading.
+            SplashUiState.Ready -> CircularProgressIndicator()
             is SplashUiState.ForceUpdate -> Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(12.dp),

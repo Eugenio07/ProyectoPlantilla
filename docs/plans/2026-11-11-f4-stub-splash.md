@@ -72,3 +72,4 @@ Contra el commit: `f7ae93e`
   barra de estado de Android ilegibles → ya es `#PP3`; (2) sin `heading()` ni región viva → **aplicado** (encabezado en
   el título de actualización, `liveRegion` en el contenedor); (3) ForceUpdate sin salida → producto, añadido a `#PP5`;
   (4–7) dependen del tema y del diseño futuros. VoiceOver y TalkBack: no pude medir.
+- 2026-11-11 · Corrección: las capturas de iOS de este plan son del iPhone 18 Pro, no del 17 Pro (índice de `docs/mediciones/`, nota ¹).
