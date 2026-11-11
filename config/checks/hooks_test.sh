@@ -61,6 +61,24 @@ done
 [ -f "$FALSO/gradle-llamado" ] && ok "stop-run-jvm-tests.sh: con JSON ilegible llega a Gradle (el falso), no al real" || ko "stop-run-jvm-tests.sh: no llegó a Gradle"
 rm -rf "$FALSO"
 
+# Recordatorio de UI (#PP22): solo las vistas de Swift y la escena (iOSApp.swift, el App.kt de Swift) son UI.
+# Repositorio temporal con DOS commits: el hook mira HEAD~1..HEAD.
+recordatorio() {  # $1 = fichero del último commit → código del hook
+  local r; r="$(mktemp -d)"
+  ( cd "$r" && git init -q && git config user.email t@t && git config user.name t && echo a > a && git add a &&
+    git commit -qm uno && mkdir -p "$(dirname "$1")" && echo b > "$1" && git add "$1" && git commit -qm dos )
+  printf '{}' | CLAUDE_PROJECT_DIR="$r" bash "$H/stop-ui-audit-reminder.sh" >/dev/null 2>&1; local c=$?
+  rm -rf "$r"; return "$c"
+}
+recordatorio iosApp/iosApp/SwiftCrashReporter.swift; c=$?
+[ "$c" -eq 0 ] && ok "recordatorio UI: Swift que no es UI → 0" || ko "recordatorio UI: SwiftCrashReporter → $c (esperado 0)"
+recordatorio iosApp/iosApp/ContentView.swift; c=$?
+[ "$c" -eq 2 ] && ok "recordatorio UI: ContentView.swift → 2" || ko "recordatorio UI: ContentView → $c (esperado 2)"
+recordatorio iosApp/iosApp/iOSApp.swift; c=$?
+[ "$c" -eq 2 ] && ok "recordatorio UI: iOSApp.swift → 2" || ko "recordatorio UI: iOSApp → $c (esperado 2)"
+recordatorio shared/src/commonMain/kotlin/x/ui/Home.kt; c=$?
+[ "$c" -eq 2 ] && ok "recordatorio UI: Kotlin en ui/ → 2" || ko "recordatorio UI: ui/ → $c (esperado 2)"
+
 if [ "${1:-}" = "--completo" ]; then
   GITDIR="$(git rev-parse --git-dir)"; LOCK="$GITDIR/puerta.lock"
   [ -d "$LOCK" ] && { echo "hay un candado puesto: no pruebo"; exit 3; }
