@@ -113,6 +113,32 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Peso:** (peso por decidir) — propuesta: 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en
   pantalla, fuera de la ruta crítica.
 
+### #PP26 · 2026-11-11 · `skills_de_cierre.py` lee la etapa equivocada si la palabra «Cierre» sale antes en el plan (higiene) (peso por decidir)
+
+- **Mecanismo:** `skills_de_cierre.py:25-26` corta el texto del plan en la PRIMERA aparición de «Cierre» y lee hasta el
+  siguiente `## `. Un plan con «Cierre» en el título o en la Parte 1 hace que lea otro trozo, y la lista de cierre
+  verdadera puede no leerse [leído; lo reprodujo el auditor sin contexto con un borrador del plan `pp7-validacion`, y lo
+  encontró la validación de `#PP7`]. Encontrado durante `#PP7`: va a la cola, no se corrige ahí.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-11.
+- **Vigente hasta que:**
+  1. el verificador busca el encabezado de la etapa final (`### Etapa final`), con un caso de prueba de un plan que
+     tiene «Cierre» en el título, y su mutación.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
+### #PP27 · 2026-11-11 · El recordatorio de UI salta en cada parada tras fusionar un PR que tocó UI (higiene) (peso por decidir)
+
+- **Mecanismo:** `stop-ui-audit-reminder.sh` mira `HEAD~1..HEAD`; tras un merge, `HEAD~1` es el primer padre y el diff
+  abarca el PR entero, así que avisa en cada parada hasta el siguiente commit, aunque la auditoría del PR ya se hizo
+  [medido 2026-11-11: tras fusionar el PR #41, en esta sesión y en la de validación]. Un aviso que salta sin motivo
+  enseña a ignorarlo (como `#PP22`).
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-11.
+- **Vigente hasta que:**
+  1. el hook no avisa cuando `HEAD` es un merge (o mira solo el árbol sucio y los commits que no están en `develop`), con
+     su caso en `hooks_test.sh` sobre un repositorio temporal con un merge.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
