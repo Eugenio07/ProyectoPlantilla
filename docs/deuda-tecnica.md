@@ -27,8 +27,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   binario se construyó contra Kotlin 2.4.0, y el arreglo para 2.4.21 (Foso/Ktorfit PR #1100) no está publicado
   [leído: `docs/mediciones/2026-11-11-matriz-de-versiones.md`].
 - **Quién lo desbloquea:** nosotros (medirlo); otro equipo (Ktorfit) si falla.
-- **Disparador:** cuando el incremento «cliente, mapper y `safeApiCall`» de la Fase 2 compile y ejecute una interfaz
-  Ktorfit en Android e iOS — estado medido 2026-11-11: no ocurrido.
+- **Disparador:** cuando el incremento «DTO→repositorio» de la Fase 4 compile y ejecute la primera interfaz Ktorfit en
+  Android e iOS — estado medido 2026-11-11: no ocurrido. (Movido desde la Fase 2 por la decisión de
+  `docs/plans/2026-11-11-f2-cliente-red.md`, «Solución y decisiones», «Ktorfit»: la Fase 2 no crea ninguna interfaz.)
 - **Vigente hasta que:**
   1. una llamada Ktorfit generada corre en un test JVM y la app iOS compila con ella, o
   2. si falla: Kotlin se baja al baseline que Ktorfit soporte, o se fija `compilerPluginVersion` a uno publicado que sí.
