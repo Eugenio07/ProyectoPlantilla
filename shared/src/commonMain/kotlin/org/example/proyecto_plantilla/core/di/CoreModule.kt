@@ -25,5 +25,5 @@ val coreModule: Module = module {
 fun initKoin(platformModules: List<Module>, appDeclaration: KoinAppDeclaration = {}): KoinApplication =
     startKoin {
         appDeclaration()
-        modules(listOf(coreModule) + platformModules)
+        modules(listOf(coreModule, dataModule) + platformModules)
     }

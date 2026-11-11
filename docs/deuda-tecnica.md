@@ -35,6 +35,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. si falla: Kotlin se baja al baseline que Ktorfit soporte, o se fija `compilerPluginVersion` a uno publicado que sí.
 - **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): (a) no, (b) no, (c) no, (d) no; solo lo ve el
   equipo, en el build.
+- **Sin motivo: entera** [medido 2026-11-11, ejecutor, rama `f4/config-repositorio`]: el código generado por Ktorfit
+  compila y corre en JVM (`ConfigRepositoryImplTest`, 4/4) y en el simulador iOS (`ConfigRepositoryIosTest`, 2/2, con
+  brazo de control). Cumple la condición 1. **Pendiente de cerrar** con el sha de la fusión.
 
 ### #PP2 · 2026-11-11 · No hay detekt estable que analice Kotlin 2.4 (higiene)
 

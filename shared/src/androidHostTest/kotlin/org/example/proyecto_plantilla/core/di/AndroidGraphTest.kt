@@ -3,6 +3,7 @@ package org.example.proyecto_plantilla.core.di
 import io.ktor.client.HttpClient
 import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
+import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.koin.core.context.stopKoin
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -18,5 +19,6 @@ class AndroidGraphTest {
         val koin = initKoin(listOf(androidPlatformModule(NetworkConfig("https://example.test/", false)))).koin
         assertNotNull(koin.getOrNull<HttpClient>(), "HttpClient")
         assertNotNull(koin.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
+        assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
     }
 }
