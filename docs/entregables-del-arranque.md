@@ -27,3 +27,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 6.5 | `config/detekt/detekt.yml` | Diferencias de detekt con el default, con su porqué |
 | 6.5 | `.editorconfig` | Copia para el IDE de la autoridad de formato |
 | 6.5 | `config/checks/puerta.sh` | La puerta: formato, detekt, verdes, verificadores, recuento de tests, conflictos |
+| 6.5 | `config/checks/candado.sh` | El candado de la puerta: una sola función de liveness |
+| 6.5 | `config/checks/candado_test.sh` | Prueba del candado como lo usará un hook |

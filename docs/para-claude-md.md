@@ -51,6 +51,9 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
 - **La puerta** (`config/checks/puerta.sh`) sustituye a los cuatro verdes a mano desde la Fase 6.5: formato, detekt, los
   cuatro verdes + los tests de iOS en una invocación con `--rerun-tasks`, cada verificador, el recuento de tests y los
   marcadores de conflicto. Cualquier código distinto de 0 es rojo, incluido el 3. `--rapido` solo para iterar.
+- **Se commitea con la puerta**: `config/checks/puerta.sh --commit <fichero-del-mensaje> [ficheros nuevos…]`. Nunca
+  `git add -A` ni `git add .`; el mensaje por fichero (heredoc `<<'EOF'`). La puerta es dueña del árbol mientras corre
+  (`config/checks/candado.sh`).
 - **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
   `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
 - **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.
