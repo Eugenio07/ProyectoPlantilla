@@ -88,6 +88,12 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. `ci.yml` y la acción compuesta están en `develop`, y
   2. un PR los ha visto correr: `android`, `calidad` e `ios` en verde, con los verdes ejecutados (`corrio.sh`).
+- **Añadido 2026-11-11 (auditoría integral, `docs/historico/auditorias/AUDIT-2026-11-11.md`; mismo mecanismo: el
+  contenido del CI aún no ejecutado; el peso no cambia):**
+  3. los tres verdes de `android` en UNA invocación de Gradle (o con `--rerun-tasks`): separados, `testAndroidHostTest`
+     encuentra `UP-TO-DATE` lo que compiló `assembleDebug` y `corrio.sh` sale 1 siempre (P0-1, [leído]);
+  4. la acción `calidad` corre los mismos verificadores que la puerta salvo `skills_de_cierre.py` (P1-6);
+  5. `alcance` escribe en `$GITHUB_OUTPUT` solo la línea `solo_docs=…`, e `ios` lleva `!cancelled()` (P2-10).
 - **Peso:** requisito de salida (fuera de escala): sin CI nada verifica fuera de la máquina de trabajo antes de una versión.
 
 ### #PP7 · 2026-11-11 · Las skills y commands del proyecto no están validados en tres pasos (requisito de salida)
@@ -102,6 +108,136 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. las cuatro filas tienen sus tres pasos en «pasó», sobre el hash actual de cada fichero, y
   2. `validaciones.py` está en `VERIFICADORES` de la puerta.
 - **Peso:** requisito de salida (fuera de escala): una skill que no se activa no ayuda a nadie, y sin validar no se sabe.
+
+### #PP8 · 2026-11-11 · El APK de release exporta `PreviewActivity` de ui-tooling (peso por decidir)
+
+- **Mecanismo:** `shared/build.gradle.kts` declara `compose.uiTooling` en `androidMain` y en `androidRuntimeClasspath` (heredado del wizard); el manifiesto fusionado de `release` lleva `PreviewActivity` con `exported="true"` [medido por la auditoría]. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. quitar las dos líneas (androidApp ya lo tiene como `debugImplementation`) y ver que el manifiesto de release no la lleva; las previews siguen funcionando.
+- **Peso:** (peso por decidir) — propuesta: 🟡: (a) no; (b) no; (c) no; (d) no hay activo crítico en la plantilla, pero cualquier app del dispositivo puede lanzar composables: alguien queda peor.
+
+### #PP9 · 2026-11-11 · `puerta.sh --commit` busca marcadores de conflicto en un índice viejo (peso por decidir)
+
+- **Mecanismo:** el paso f) hace `git grep --cached` ANTES del `git add -u` del commit [leído]: un marcador en un fichero no indexado entra con «PUERTA VERDE». Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. en modo `--commit`, el paso f) mira lo que se va a commitear, con una mutación que lo pruebe por ese camino.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
+### #PP10 · 2026-11-11 · El breaker no corta un bucle de crash lento en Android (peso por decidir)
+
+- **Mecanismo:** la ventana deslizante de 10 s anclada al primer crash exige 3 crashes en 10 s; con relanzamiento ~1 s y un crash a T s del arranque, solo se dispara si 2T+3 ≤ 10 (T ≲ 3,5 s) [leído y derivado; sin medir en dispositivo]. Toca la conducta del breaker: [DECISIÓN-DE-PRODUCTO] Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. un bucle relanzar-crashear con crash a los 5 s acaba en la pantalla segura (test primero y prueba en `releaseLocal`), con la decisión de quien decide sobre cómo (disparo hasta `reset()` o ventana mayor).
+- **Peso:** (peso por decidir) — propuesta: 🔴 propuesto: (b) quien usa la app queda sin salida en la ruta crítica de la plantilla (el arranque).
+
+### #PP11 · 2026-11-11 · Crashlytics de iOS recibiría todos los crashes como un único error sin traza (peso por decidir)
+
+- **Mecanismo:** `SwiftCrashReporter` registra un `NSError` con dominio fijo, `code: 0` y solo el mensaje [leído; sin medir: no hay proyecto]. [TOCA-iOS] Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. el reporter de iOS manda un `ExceptionModel` con los frames de la pila de Kotlin, y un crash de prueba en un proyecto real se ve agrupado por su causa.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): lo ve el equipo en el panel.
+
+### #PP12 · 2026-11-11 · Nada impide que el stub de config vuelva a entrar en release de Android (peso por decidir)
+
+- **Mecanismo:** «el stub nunca en release» se midió una vez (`releaseRuntimeClasspath`), sin guarda continua [leído]. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. un paso de la puerta (o del CI) falla si `ktor-client-mock` aparece en `releaseRuntimeClasspath`, con su mutación.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
+
+### #PP13 · 2026-11-11 · Las variantes release no se compilan en ninguna verificación (peso por decidir)
+
+- **Mecanismo:** `VERDES` solo tiene `assembleDebug`: `src/release`, `releaseLocal` y la rama `#else` de `iOSApp.swift` no se compilan en la puerta ni en el CI [leído]. [TOCA-iOS] Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. la puerta compila la variante release de Android y hay una medición de `xcodebuild -configuration Release`.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
+
+### #PP14 · 2026-11-11 · Un segmento de versión más largo que un `Int` se compara como 0 (peso por decidir)
+
+- **Mecanismo:** `SemanticVersionComparator` usa `toIntOrNull() ?: 0` y `isValid` acepta `\\d+` de cualquier longitud [leído]: un `minVersion` con un segmento enorme desactiva el force-update sin aviso. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. test primero con un segmento de más de 10 dígitos; la comparación lo ordena bien.
+- **Peso:** (peso por decidir) — propuesta: 🟡 propuesto: (b) fuera de la ruta crítica una versión vieja no bloquea cuando debía.
+
+### #PP15 · 2026-11-11 · El recuento de tests no exige resultados de cada plataforma (peso por decidir)
+
+- **Mecanismo:** `recuento_tests.py` suma el total; un `iosSimulatorArm64Test` saltado pasaría con los tests JVM [leído; sin medir que ocurra]. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. el recuento falla si falta XML de `testAndroidHostTest` o de `iosSimulatorArm64Test`, con su mutación.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
+
+### #PP16 · 2026-11-11 · Hay versiones copiadas fuera del catálogo (peso por decidir)
+
+- **Mecanismo:** `CLAUDE.md` §3 nombra la versión de detekt; el `pbxproj` y `Package.resolved` fijan Firebase iOS [medido por la auditoría con `git grep`]; la regla §3 de `CLAUDE.md` dice «nunca las copies». Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. `CLAUDE.md` sin números de versión, y el `pbxproj` declarado como excepción (SwiftPM no lee el catálogo de Gradle).
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
+
+### #PP17 · 2026-11-11 · El guard de ficheros protegidos no ve las escrituras por Bash (peso por decidir)
+
+- **Mecanismo:** su matcher es `Edit|Write|MultiEdit` [leído]: un comando de shell puede escribir `local.properties` sin pasar por él. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. el guard cubre también `Bash` (heurística) o la limitación queda declarada en `CLAUDE.md` §13.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
+
+### #PP18 · 2026-11-11 · El filtro del auditor deja pasar `gh` entre comillas (peso por decidir)
+
+- **Mecanismo:** `'gh' pr list` no casa con el patrón de palabra [leído]. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. el filtro deniega `gh` entrecomillado, con su caso en `hooks_test.sh`.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
+
+### #PP19 · 2026-11-11 · El README es el del wizard (peso por decidir)
+
+- **Mecanismo:** cita `jvmMain` (no existe) y no dice nada de `CLAUDE.md`, la puerta ni `git config core.hooksPath .githooks` [leído]. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. el README explica qué es la plantilla, cómo se arranca un clon (hook) y dónde están los manuales.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
+
+### #PP20 · 2026-11-11 · `.gitignore` no ignora keystores (peso por decidir)
+
+- **Mecanismo:** solo el pre-commit los rechaza; `*.jks` y `*.keystore` no están en `.gitignore` [leído]. Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
+  cola: sin entrada.
+- **Quién lo desbloquea:** nosotros, tras la aprobación de la fase B por quien decide.
+- **Fecha de revisión:** cuando quien decide apruebe la fase B de la auditoría.
+- **Vigente hasta que:**
+  1. `.gitignore` los ignora.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
 
 ## Cerrados
 
