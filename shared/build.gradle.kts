@@ -48,7 +48,6 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
-            implementation(libs.compose.uiTooling)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
             // Firebase por GitLive SOLO en Android. En iOS el klib de GitLive exige el framework FirebaseCore al enlazar
@@ -99,8 +98,4 @@ kotlin {
             implementation(libs.androidx.testRunner)
         }
     }
-}
-
-dependencies {
-    androidRuntimeClasspath(libs.compose.uiTooling)
 }
