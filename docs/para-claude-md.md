@@ -58,6 +58,12 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
   cola, no un fichero que se mantiene) y `config/checks/barrido_texto.py` (cierre de una tarea con una salida nueva).
   `cola.py` y `tope_plan.py` van en la puerta. **Sin herramienta de grafo** (ranura): una afirmación de alcanzabilidad se
   escribe «no comprobada: sin herramienta de grafo», y la puerta no tiene paso de frescura de grafo.
+- **Firebase sin proyecto** (condición de quien decide, 2026-11-11): la app compila y arranca sin
+  `google-services.json` ni `GoogleService-Info.plist`. Con ellos, los plugins de google-services y Crashlytics se
+  aplican JUNTOS (con config y sin el de Crashlytics, la app crashea al arrancar: medido). Antes de publicar,
+  `./gradlew :androidApp:verificarFirebase`. **Lo provocado desde un build de depuración NO existe para Crashlytics**
+  (colección apagada en `src/debug`): toda medición «mira si salió un evento» dice desde qué build se provocó, y un cero
+  no se lee sin eso.
 - **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
   `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
 - **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.

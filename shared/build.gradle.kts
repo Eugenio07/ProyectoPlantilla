@@ -51,6 +51,13 @@ kotlin {
             implementation(libs.compose.uiTooling)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
+            // Firebase por GitLive SOLO en Android. En iOS el klib de GitLive exige el framework FirebaseCore al enlazar
+            // cualquier ejecutable de Kotlin/Native (los tests: «ld: framework 'FirebaseCore' not found», medido
+            // 2026-11-11); allí el CrashReporter lo implementa Swift con el SDK nativo (v2, trampa 12: contrato de callback).
+            implementation(libs.gitlive.firebase.app)
+            implementation(libs.gitlive.firebase.crashlytics)
+            // GitLive declara los SDK nativos de Firebase SIN versión: el BoM las fija.
+            implementation(project.dependencies.platform(libs.firebase.bom))
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
