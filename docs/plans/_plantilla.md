@@ -46,7 +46,9 @@ Cada tarea dice su orden por capa:
 
 - [ ] Capturas (si se tocó UI), en `docs/mediciones/` con su índice
 - [ ] La puerta entera con `--rerun-tasks` (antes de la Fase 6.5: los cuatro verdes a mano)
-- [ ] Auditoría visual de UI (ranura) si se tocó UI
+- [ ] Auditoría visual de UI (ranura) si se tocó UI: `compose-visual-loop` (captura en Android e iOS) y
+  `/material-3 audit` (10 categorías)
+- [ ] Revisión de pre-PR: `/plantilla-review`, antes de abrir el PR
 - [ ] Overviews del área cambiada
 - [ ] `barrido_texto.py` si hay una salida nueva
 - [ ] Entradas de la cola cuyo disparador nombra esta feature: cerradas o con su porqué

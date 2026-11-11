@@ -58,3 +58,9 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 10 | `.claude/hooks/stop-verificadores.sh` | Stop: verificadores de la puerta sin Gradle |
 | 10 | `.claude/hooks/stop-ui-audit-reminder.sh` | Stop: recordatorio de la auditoría visual |
 | 10 | `config/checks/hooks_test.sh` | Pruebas de los hooks |
+| 11 | `.claude/commands/plantilla-review.md` | Revisión de pre-PR contra CLAUDE.md |
+| 11 | `.claude/commands/plantilla-contract-sync.md` | Divergencias DTO-contrato (sin backend) |
+| 11 | `.claude/skills/kmp-ios-gotchas/SKILL.md` | Catálogo de trampas iOS/KMP |
+| 11 | `.claude/validaciones.md` | Registro de la validación en tres pasos |
+| 11 | `config/checks/validaciones.py` | Verificador del registro (comprobación declarada) |
+| 11 | `config/checks/skills_de_cierre.py` | Las skills de la lista de cierre resuelven |

@@ -54,6 +54,11 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 - Deja que los hooks de `.claude/` informen (Stop: fallan abiertos) y que el guard deniegue (falla cerrado). Prueba:
   `config/checks/hooks_test.sh --completo`.
 
+- Prefija todo command del proyecto con `plantilla-` (los built-ins como `/review` tienen precedencia). Revisa antes
+  de abrir un PR con `/plantilla-review`; sin backend, `/plantilla-contract-sync` reporta divergencias DTO-contrato.
+- Valida cada skill, command o agente nuevo en tres pasos (positiva, control, negativa) en una sesión nueva, con su fila
+  en `.claude/validaciones.md`. Prueba: `config/checks/validaciones.py` (declarada, no verificada; `#PP7`).
+
 ## §5 · Arquitectura y red
 
 - Respeta la regla de dependencias de `domain`: depende solo de `core/error`, `core/result`, `core/log` (interfaz),
