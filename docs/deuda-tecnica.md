@@ -78,25 +78,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      con la red del emulador funcionando). Manual de operación §10: el texto no afirma lo que no sabe.
 - **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar.
 
-### #PP6 · 2026-11-11 · El CI no existe en el remoto: el token no puede subir workflows (requisito de salida)
-
-- **Mecanismo:** GitHub rechaza crear `.github/workflows/*` con un token OAuth sin el permiso `workflow` [medido
-  2026-11-11: push de `f7/ci` rechazado con ese mensaje]. `ci.yml` y `.github/actions/calidad/action.yml` están escritos
-  y auditados (`docs/historico/planes/2026-11-11-f7-ci.md`). **2026-11-11: quien decide concedió el permiso**
-  (`gh auth status`: `workflow`); suben en `f7/subir-ci` con las condiciones 3–5 aplicadas.
-- **Quién lo desbloquea:** quien decide: `gh auth refresh -h github.com -s workflow` (paso interactivo en el navegador).
-- **Disparador:** cuando el token tenga el permiso `workflow` — estado medido 2026-11-11: no lo tiene.
-- **Vigente hasta que:**
-  1. `ci.yml` y la acción compuesta están en `develop`, y
-  2. un PR los ha visto correr: `android`, `calidad` e `ios` en verde, con los verdes ejecutados (`corrio.sh`).
-- **Añadido 2026-11-11 (auditoría integral, `docs/historico/auditorias/AUDIT-2026-11-11.md`; mismo mecanismo: el
-  contenido del CI aún no ejecutado; el peso no cambia):**
-  3. los tres verdes de `android` en UNA invocación de Gradle (o con `--rerun-tasks`): separados, `testAndroidHostTest`
-     encuentra `UP-TO-DATE` lo que compiló `assembleDebug` y `corrio.sh` sale 1 siempre (P0-1, [leído]);
-  4. la acción `calidad` corre los mismos verificadores que la puerta salvo `skills_de_cierre.py` (P1-6);
-  5. `alcance` escribe en `$GITHUB_OUTPUT` solo la línea `solo_docs=…`, e `ios` lleva `!cancelled()` (P2-10).
-- **Peso:** requisito de salida (fuera de escala): sin CI nada verifica fuera de la máquina de trabajo antes de una versión.
-
 ### #PP7 · 2026-11-11 · Las skills y commands del proyecto no están validados en tres pasos (requisito de salida)
 
 - **Mecanismo:** la validación (positiva, control, negativa) exige una sesión NUEVA de Claude Code; la lanzada con
@@ -240,10 +221,22 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. `.gitignore` los ignora.
 - **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene).
 
+### #PP21 · 2026-11-11 · `hooks_test.sh` corre Gradle dentro del job `calidad` del CI (peso por decidir)
+
+- **Mecanismo:** su caso «JSON ilegible» del Stop hook de tests JVM ejecuta el hook de verdad, que corre
+  `:shared:testAndroidHostTest`: casi 3 min de los ~5 del job `calidad` [medido: log del run 43088399973, pasos de
+  `hooks_test` de 19:36:19 a 19:39:07]. Minutos facturados por un caso que no prueba nada de Gradle.
+- **Quién lo desbloquea:** nosotros.
+- **Disparador:** cuando se revise el coste del CI con el método de la Fase 7 — **Fecha de revisión:** 2026-12-11.
+- **Vigente hasta que:**
+  1. el caso de JSON ilegible del hook de tests no lanza Gradle (o `hooks_test.sh` lo salta en el CI), con su prueba.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo, en la factura.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP6` | El CI no estaba en el remoto (el token no podía subir workflows). Las 5 condiciones, en el PR #37: subido a `.github/`; `alcance`, `android`, `calidad` e `ios` en verde con los verdes ejecutados (`corrio.sh` en `android` e `ios`); los tres verdes en una invocación; `calidad` con los verificadores de la puerta; `alcance` solo con `solo_docs=` | `7577bfc` |
 | `#PP1` | El compilador de Ktorfit podía no compilar contra Kotlin 2.4.21. Condición 1 cumplida: Ktorfit corre en JVM y en el simulador (`ConfigRepositoryImplTest`, `ConfigRepositoryIosTest`) | `2b95a60` |
 
 ## Aceptado a conciencia
