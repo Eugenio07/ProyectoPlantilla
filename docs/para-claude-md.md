@@ -38,6 +38,10 @@ Fechas en la zona del proyecto (America/Caracas, UTC−4). Atribuciones según e
   [medido 2026-11-11]. Lo que el manual llama `master` se lee `main` (gana lo que encuentras).
 - **Fusión sin protección de ramas** (Fase 7): no se usa `gh pr merge --auto`; se espera el verde y se fusiona a mano;
   antes de fusionar se comprueba que la cabeza de la rama es la revisada.
+- **Arquitectura** (detalle en `docs/ARCHITECTURE.md`): `domain` depende solo de `core/error`, `core/result`,
+  `core/log` (interfaz) y `core/platform` (contratos), enumerados; nunca de `core/network` ni `core/di`. `data`→`domain`,
+  `ui`→`domain`, nada depende de `ui`. Un use case existe solo si hace algo que el repositorio no puede. La lista de
+  `domain` se amplía con una decisión escrita en `docs/ARCHITECTURE.md`.
 - **Hook pre-commit, una vez por clon:** `git config core.hooksPath .githooks`. Rechaza en el índice
   `google-services.json`, `GoogleService-Info.plist`, `local.properties`, `*.jks` y `*.keystore`.
 - **`.gitattributes` antes del primer guion:** `*.sh text eol=lf`.

@@ -18,3 +18,4 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 0 | `docs/manuales/manuales_revisiones.md` | Registro de revisiones de los manuales |
 | 0 | `.gitattributes` | `*.sh` con fin de línea LF |
 | 0 | `.githooks/pre-commit` | Rechaza ficheros prohibidos en el índice |
+| 1 | `docs/ARCHITECTURE.md` | Paquetes y regla de dependencias |
