@@ -209,8 +209,11 @@ jobs:
         run: |
           ./gradlew :shared:compileKotlinIosSimulatorArm64 --no-build-cache --console=plain | tee "$RUNNER_TEMP/v4.log"
           config/checks/corrio.sh "$RUNNER_TEMP/v4.log"
-      - name: Xcode del runner (la plantilla se hizo con Xcode 27; si este falla, es lo primero que se mira)
-        run: xcodebuild -version
+      - name: Xcode del runner (si la app no compila, es lo primero que se mira)
+        id: xcode
+        run: |
+          xcodebuild -version
+          echo "version=$(xcodebuild -version | head -1 | tr ' ' '-')" >> "$GITHUB_OUTPUT"
       # FILTRO POR PASO (no on.paths): ¿el diff toca algo que pueda romper el ARRANQUE de iOS? Es una APUESTA, no una
       # garantía. Si no puede listar el diff, CORRE.
       - name: Filtro · ¿hay que arrancar la app?
@@ -233,6 +236,20 @@ jobs:
             echo "El diff no toca rutas de arranque: se salta."; echo "arrancar=false" >> "$GITHUB_OUTPUT"
             echo "⚠️ **No se comprobó que la app iOS arranque**: el diff no toca rutas de arranque (filtro por paso; es una apuesta)." >> "$GITHUB_STEP_SUMMARY"
           fi
+      # CACHÉ DEL DERIVEDDATA (#PP23): construir la app compila el SDK de Firebase (SwiftPM) desde el código: ~10 min en
+      # frío. Aquí SOLO se restaura: una caché guardada en un PR no la ve otro PR, así que la llena el job cache-ios desde
+      # develop. Clave: Package.resolved + Xcode; si cambia Xcode y no Package.resolved, restore-keys da una caché vieja
+      # (correcta, más lenta). La ruta debe ser IDÉNTICA a la de cache-ios (forma parte de la versión de la caché).
+      - name: Restaurar el DerivedData (lo llena cache-ios desde develop)
+        if: steps.filtro.outputs.arrancar == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ${{ runner.temp }}/dd
+            !${{ runner.temp }}/dd/Logs
+            !${{ runner.temp }}/dd/Index.noindex
+          key: dd-${{ runner.os }}-${{ hashFiles('iosApp/iosApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}-${{ steps.xcode.outputs.version }}
+          restore-keys: dd-${{ runner.os }}-${{ hashFiles('iosApp/iosApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}-
       - name: Construir la app y comprobar que ARRANCA en el simulador
         if: steps.filtro.outputs.arrancar == 'true'
         run: |
@@ -263,3 +280,68 @@ jobs:
           xcrun simctl terminate "${UDID:-booted}" org.example.proyectoplantilla.ProyectoPlantilla || true
           xcrun simctl shutdown all || true
           echo "Simulador apagado."
+
+  # LLENAR LA CACHÉ DEL DERIVEDDATA (#PP23, decisión de quien decide: «Llenarla desde develop»). Una caché guardada en
+  # develop la restauran todos los PR contra develop; una de un PR, solo ese PR. Primero ubuntu (×1) pregunta por la API
+  # si ya hay una caché para este Package.resolved; solo si falta, macOS (×10) construye la app (sin simulador) y la
+  # guarda. Coste: un build en frío (~10 min de macOS) cada vez que cambia Package.resolved o la caché caduca (7 días sin
+  # uso); el resto de pushes a develop paga 1 minuto de ubuntu.
+  cache-ios-falta:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      falta: ${{ steps.q.outputs.falta }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: q
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PREFIJO: dd-macOS-${{ hashFiles('iosApp/iosApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}-
+        run: |
+          # Si la API falla, se construye (falta=true): mejor un build de más que un PR en frío para siempre.
+          n=$(gh api "repos/${{ github.repository }}/actions/caches?key=$PREFIJO&ref=refs/heads/develop" --jq .total_count) || n=0
+          echo "Cachés con el prefijo $PREFIJO en develop: $n"
+          if [ "$n" -ge 1 ]; then echo "falta=false" >> "$GITHUB_OUTPUT"; else echo "falta=true" >> "$GITHUB_OUTPUT"; fi
+
+  cache-ios:
+    needs: [cache-ios-falta]
+    if: needs.cache-ios-falta.outputs.falta == 'true'
+    runs-on: macos-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew
+      - name: Versión de Kotlin (clave de la caché de Kotlin/Native)
+        id: kotlin
+        run: echo "version=$(grep -E '^kotlin = ' gradle/libs.versions.toml | cut -d'"' -f2)" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.konan
+          key: konan-${{ runner.os }}-${{ steps.kotlin.outputs.version }}
+      - name: Xcode del runner
+        id: xcode
+        run: |
+          xcodebuild -version
+          echo "version=$(xcodebuild -version | head -1 | tr ' ' '-')" >> "$GITHUB_OUTPUT"
+      - name: Construir la app (solo para llenar el DerivedData)
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys; d=[x for r in json.load(sys.stdin)['devices'].values() for x in r if x['name'].startswith('iPhone')]; print(d[0]['udid'])")
+          xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug \
+            -destination "platform=iOS Simulator,id=$UDID" -derivedDataPath "$RUNNER_TEMP/dd" \
+            CODE_SIGNING_ALLOWED=NO build -quiet
+          du -sh "$RUNNER_TEMP/dd" || true
+      - uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ runner.temp }}/dd
+            !${{ runner.temp }}/dd/Logs
+            !${{ runner.temp }}/dd/Index.noindex
+          key: dd-${{ runner.os }}-${{ hashFiles('iosApp/iosApp.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}-${{ steps.xcode.outputs.version }}
