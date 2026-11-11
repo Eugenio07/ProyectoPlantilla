@@ -1,6 +1,10 @@
 package org.example.proyecto_plantilla.core.di
 
+import android.content.Context
 import io.ktor.client.HttpClient
+import io.mockk.mockk
+import org.example.proyecto_plantilla.core.platform.AppVersionProvider
+import org.koin.android.ext.koin.androidContext
 import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
@@ -16,9 +20,12 @@ class AndroidGraphTest {
 
     @Test
     fun androidGraphResolvesHttpClientAndMapper() {
-        val koin = initKoin(listOf(androidPlatformModule(NetworkConfig("https://example.test/", false)))).koin
+        val koin = initKoin(listOf(androidPlatformModule(NetworkConfig("https://example.test/", false)))) {
+            androidContext(mockk<Context>(relaxed = true))
+        }.koin
         assertNotNull(koin.getOrNull<HttpClient>(), "HttpClient")
         assertNotNull(koin.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
+        assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")
     }
 }

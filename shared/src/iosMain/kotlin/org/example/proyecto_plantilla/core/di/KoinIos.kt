@@ -3,6 +3,8 @@ package org.example.proyecto_plantilla.core.di
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 import org.example.proyecto_plantilla.core.network.NetworkConfig
+import org.example.proyecto_plantilla.core.platform.AppVersionProvider
+import org.example.proyecto_plantilla.core.platform.IosAppVersionProvider
 import org.koin.core.Koin
 import org.koin.core.module.Module
 import org.koin.core.KoinApplication
@@ -12,6 +14,7 @@ import org.koin.dsl.module
 fun iosPlatformModule(config: NetworkConfig): Module = module {
     single { config }
     single<HttpClientEngine> { Darwin.create() }
+    single<AppVersionProvider> { IosAppVersionProvider() }
 }
 
 private var koinApplication: KoinApplication? = null

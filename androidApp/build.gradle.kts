@@ -30,7 +30,7 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
         // Sin backend todavía (Fase 3, rama A): dominio reservado, nunca resuelve. Se cambia al llegar el backend.
         buildConfigField("String", "BASE_URL", "\"https://api.example.invalid/\"")
     }

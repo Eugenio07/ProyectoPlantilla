@@ -21,24 +21,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 ## Abiertos
 
-### #PP1 · 2026-11-11 · El compilador de Ktorfit puede no compilar contra Kotlin 2.4.21 (por medir) (higiene)
-
-- **Mecanismo:** el plugin de Gradle de Ktorfit 2.7.5 elige el plugin de compilador 2.3.5 para toda Kotlin ≥ 2.4; ese
-  binario se construyó contra Kotlin 2.4.0, y el arreglo para 2.4.21 (Foso/Ktorfit PR #1100) no está publicado
-  [leído: `docs/mediciones/2026-11-11-matriz-de-versiones.md`].
-- **Quién lo desbloquea:** nosotros (medirlo); otro equipo (Ktorfit) si falla.
-- **Disparador:** cuando el incremento «DTO→repositorio» de la Fase 4 compile y ejecute la primera interfaz Ktorfit en
-  Android e iOS — estado medido 2026-11-11: no ocurrido. (Movido desde la Fase 2 por la decisión de
-  `docs/plans/2026-11-11-f2-cliente-red.md`, «Solución y decisiones», «Ktorfit»: la Fase 2 no crea ninguna interfaz.)
-- **Vigente hasta que:**
-  1. una llamada Ktorfit generada corre en un test JVM y la app iOS compila con ella, o
-  2. si falla: Kotlin se baja al baseline que Ktorfit soporte, o se fija `compilerPluginVersion` a uno publicado que sí.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): (a) no, (b) no, (c) no, (d) no; solo lo ve el
-  equipo, en el build.
-- **Sin motivo: entera** [medido 2026-11-11, ejecutor, rama `f4/config-repositorio`]: el código generado por Ktorfit
-  compila y corre en JVM (`ConfigRepositoryImplTest`, 4/4) y en el simulador iOS (`ConfigRepositoryIosTest`, 2/2, con
-  brazo de control). Cumple la condición 1. **Pendiente de cerrar** con el sha de la fusión.
-
 ### #PP2 · 2026-11-11 · No hay detekt estable que analice Kotlin 2.4 (higiene)
 
 - **Mecanismo:** detekt 1.23.8 (estable) está construido con Kotlin 2.0.21; el soporte de 2.4 solo existe en
@@ -81,5 +63,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP1` | El compilador de Ktorfit podía no compilar contra Kotlin 2.4.21. Condición 1 cumplida: Ktorfit corre en JVM y en el simulador (`ConfigRepositoryImplTest`, `ConfigRepositoryIosTest`) | `2b95a60` |
 
 ## Aceptado a conciencia
