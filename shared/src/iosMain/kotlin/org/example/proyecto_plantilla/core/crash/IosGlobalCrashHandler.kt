@@ -10,6 +10,7 @@ import kotlin.experimental.ExperimentalNativeApi
 class IosGlobalCrashHandler(
     private val logger: Logger,
     private val breaker: CrashCircuitBreaker,
+    private val reporter: CrashReporter,
 ) : GlobalCrashHandler {
     private var installed = false
 
@@ -19,6 +20,7 @@ class IosGlobalCrashHandler(
         installed = true
         setUnhandledExceptionHook { throwable ->
             logger.error(TAG, "crash no gestionado (iOS: solo se registra)", throwable)
+            reporter.recordException(throwable)
             breaker.recordCrash()
         }
     }

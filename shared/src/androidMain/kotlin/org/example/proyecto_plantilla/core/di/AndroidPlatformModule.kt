@@ -7,6 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.example.proyecto_plantilla.core.crash.AndroidGlobalCrashHandler
 import org.example.proyecto_plantilla.core.crash.CrashCounterStore
+import org.example.proyecto_plantilla.core.crash.CrashReporter
+import org.example.proyecto_plantilla.core.crash.GitLiveCrashReporter
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.crash.HealthyUptimeReset
 import org.example.proyecto_plantilla.core.crash.SharedPrefsCrashCounterStore
@@ -32,7 +34,8 @@ fun androidPlatformModule(
     module {
         single { config }
         single { buildInfo }
-        single<GlobalCrashHandler> { AndroidGlobalCrashHandler(androidContext(), get(), get(), get()) }
+        single<GlobalCrashHandler> { AndroidGlobalCrashHandler(androidContext(), get(), get(), get(), get()) }
+        single<CrashReporter> { GitLiveCrashReporter(androidContext(), get()) }
         single<CrashCounterStore> { SharedPrefsCrashCounterStore(androidContext()) }
         single { HealthyUptimeReset(get(), get(), CoroutineScope(SupervisorJob() + Dispatchers.Default)) }
         single<HttpClientEngine> { engineOverride ?: OkHttp.create() }

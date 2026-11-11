@@ -3,7 +3,9 @@ package org.example.proyecto_plantilla
 import io.ktor.client.HttpClient
 import org.example.proyecto_plantilla.core.crash.CrashBreakerConfig
 import org.example.proyecto_plantilla.core.crash.CrashCircuitBreaker
+import org.example.proyecto_plantilla.core.crash.CrashReporter
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
+import org.example.proyecto_plantilla.core.crash.NoOpCrashReporter
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
@@ -22,11 +24,24 @@ import kotlin.test.assertSame
 class KoinIosTest {
     @Test
     fun startKoinIosIsIdempotentAndResolvesTheIosGraph() {
-        val first = startKoinIos(baseUrl = "https://example.test/", useMockConfig = false, isDebug = false)
-        val second = startKoinIos(baseUrl = "https://example.test/", useMockConfig = false, isDebug = false)
+        val first =
+            startKoinIos(
+                baseUrl = "https://example.test/",
+                useMockConfig = false,
+                isDebug = false,
+                crashReporter = NoOpCrashReporter,
+            )
+        val second =
+            startKoinIos(
+                baseUrl = "https://example.test/",
+                useMockConfig = false,
+                isDebug = false,
+                crashReporter = NoOpCrashReporter,
+            )
         assertSame(first, second, "startKoinIos no es idempotente")
         assertNotNull(first.getOrNull<HttpClient>(), "HttpClient")
         assertNotNull(first.getOrNull<GlobalCrashHandler>(), "GlobalCrashHandler")
+        assertNotNull(first.getOrNull<CrashReporter>(), "CrashReporter")
         assertNotNull(first.getOrNull<CrashCircuitBreaker>(), "CrashCircuitBreaker")
         assertEquals(60_000, first.get<CrashBreakerConfig>().windowMs, "ventana de iOS (override)")
         assertNotNull(first.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
