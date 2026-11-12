@@ -33,20 +33,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. quien decide acepta a conciencia la alpha (y la entrada pasa a «Aceptado a conciencia» con su firma).
 - **Peso:** fuera de escala (higiene): cuatro «no»; solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP3 · 2026-11-11 · Los iconos de la barra de estado de Android no se leen sobre el fondo claro 🟡
-
-- **Mecanismo:** con `enableEdgeToEdge()` y el tema `Theme.Material.Light.NoActionBar` del manifiesto, la barra de
-  estado pinta iconos claros sobre la superficie clara de la app [medido 2026-11-11: captura
-  `docs/mediciones/2026-11-11-app-vacia-android.png`, build de depuración, commit `00b30dd`]. El mecanismo exacto
-  (estilo de la barra frente al tema) está **sin medir**.
-- **Quién lo desbloquea:** nosotros.
-- **Disparador:** cuando se cree el tema de la app (etapa de producto, «design system y tokens de marca») — estado
-  medido 2026-11-11: no existe tema propio.
-- **Vigente hasta que:**
-  1. una captura de Android en tema claro y oscuro muestra los iconos de la barra de estado legibles.
-- **Peso:** 🟡: (a) no; (b) no; (c) no en la ruta crítica (la hora y la batería no son — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
-  necesarias para recorrerla); (d) no; alguien queda peor (no lee su barra de estado dentro de la app).
-
 ### #PP4 · 2026-11-11 · Android Studio no ofrece simuladores iOS para correr `iosApp` (higiene)
 
 - **Mecanismo:** el plugin Kotlin Multiplatform de Android Studio (261.25134.80-AS) lanza un `NullPointerException` en
@@ -72,24 +58,12 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven 🟡
-
-- **Mecanismo:** `enableEdgeToEdge()` elige iconos claros cuando el sistema está en oscuro, pero la app pinta siempre el
-  tema claro (`MaterialTheme {}` sin esquema oscuro, `App.kt:24`) [medido 2026-11-11: captura
-  `docs/mediciones/2026-11-11-error-red-android.png`, emulador con `night mode: yes`]. Encontrado en la auditoría MD3 de
-  `#PP5`: va a la cola, no se corrige ahí.
-- **Quién lo desbloquea:** nosotros (o la primera app derivada al poner su tema).
-- **Fecha de revisión:** antes de la primera versión publicada de una app derivada.
-- **Vigente hasta que:**
-  1. con el sistema en oscuro, la barra de estado se lee en Android (captura), sea porque la app tiene tema oscuro o porque
-     el estilo de la barra sigue al tema de la app.
-- **Peso:** 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en pantalla, fuera de la ruta
-  crítica. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
-
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP3` | Los iconos de la barra de estado de Android no se leían sobre el fondo claro (tema de ventana y de la app fijos en claro). Mismo mecanismo que `#PP25`; cerrada con él | `2dbdf81` |
+| `#PP25` | Con el sistema en oscuro, la barra de estado de Android no se leía. `AppTheme` (claro/oscuro, sigue al sistema, colores base de Material provisionales) y tema de ventana con `values-night`; capturas en las dos plataformas, claro, oscuro y cambio de modo | `2dbdf81` |
 | `#PP24` | La pantalla de actualización obligatoria no tenía salida. `storeUrl` por plataforma en la config (contrato, DTO, mapper); el caso de uso elige y valida la de su plataforma; botón «Actualizar» que abre la URL (Android: Play Store; iOS: Safari, sin App Store en el simulador); las listas de release obligan a comprobar la ficha real (condición reformulada por quien decide) | `75fd2e3` |
 | `#PP26` | `skills_de_cierre.py` leía otro trozo si la palabra de la etapa final salía antes en el plan, y las secciones `###` de detrás. Lee solo la sección «Etapa final» hasta el siguiente encabezado de nivel igual o superior; `skills_de_cierre_test.sh` en la puerta, con mutaciones | `ffd7d56` |
 | `#PP27` | El recordatorio de UI avisaba en cada parada tras un merge y no veía lo sin rastrear. Ignora el último commit si es un merge y suma lo sin rastrear; casos con `merge --no-ff` y mutaciones | `8e31300` |
