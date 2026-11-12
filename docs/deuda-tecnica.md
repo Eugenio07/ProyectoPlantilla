@@ -129,7 +129,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
-| `#PP7` | Las skills, commands y agentes no estaban validados en tres pasos. 18 de 18 pasos en dos sesiones nuevas más la repetición de la fila visual (`docs/mediciones/2026-11-11-validacion-pp7.md`); `validaciones.py` en la puerta y en `calidad` (`c1d6ed5`); `compose-visual-loop` encadena `/material-3 audit` | (este commit) |
+| `#PP7` | Las skills, commands y agentes no estaban validados en tres pasos. 18 de 18 pasos en dos sesiones nuevas más la repetición de la fila visual (`docs/mediciones/2026-11-11-validacion-pp7.md`); `validaciones.py` en la puerta y en `calidad` (`c1d6ed5`); `compose-visual-loop` encadena `/material-3 audit` | `3f7b362` |
 | `#PP5` | Los textos de la Splash, de `CrashSafeScreen` y las acciones por code no estaban aprobados. Aprobados como provisionales de plantilla; `error_network` ya no afirma una causa; la salida de la actualización obligatoria, decidida (opción a) → `#PP24` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`) | `551786c` |
 | `#PP23` | El job `ios` compilaba el SDK de Firebase en frío en cada PR. `ios` restaura el DerivedData y `cache-ios` lo llena desde `develop`: «Construir la app» 8 min 07 s → 3 min 11 s (`docs/mediciones/2026-11-11-cache-ios.md`) | `f3f3317` |
 | `#PP12` | Nada impedía que el stub de config volviera a release de Android. `:androidApp:verificarSinStubEnRelease` (grafo resuelto) en la puerta y en el job `android`; mutación `debugImplementation`→`implementation` → roja | `4c6b662` |
