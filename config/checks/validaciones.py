@@ -32,7 +32,40 @@ def piezas():
     return out
 
 
+# Toda pieza que declare una propiedad dice qué mecanismo la sostiene, o no la declara (CLAUDE.md §4; la revisión externa,
+# 2026-11-12). Las frases de capacidad YA VISTAS en las piezas; el mecanismo, nombrado en la misma línea o una vecina.
+# LÍMITE (escrito): es un grep de frases. Caza las formulaciones vistas, no toda afirmación posible (no caza «solo ve»), y
+# FALLA HACIA EL SILENCIO, que es lo que ya pasaba sin él. NO comprueba que el mecanismo sea cierto: basta la palabra. Una
+# línea con «mecanismo» legitima a sus vecinas aunque declaren otra cosa. No mira `tools:` ni `allowed-tools:` (que
+# `allowed-tools` restrinja un command está sin medir).
+FRASES = re.compile(
+    r"s[oó]lo lees?\b|s[oó]lo lectura|s[oó]lo reporta|s[oó]lo informa|sin acceso a|no modifica|no edita|no escribe|read-only",
+    re.IGNORECASE,
+)
+MECANISMO = re.compile(r"mecanismo|por instrucci[oó]n", re.IGNORECASE)
+
+
+def mecanismos(rutas):
+    """[«pieza:línea: «frase» sin su mecanismo»] de las frases de capacidad sin el mecanismo en su línea o en una vecina."""
+    fallos = []
+    for ruta in rutas:
+        lineas = open(ruta, encoding="utf-8").read().splitlines()
+        for i, linea in enumerate(lineas):
+            m = FRASES.search(linea)
+            if m and not any(MECANISMO.search(lineas[j]) for j in (i - 1, i, i + 1) if 0 <= j < len(lineas)):
+                fallos.append(f"{os.path.relpath(ruta, RAIZ)}:{i + 1}: «{m.group(0)}» sin su mecanismo")
+    return fallos
+
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == "--mecanismos":
+        if len(sys.argv) == 2:
+            print("validaciones.py --mecanismos: sin ficheros → NO PUDE MEDIR")
+            return 3
+        fallos = mecanismos(sys.argv[2:])
+        for f in fallos:
+            print("FALLO:", f)
+        return 1 if fallos else 0
     try:
         texto = open(os.path.join(RAIZ, ".claude/validaciones.md"), encoding="utf-8").read()
     except OSError as e:
@@ -60,6 +93,7 @@ def main():
         validado = fila[2].strip("`")
         if actual != validado:
             fallos.append(f"{nombre}: cambió desde su validación ({validado[:10]} → {actual[:10]}): hay que revalidar")
+    fallos += mecanismos(sorted(piezas().values()))
     for f in fallos:
         print("FALLO:", f)
     if fallos:

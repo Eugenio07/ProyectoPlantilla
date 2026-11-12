@@ -42,3 +42,7 @@
     sostiene en parte: «sin la conversación», por construcción del subagente; «sin la bandeja», por el filtro de GitHub
     (por nombre); «solo ve» no se sostiene, porque tiene `Bash`. Este caso no lo cazaría el verificador: «solo ve» no
     está en la lista de frases.
+
+**Corrección (2026-11-12, tras el auditor y la revisión de pre-PR):** la lista del umbral omitió
+`plantilla-contract-sync.md:2` («Solo lee.», en su descripción). Son cuatro líneas y seis frases en los dos commands; la
+cuenta «2 de 5 piezas» no cambia. Y el caso (d) está en dos manuales, así que son **4 casos en 5 sitios**.

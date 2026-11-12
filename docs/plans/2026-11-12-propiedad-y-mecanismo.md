@@ -1,6 +1,6 @@
 # Toda propiedad declarada dice su mecanismo: la regla, su verificador, los commands y #PP31
 
-- **Estado:** Plan aprobado
+- **Estado:** Implementado
 - **Tamaño:** M
 - **Entrada:** la ficha es el encargo de la revisión externa del 2026-11-12, literal en
   `docs/mediciones/2026-11-12-propiedad-y-mecanismo.md`.
@@ -127,22 +127,22 @@ Contra el commit: `329be68` (`develop`). Rama medida: `operacion/propiedades-y-m
 
 ### Etapa final · Cierre
 
-- [ ] La puerta entera con `--rerun-tasks`
-- [ ] Auditoría visual: no aplica
-- [ ] Revisión de pre-PR con `/plantilla-review`
-- [ ] Overviews: no aplica · `barrido_texto.py`: no aplica
-- [ ] Cola: `#PP31`, cerrada, o con las descripciones ajustadas a lo medido
-- [ ] `docs/entregables-del-arranque.md` con `validaciones_test.sh`
+- [x] La puerta entera con `--rerun-tasks`
+- [x] Auditoría visual: no aplica
+- [x] Revisión de pre-PR con `/plantilla-review`
+- [x] Overviews: no aplica · `barrido_texto.py`: no aplica
+- [x] Cola: `#PP31` medida y reescrita con lo medido; cómo se corrigen los agentes, a quien decide
+- [x] `docs/entregables-del-arranque.md` con `validaciones_test.sh`
 
 ### Verificación por criterio
 
 | Criterio | Clase | Método y evidencia | Mutación · control | Resultado |
 |---|---|---|---|---|
-| C1 | Verificable | `validaciones.py` antes y después | rojo previo: líneas `FALLO … sin su mecanismo` de los commands · control: 0 tras corregirlos | |
-| C2 | Verificable | `validaciones_test.sh` | sin «solo lee» en la lista → cae «Solo lee. → 1»; ignorar el mecanismo → cae «misma línea → 0»; ventana sin la línea anterior → cae «anterior → 0»; sin el 3 → cae «sin ficheros → 3» | |
-| C3 | Verificable | con un command mutado a «Solo lee.», `puerta.sh --rapido` | se lee la línea `FALLO … sin su mecanismo`, no solo «PUERTA ROJA» | |
-| C4 | Comprobación humana declarada | quien decide lee el diff; `wiki.py` y `claude_md.py` verdes | — | |
-| C5 | Comprobación humana declarada | quien decide, en una sesión nueva; los literales en `docs/mediciones/` | — | |
+| C1 | Verificable | `validaciones.py` antes y después | rojo previo: líneas `FALLO … sin su mecanismo` de los commands · control: 0 tras corregirlos  | Pasó: rojo previo, `FALLO … plantilla-contract-sync.md:2 «Solo lee»`, `:11 «Solo reporta»`, `plantilla-review.md:2 «Solo lee»`, `:9 «Solo lees»`; tras corregirlos, verde |
+| C2 | Verificable | `validaciones_test.sh` | sin «solo lee» en la lista → cae «Solo lee. → 1»; ignorar el mecanismo → cae «misma línea → 0»; ventana sin la línea anterior → cae «anterior → 0»; sin el 3 → cae «sin ficheros → 3»  | Pasó: rojo previo con la función vacía (3 casos por su aserción); `lo lees?` → `lo NADA` → «FALLO «Solo lee.» sin mecanismo → 0 (esperado 1)»; `for j in ()` → caen las tres ventanas; `(i, i + 1)` → «FALLO mecanismo en la línea anterior → 1»; `return 3` → `return 0` → «FALLO --mecanismos sin ficheros → 0 (esperado 3)» (mutar.sh 0 en las cuatro) |
+| C3 | Verificable | con un command mutado a «Solo lee.», `puerta.sh --rapido` | se lee la línea `FALLO … sin su mecanismo`, no solo «PUERTA ROJA»  | Pasó al segundo intento: la descripción mutada a «. Solo lee.» → «FALLO: .claude/commands/plantilla-review.md:2: «Solo lee» sin su mecanismo». El primero (línea 9, vecina de «ningún mecanismo») quedó CIEGO: la puerta salió roja solo por el hash; es el límite escrito |
+| C4 | Comprobación humana declarada | quien decide lee el diff; `wiki.py` y `claude_md.py` verdes | —  | Declarada: `wiki.py` (22 punteros) y `claude_md.py` (media 1.83) verdes; el diff, en el PR |
+| C5 | Comprobación humana declarada | quien decide, en una sesión nueva; los literales en `docs/mediciones/` | —  | Pasó, declarada: los commands, 6 de 6; `#PP31` medida: los dos agentes reciben Read y Bash, no Grep ni Glob (`docs/mediciones/2026-11-12-commands-y-pp31.md`) |
 
 ### Lo que no podrá comprobarse aquí
 
@@ -168,3 +168,16 @@ Contra el commit: `329be68` (`develop`). Rama medida: `operacion/propiedades-y-m
   - **14:** el hook queda fuera, con su motivo.
   - **15:** el cierre previo al traslado.
 - **2026-11-12 · Autorización** (literal): «Sí, impleméntalo».
+- **2026-11-12 · Implementación.**
+  - **El orden de los commits quedó invertido** respecto a las tareas: la regla (`4af3e99`) entró antes que su
+    verificador. `validaciones.py` extendido salía rojo sobre los commands hasta revalidarlos, así que la tarea 1 esperó
+    apartada (stash) y entra en el commit final, con los commands. Lo señaló la revisión de pre-PR (H1).
+  - **La primera mutación de C3 quedó ciega** por la ventana: es el límite escrito, y ahora está en la página de `wiki/`.
+  - **`#PP31` medida:** Grep y Glob no llegan a ninguno de los dos agentes. Cómo se corrige (descripción y `tools:` a lo
+    medido, o medir la causa) sube a quien decide, porque cambiar un agente caduca su validación otra vez.
+- **2026-11-12 · Revisión de pre-PR** (la corrió la positiva de `plantilla-review` en la sesión nueva):
+  - **H1 y H2:** se resuelven con el commit final.
+  - **H3:** las mutaciones, pegadas arriba.
+  - **H4:** «4 casos en 5 sitios».
+  - **H5:** la corrección, en la ficha.
+  - **H6:** los cuatro límites, en `wiki/`.

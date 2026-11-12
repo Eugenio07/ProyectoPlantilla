@@ -96,18 +96,19 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
 
-### #PP31 · 2026-11-12 · Un agente podría no recibir todas las herramientas que declara su frontmatter (higiene) (por medir) (peso por decidir)
+### #PP31 · 2026-11-12 · Los dos agentes declaran Grep y Glob y no los reciben (higiene) (peso por decidir)
 
-- **Mecanismo:** en su revalidación, `revisor-externo` dijo «mi lista fue Read y Bash… Grep y Glob no estaban», y su
-  frontmatter declara `tools: Read, Grep, Glob, Bash` [dicho por el agente; sin medir]. Si es así, su descripción
-  («Herramientas: Read, Grep, Glob y Bash») promete más de lo que tiene. El listado de agentes de la sesión del ejecutor
-  lo muestra con las cuatro [leído]. Sin medir en el auditor.
-- **Quién lo desbloquea:** nosotros.
+- **Mecanismo:** `tools: Read, Grep, Glob, Bash` en los dos frontmatter, y «Herramientas: Read, Grep, Glob y Bash» en su
+  descripción. En una sesión nueva, los dos reciben `Read`, `Bash` y `SubagentHandback`: la llamada a Grep y la llamada a
+  Glob **no existieron** [medido 2026-11-12, `docs/mediciones/2026-11-12-commands-y-pp31.md`; dicho por los agentes]. La
+  descripción afirma una capacidad sin el mecanismo que la sostenga (regla de `CLAUDE.md` §4). No se midió la causa.
+- **Quién lo desbloquea:** quien decide (cómo se corrige; ver «Vigente hasta que»).
 - **Fecha de revisión:** 2026-12-12.
 - **Vigente hasta que:**
-  1. una medición en una sesión nueva (el agente intenta usar Grep y Glob, y se mira si la llamada existe) dice qué
-     herramientas recibe cada agente, y la descripción dice lo medido.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+  1. la descripción y el `tools:` de los dos agentes dicen lo medido (Read y Bash), o se mide la causa y se hace que
+     lleguen Grep y Glob; y los dos agentes se revalidan en una sesión nueva.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo; el agente sustituye Grep y
+  Glob por Bash, así que no pierde capacidad, pero su descripción miente.
 
 ## Cerrados
 

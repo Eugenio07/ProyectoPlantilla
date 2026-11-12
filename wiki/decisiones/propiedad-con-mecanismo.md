@@ -24,4 +24,7 @@ buscando las frases de capacidad ya vistas, y exige la palabra «mecanismo» o �
 una vecina. **Su límite:**
 - es un grep de frases: caza las formulaciones vistas, no toda afirmación posible;
 - falla hacia el silencio, que es lo que ya pasaba sin él;
-- no comprueba que el mecanismo nombrado sea cierto.
+- no comprueba que el mecanismo nombrado sea cierto: basta la palabra;
+- una línea con «mecanismo» deja pasar a sus vecinas aunque declaren otra cosa (medido: la primera mutación de C3 cayó
+  junto a «ningún mecanismo te lo impide» y no se cazó);
+- no mira `tools:` ni `allowed-tools:`. Y lo que declara `tools:` puede no llegar al agente (`#PP31`, medido).
