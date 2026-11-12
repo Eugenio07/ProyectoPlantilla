@@ -72,7 +72,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP24 · 2026-11-11 · La pantalla de actualización obligatoria no tiene salida (requisito de salida) (peso por decidir)
+### #PP24 · 2026-11-11 · La pantalla de actualización obligatoria no tiene salida (requisito de salida)
 
 - **Mecanismo:** la pantalla es bloqueante y no ofrece ninguna acción: la persona queda sin nada que pulsar dentro de la
   app [leído]. Quien decide eligió la opción (a) de `#PP5` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`): un botón
@@ -83,9 +83,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. `docs/contracts/config-endpoint.md` define la URL de la tienda por plataforma, y el DTO y el mapper la leen (test
      primero);
   2. la pantalla muestra el botón con URL y no lo muestra sin ella (captura en Android e iOS) y el botón abre la tienda.
-- **Peso:** (peso por decidir) — propuesta: requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar.
+- **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; ninguna app derivada se publica sin esto. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven (peso por decidir)
+### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven 🟡
 
 - **Mecanismo:** `enableEdgeToEdge()` elige iconos claros cuando el sistema está en oscuro, pero la app pinta siempre el
   tema claro (`MaterialTheme {}` sin esquema oscuro, `App.kt:24`) [medido 2026-11-11: captura
@@ -96,10 +96,10 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. con el sistema en oscuro, la barra de estado se lee en Android (captura), sea porque la app tiene tema oscuro o porque
      el estilo de la barra sigue al tema de la app.
-- **Peso:** (peso por decidir) — propuesta: 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en
-  pantalla, fuera de la ruta crítica.
+- **Peso:** 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en pantalla, fuera de la ruta
+  crítica. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP26 · 2026-11-11 · `skills_de_cierre.py` lee la etapa equivocada si la palabra «Cierre» sale antes en el plan (higiene) (peso por decidir)
+### #PP26 · 2026-11-11 · `skills_de_cierre.py` lee la etapa equivocada si la palabra «Cierre» sale antes en el plan (higiene)
 
 - **Mecanismo:** `skills_de_cierre.py:25-26` corta el texto del plan en la PRIMERA aparición de «Cierre» y lee hasta el
   siguiente `## `. Un plan con «Cierre» en el título o en la Parte 1 hace que lea otro trozo, y la lista de cierre
@@ -110,9 +110,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. el verificador busca el encabezado de la etapa final (`### Etapa final`), con un caso de prueba de un plan que
      tiene «Cierre» en el título, y su mutación.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP27 · 2026-11-11 · El recordatorio de UI salta en cada parada tras fusionar un PR que tocó UI (higiene) (peso por decidir)
+### #PP27 · 2026-11-11 · El recordatorio de UI salta en cada parada tras fusionar un PR que tocó UI (higiene)
 
 - **Mecanismo:** `stop-ui-audit-reminder.sh` mira `HEAD~1..HEAD`; tras un merge, `HEAD~1` es el primer padre y el diff
   abarca el PR entero, así que avisa en cada parada hasta el siguiente commit, aunque la auditoría del PR ya se hizo
@@ -123,7 +123,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. el hook no avisa cuando `HEAD` es un merge (o mira solo el árbol sucio y los commits que no están en `develop`), con
      su caso en `hooks_test.sh` sobre un repositorio temporal con un merge.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
 ## Cerrados
 
