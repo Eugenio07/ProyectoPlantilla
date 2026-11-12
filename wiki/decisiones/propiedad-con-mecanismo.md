@@ -27,4 +27,6 @@ una vecina. **Su límite:**
 - no comprueba que el mecanismo nombrado sea cierto: basta la palabra;
 - una línea con «mecanismo» deja pasar a sus vecinas aunque declaren otra cosa (medido: la primera mutación de C3 cayó
   junto a «ningún mecanismo te lo impide» y no se cazó);
-- no mira `tools:` ni `allowed-tools:`. Y lo que declara `tools:` puede no llegar al agente (`#PP31`, medido).
+- no mira `tools:` ni `allowed-tools:`. Y lo que declara `tools:` puede no llegar al agente: en la versión de la app de
+  escritorio medida llegaron 2 de 4 (Grep y Glob no existen en ese entorno; `#PP31`, la versión y la pasada en
+  `docs/mediciones/2026-11-12-pp31-causa.md`).

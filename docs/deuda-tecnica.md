@@ -96,19 +96,18 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
 
-### #PP31 · 2026-11-12 · Los dos agentes declaran Grep y Glob y no los reciben (higiene) (peso por decidir)
+### #PP32 · 2026-11-12 · La plantilla de plan pide «la puerta con `--rerun-tasks`» y `puerta.sh` no acepta ese argumento (higiene) (peso por decidir)
 
-- **Mecanismo:** `tools: Read, Grep, Glob, Bash` en los dos frontmatter, y «Herramientas: Read, Grep, Glob y Bash» en su
-  descripción. En una sesión nueva, los dos reciben `Read`, `Bash` y `SubagentHandback`: la llamada a Grep y la llamada a
-  Glob **no existieron** [medido 2026-11-12, `docs/mediciones/2026-11-12-commands-y-pp31.md`; dicho por los agentes]. La
-  descripción afirma una capacidad sin el mecanismo que la sostenga (regla de `CLAUDE.md` §4). No se midió la causa.
-- **Quién lo desbloquea:** quien decide (cómo se corrige; ver «Vigente hasta que»).
+- **Mecanismo:** `docs/plans/_plantilla.md` (etapa final) y el manual de operación §2 («La etapa de cierre») dicen «La
+  puerta entera con `--rerun-tasks`». `puerta.sh` ya corre así por defecto (`--rapido` lo quita), y un argumento
+  `--rerun-tasks` sale «argumento desconocido» (código 2) [leído: el bucle de argumentos de `puerta.sh`]. Lo encontró el
+  auditor en la positiva de su revalidación (`docs/mediciones/2026-11-12-pp31-validacion-agentes.md`). Va a la cola: no
+  se corrige en `#PP31`.
+- **Quién lo desbloquea:** nosotros.
 - **Fecha de revisión:** 2026-12-12.
 - **Vigente hasta que:**
-  1. la descripción y el `tools:` de los dos agentes dicen lo medido (Read y Bash), o se mide la causa y se hace que
-     lleguen Grep y Glob; y los dos agentes se revalidan en una sesión nueva.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo; el agente sustituye Grep y
-  Glob por Bash, así que no pierde capacidad, pero su descripción miente.
+  1. la plantilla de plan y el manual dicen «La puerta entera (sin `--rapido`)».
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
 
 ## Cerrados
 
@@ -116,6 +115,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 |---|---|---|
 | `#PP3` | Los iconos de la barra de estado de Android no se leían sobre el fondo claro (tema de ventana y de la app fijos en claro). Mismo mecanismo que `#PP25`; cerrada con él | `2dbdf81` |
 | `#PP25` | Con el sistema en oscuro, la barra de estado de Android no se leía. `AppTheme` (claro/oscuro, sigue al sistema, colores base de Material provisionales) y tema de ventana con `values-night`; capturas en las dos plataformas, claro, oscuro y cambio de modo | `2dbdf81` |
+| `#PP31` | Los agentes declaraban Grep y Glob y no los recibían. Causa más cercana, medida: la app de escritorio no ofrece Grep ni Glob a ninguna sesión (la versión, en `docs/mediciones/2026-11-12-pp31-causa.md`; el porqué dentro del binario, sin medir). Opción A: `tools: Read, Bash` y descripciones con lo medido; revalidados 6 de 6. El manual (FASE 12) dice que `tools:` no es un suelo | `48048e0` |
 | `#PP24` | La pantalla de actualización obligatoria no tenía salida. `storeUrl` por plataforma en la config (contrato, DTO, mapper); el caso de uso elige y valida la de su plataforma; botón «Actualizar» que abre la URL (Android: Play Store; iOS: Safari, sin App Store en el simulador); las listas de release obligan a comprobar la ficha real (condición reformulada por quien decide) | `75fd2e3` |
 | `#PP26` | `skills_de_cierre.py` leía otro trozo si la palabra de la etapa final salía antes en el plan, y las secciones `###` de detrás. Lee solo la sección «Etapa final» hasta el siguiente encabezado de nivel igual o superior; `skills_de_cierre_test.sh` en la puerta, con mutaciones | `ffd7d56` |
 | `#PP27` | El recordatorio de UI avisaba en cada parada tras un merge y no veía lo sin rastrear. Ignora el último commit si es un merge y suma lo sin rastrear; casos con `merge --no-ff` y mutaciones | `8e31300` |

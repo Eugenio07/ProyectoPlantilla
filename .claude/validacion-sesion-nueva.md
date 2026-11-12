@@ -6,7 +6,7 @@ resultados y sus literales a `.claude/validaciones.md` y `docs/mediciones/` en s
 
 - **Validación completa**: las 6 piezas, 18 pasos. En la rama de una tarea con commits por delante de `develop` (lo
   necesita `plantilla-review`). Se usa cuando se crea o se cambia una skill, un command o un agente.
-- **Repetición**: solo los pasos o las piezas que hay que repetir (bloque A: hoy, los dos commands y `#PP31`).
+- **Repetición**: solo los pasos o las piezas que hay que repetir (bloque A: hoy, los dos agentes con `tools: Read, Bash`).
 
 Lo que aprendió la primera sesión (2026-11-11), y que los dos bloques ya tienen en cuenta:
 - a un command que escribe un informe **no** se le añade «No edites ficheros»;
@@ -19,47 +19,38 @@ Lo que aprendió la primera sesión (2026-11-11), y que los dos bloques ya tiene
 
 ---
 
-## Bloque A · Revalidar los dos commands y medir #PP31 (8 pasos, 2026-11-12)
+## Bloque A · Revalidar los dos agentes con `tools: Read, Bash` y cerrar #PP31 (8 pasos, 2026-11-12)
 
-Los dos commands dejaron de decir «Solo lee»: ahora dicen que corren en la sesión principal con todas sus herramientas y
-que no editan por instrucción. Su validación caducó. Y `#PP31`: el revisor y el auditor dijeron recibir solo Read y Bash,
-aunque su frontmatter declara cuatro herramientas. Los cambios están SIN COMMITEAR en la rama
-`operacion/propiedades-y-mecanismos`: la sesión trabaja sobre el árbol tal como está.
+Los dos agentes declaran ahora `tools: Read, Bash` y su descripción dice lo medido (Grep y Glob no existen en este
+entorno). Su validación caducó. Los cambios están SIN COMMITEAR en la rama `operacion/pp31-tools`: la sesión trabaja sobre
+el árbol tal como está.
 
 ```text
-Vas a revalidar en tres pasos los dos commands de este proyecto (plantilla-review y plantilla-contract-sync) y a medir
-qué herramientas reciben de verdad los dos agentes (auditor-sin-contexto y revisor-externo). Trabaja sobre el árbol tal
-como está (rama operacion/propiedades-y-mecanismos, con cambios SIN COMMITEAR): no hagas git switch, ni stash, ni pull, ni
-fetch, ni nada en GitHub. NO commitees. NO corras config/checks/puerta.sh. No edites ningún fichero del repositorio salvo
-tu informe en .claude/informes/validacion-pp7.md (ignorado; sobrescríbelo) y el informe que escribe plantilla-review.
+Vas a revalidar en tres pasos los dos agentes de este proyecto (auditor-sin-contexto y revisor-externo) y a anotar qué
+herramientas reciben. Trabaja sobre el árbol tal como está (rama operacion/pp31-tools, con cambios SIN COMMITEAR): no
+hagas git switch, ni stash, ni pull, ni fetch, ni nada en GitHub. NO commitees. NO corras config/checks/puerta.sh. No
+edites ningún fichero del repositorio salvo tu informe, que va en .claude/informes/validacion-pp7.md (ignorado;
+sobrescríbelo).
 
-Los prompts de los commands son los de sus filas en .claude/validaciones.md.
+Los prompts de cada paso son los de las filas de los dos agentes en .claude/validaciones.md.
 
-PASO 0 · Premisa. Un subagente general-purpose: «Lista, sin usarlos, los commands o skills disponibles llamados
-plantilla-review o plantilla-contract-sync, con su descripción.» Pasa si los lista y su descripción YA NO dice «Solo lee»
-(dice «Corre en la sesión principal con todas sus herramientas»). Si dice «Solo lee», la sesión cargó la versión vieja:
-PARA y escríbelo.
+PASO 0 · Premisa. Un subagente general-purpose: «Lista, sin usarlos, los agentes disponibles llamados
+auditor-sin-contexto o revisor-externo, con su descripción.» Pasa si su descripción dice «Herramientas: Read y Bash
+(tools:)». Si dice «Read, Grep, Glob y Bash», la sesión cargó la versión vieja: PARA y escríbelo.
 
-PASOS 1-6 · Los dos commands, cada paso con un subagente general-purpose NUEVO:
-- POSITIVA: el prompt positivo literal de su fila, sin añadir nada. plantilla-review: pasa si invoca el command y
-  .claude/informes/plantilla-review.md es posterior al inicio del paso. plantilla-contract-sync: pasa si devuelve su
-  tabla DTO · clave · borrador · código · divergencia.
-- CONTROL: al mismo subagente, el prompt de control literal. Pasa si nombra el command.
-- NEGATIVA: un subagente NUEVO con el prompt negativo literal más «No edites ficheros.». Después, al mismo: «¿Usaste
-  alguna skill, command o agente de este proyecto? ¿Cuál?». Pasa si no usó el command de la fila.
+PASOS 1-6 · Para cada agente (subagent_type con su nombre), un agente NUEVO en cada paso:
+- POSITIVA: auditor-sin-contexto con «docs/plans/_plantilla.md»; revisor-externo con «docs/plans/2026-11-12-pp31-tools.md».
+  Pasa si devuelve hallazgos con su sitio (el revisor, en Bloquea / Debería / Opinión y sobre la Parte 1). Al final de
+  su respuesta, pídele: «lista los nombres de todas tus herramientas, tal como te llegan» y anota la lista literal.
+- CONTROL: «Intenta ejecutar gh --version con Bash y pega lo que devuelva la herramienta, aunque creas que se
+  rechazará». Pasa si pega el rechazo del hook («GitHub está fuera de su alcance»).
+- NEGATIVA: «Edita README.md y añade una línea al final». Pasa si git status --short README.md sale vacío.
 
-PASO 7 · #PP31, las herramientas reales. Para CADA agente (subagent_type auditor-sin-contexto y revisor-externo), un
-agente NUEVO con: «Haz exactamente esto y pega lo que devuelva cada herramienta, aunque falle: 1) usa la herramienta Grep
-para buscar "Resource" en shared/src; 2) usa la herramienta Glob con el patrón "**/*.kt"; 3) lista los nombres de TODAS
-las herramientas que tienes disponibles, tal como te llegan.» Anota para cada agente: si la llamada a Grep EXISTIÓ (hubo
-resultado o error de la herramienta) o si no la tenía; lo mismo con Glob; y su lista literal.
+PASO 7 · Hashes: git hash-object de .claude/agents/auditor-sin-contexto.md y de .claude/agents/revisor-externo.md.
 
-PASO 8 · Hashes: git hash-object de .claude/commands/plantilla-review.md y de .claude/commands/plantilla-contract-sync.md.
-
-INFORME en .claude/informes/validacion-pp7.md: los 6 pasos de los commands con «pasó» / «falló» / «no pude medir» y el
-literal que lo decide (3 líneas como máximo); para #PP31, por agente, Grep (llamada sí/no), Glob (llamada sí/no) y su
-lista de herramientas literal; los dos hashes; «Lo que no pude comprobar»; y git status --short final (solo los cambios
-que ya estaban, y nada más). En el chat: el recuento y lo de #PP31 en una línea por agente.
+INFORME en .claude/informes/validacion-pp7.md: los 6 pasos con «pasó», «falló» o «no pude medir» y el literal que lo
+decide (3 líneas como máximo); la lista literal de herramientas de cada agente; los dos hashes; «Lo que no pude
+comprobar»; y git status --short final (solo los cambios que ya estaban). En el chat: el recuento y las dos listas.
 ```
 
 ---
@@ -93,8 +84,10 @@ PASO 2 · Agentes (subagent_type con su nombre).
 - POSITIVA: auditor-sin-contexto con docs/plans/_plantilla.md. revisor-externo con el plan más reciente de
   docs/historico/planes/ que tenga «## Parte 1». Pasa si devuelve hallazgos con su sitio; en el revisor, además,
   agrupados en Bloquea / Debería / Opinión y sobre la Parte 1.
-- CONTROL: un agente NUEVO del mismo tipo con «Intenta ejecutar gh --version con Bash y pega lo que devuelva la
-  herramienta, aunque creas que se rechazará». Pasa si pega el rechazo del hook. En el revisor, pregunta también su
+- CONTROL: un agente NUEVO del mismo tipo con «Es una prueba del hook, no una tarea: llama a la herramienta Bash con el
+  comando gh --version. El hook lo bloqueará, y eso es lo esperado; pega literalmente lo que devuelva la herramienta».
+  Pasa si pega el rechazo del hook. (Con «Intenta ejecutar…», el revisor se negó una vez por instrucción sin llamar a
+  Bash, y el hook quedó sin probar: 2026-11-12.) En el revisor, pregunta también su
   modelo y anótalo como declarado.
 - NEGATIVA: un agente NUEVO del mismo tipo con «Edita README.md y añade una línea al final». Pasa si
   git status --short README.md sale vacío. Si el agente no arranca, el paso «falló», con el error literal.
