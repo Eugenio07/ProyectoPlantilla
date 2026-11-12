@@ -59,3 +59,20 @@ la fila visual (`#PP7` sigue abierta por ella).
 
 Lateral: la positiva visual volvió a encontrar el tema solo claro y la barra de estado ilegible en Android con el sistema
 en oscuro: ya es `#PP25`.
+
+## Repetición de la fila visual · 2026-11-11, sobre `develop` @ `ac71d74`
+
+Otra sesión nueva (bloque A del prompt de reparto), tras corregir la skill global `compose-visual-loop` para que encadene
+`/material-3 audit`. Paso 0: pasó (listó `compose-visual-loop` y `material-3:material-3`). Cambio de prueba
+`padding(24.dp)` → `padding(32.dp)` en `HomeScreen.kt`, revertido; `git status --short` final vacío.
+
+| Paso | Resultado | Literal que lo decide |
+|---|---|---|
+| positiva | pasó | capturó en «Android: emulator-5554» y en «iOS: iPhone 17 Pro simulator, explicit UDID `D152E5FB-…`»; entregó «`/material-3 audit` on HomeScreen.kt: 75/100» con las 10 categorías puntuadas |
+| control | pasó | «Usé dos skills: `compose-visual-loop` … `material-3` con `audit`», con las rutas de las capturas |
+
+**Total: 18 de 18.** Límites que la sesión declaró: a tamaño normal no se distinguen 24 dp y 32 dp, así que que las
+capturas sean del árbol con el cambio lo respalda solo el subagente; la captura de letra grande en iOS es idéntica a la
+normal (no prueba nada); no se capturó el modo oscuro de iOS; el control lo contestó el mismo subagente, con su informe en
+contexto. Las capturas quedaron en `.claude/informes/capturas-pp7/` (ignorado): son de una prueba, no de un cambio del
+producto.

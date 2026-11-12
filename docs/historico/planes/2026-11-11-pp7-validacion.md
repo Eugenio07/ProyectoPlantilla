@@ -1,6 +1,6 @@
 # Validación en tres pasos (#PP7): registrar, repetir lo que faltó y meter validaciones.py en la puerta
 
-- **Estado:** Implementado
+- **Estado:** Fusionado (PR #42, `ac71d74`); `#PP7` se cierra en la rama `operacion/pp7-cierre`
 - **Tamaño:** S
 - **Entrada:** el informe de la sesión de validación que quien decide lanzó con `.claude/validacion-sesion-nueva.md`
   (`.claude/informes/validacion-pp7.md`, ignorado) y que pegó en la conversación, más sus dos respuestas posteriores
