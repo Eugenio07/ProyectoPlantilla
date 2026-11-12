@@ -916,8 +916,10 @@ aplicar»). Cuándo pasa exactamente, cómo se resuelven sus hallazgos y cuándo
 de parchear y se rehace la forma: ver el manual de operación.
 
 ```text
-PROMPT A · El auditor sin contexto. Crea .claude/agents/auditor-sin-contexto.md: tools Read, Grep, Glob, Bash; solo
-lectura; juzga un documento solo por lo escrito y por el código del repositorio. Le niega GitHub (gh, github.com) un
+PROMPT A · El auditor sin contexto. Crea .claude/agents/auditor-sin-contexto.md: en tools, SOLO las herramientas que el
+entorno ofrece (compruébalo antes: ver «tools: no es un suelo», debajo), con Bash si ha de leer git o correr guiones; no
+edita, POR INSTRUCCIÓN (con Bash, ningún mecanismo lo impide), y su descripción lo dice así; juzga un documento solo por
+lo escrito y por el código del repositorio. Le niega GitHub (gh, github.com) un
 hook PreToolUse propio que FALLA CERRADO: si no puede leer el comando, deniega. Motivo: si lee las incidencias y los
 PR, comparte las suposiciones de quien escribió el plan. Lo que solo se sabría por ahí va a una sección "Lo que no pude
 comprobar". Valídalo en tres pasos con su fila en .claude/validaciones.md (Fase 11), adaptados a un agente: POSITIVA
@@ -925,6 +927,22 @@ comprobar". Valídalo en tres pasos con su fila en .claude/validaciones.md (Fase
 rechazado), NEGATIVA (se le pide editar un fichero → no lo edita). Añade el filtro a config/checks/hooks_test.sh: un
 comando con gh se deniega, y sin python3 también.
 ```
+
+**`tools:` no es un suelo, ni un techo estricto** (v3, medido en la plantilla el 2026-11-12, `#PP31`). Un agente con
+`tools: Read, Grep, Glob, Bash` recibió **Read y Bash**: 2 de las 4 herramientas declaradas. La causa más cercana: la app
+de escritorio de Claude Code **2.1.321** no ofrece Grep ni Glob a **ninguna** sesión, tampoco a la principal. Ninguna
+configuración las deniega; por qué el binario no las ofrece está sin medir, y otro entorno (la CLI) no se pudo medir.
+Además, el entorno **añade** una herramienta que no se declara (`SubagentHandback`, para devolver el informe).
+`tools:` concede lo declarado **dentro de lo que ofrece el entorno**: no garantiza lo que declara. Por eso:
+- **antes de declarar una herramienta,** comprueba que el entorno la ofrece (en la sesión principal, `ToolSearch`
+  «select:<nombre>»), y escribe en la descripción **la versión** donde lo mediste;
+- **declara solo lo que llega.** Una descripción que promete herramientas que no llegan es una propiedad sin mecanismo
+  (`CLAUDE.md` §4).
+
+**Lo que no se contagia: `hooks:` sí funciona.** Los controles de las validaciones de los dos agentes de la plantilla
+pegaron el rechazo literal del filtro (medido, `docs/mediciones/2026-11-12-validacion-agentes.md`). En el origen, el
+control de punta a punta vio la denegación en la transcripción del subagente, con el texto del propio filtro (dicho por
+la revisión externa). La independencia del auditor no queda en duda por `#PP31`.
 **Aviso:** en el origen el filtro se probó con entradas, pero **el agente entero quedó sin probar** [leído]. Es la
 prueba que este prompt exige.
 

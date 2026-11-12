@@ -96,3 +96,15 @@ plantilla. Plan: `docs/historico/planes/2026-11-12-propiedad-y-mecanismo.md`.
 
 **Fuera, y por qué:** «Solo informa» de `que_va_ahora.py` y `barrido_texto.py` (arranque, FASE 6.5). No declaran una
 capacidad: dicen que no bloquean, y el texto ya da el mecanismo («No va en la puerta»).
+
+## v3, 2026-11-12 (tercera entrada): `tools:` entregó dos de cuatro
+
+**Origen:** el encargo de la revisión externa sobre `#PP31`, literal en `docs/mediciones/2026-11-12-pp31-causa.md` del
+repo plantilla. Plan: `docs/plans/2026-11-12-pp31-tools.md`.
+
+| Cambio | Dónde |
+|---|---|
+| «`tools:` no es un suelo, ni un techo estricto»: 2 de las 4 declaradas en la app de escritorio 2.1.321; el entorno añade `SubagentHandback`; comprobar la herramienta y escribir la versión antes de declararla | Arranque, FASE 12, sección de los agentes |
+| El PROMPT A ya no prescribe «tools Read, Grep, Glob, Bash; solo lectura»: solo lo que ofrece el entorno, y «no edita, por instrucción» | Arranque, FASE 12, PROMPT A |
+| Lo que no se contagia: `hooks:` sí funciona (medido aquí; en el origen, dicho por la revisión externa) | Arranque, FASE 12 |
+| La descripción del auditor y «quitarle `Bash`» ya no es una frontera practicable | Operación §1 |

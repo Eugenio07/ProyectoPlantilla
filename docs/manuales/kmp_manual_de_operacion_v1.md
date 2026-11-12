@@ -132,11 +132,12 @@ lectura del auditor de lo que el texto supone, aceptada como alcance]:
 técnicas.
 
 **Lo que un agente puede hacer lo dicen sus herramientas, no su descripción** (v3). «Solo lee» en un agente con `Bash` es
-una instrucción, no una frontera. Su descripción dice lo que es: «Read, Grep, Glob y Bash; GitHub, denegado por nombre;
-no edita por instrucción». **No se amplía el filtro para negar escrituras por nombre**, porque hereda el mismo agujero
+una instrucción, no una frontera. Su descripción dice lo que es: «Read y Bash (lo que el entorno ofrece: v2 FASE 12,
+«`tools:` no es un suelo»); GitHub, denegado por nombre; no edita por instrucción». **No se amplía el filtro para negar escrituras por nombre**, porque hereda el mismo agujero
 que se midió en el origen con `git ls-remote`. El auditor necesita `Bash` [leído: sus pasadas guardadas usan `git
 check-ignore`, `git ls-files`, `git merge-base`, corren los verificadores y leen las fuentes de una librería dentro de un
-jar]. Si algún día le bastan Read, Grep y Glob, quitarle `Bash` es la frontera de verdad.
+jar]. Sin `Bash` le quedaría solo Read (en la app de escritorio 2.1.321 no hay Grep ni Glob, `#PP31`): quitárselo no es
+una frontera practicable hoy.
 
 ### Quien escribe no pesa
 **El ejecutor propone el peso con las preguntas respondidas una a una; quien decide lo pone. Quien está afectado por un
