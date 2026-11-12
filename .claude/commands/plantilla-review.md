@@ -1,12 +1,13 @@
 ---
-description: Revisión de pre-PR de la rama actual contra CLAUDE.md. Solo lee; escribe su informe en .claude/informes/plantilla-review.md. Úsala ANTES de abrir el PR.
+description: Revisión de pre-PR de la rama actual contra CLAUDE.md; escribe su informe en .claude/informes/plantilla-review.md. Corre en la sesión principal con todas sus herramientas: no edita el repositorio por instrucción, no por mecanismo. Úsala ANTES de abrir el PR.
 ---
 
 Revisa los cambios de la rama actual respecto a `develop` (`git diff develop...HEAD` y `git log develop..HEAD`) contra
 las reglas de `CLAUDE.md` (léelo: es la referencia, no la copies).
 
 Reglas de esta revisión:
-- **Solo lees.** No editas ningún fichero salvo el informe.
+- **No editas ningún fichero salvo el informe, por instrucción:** corres en la sesión principal con todas sus
+  herramientas, y ningún mecanismo te lo impide. Lo cumples tú.
 - Cada hallazgo con `fichero:línea` (y el commit), la regla de `CLAUDE.md` que incumple (por su sección y su frase) y la
   evidencia. Marca cada afirmación medido / leído / sin medir.
 - Mira en especial: la regla de dependencias de `domain` (§5), que los repositorios no lancen (§5), la config por

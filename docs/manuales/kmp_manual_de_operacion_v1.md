@@ -125,7 +125,7 @@ lectura del auditor de lo que el texto supone, aceptada como alcance]:
 | Papel | Quién | Escribe | Decide | No hace nunca |
 |---|---|---|---|---|
 | **Ejecutor** | Claude Code, en el repositorio | El plan, el código, los tests, las mediciones, las entradas de la cola, el informe | Lo que una regla escrita ya resuelve (§2.1, §6). Cómo se implementa lo autorizado | Poner un peso; aprobar su propio plan; decidir un texto que lee quien usa la app; cruzar una parada |
-| **Auditor sin contexto** | Un subagente que solo ve el documento y el código, sin la bandeja (v2, «FASE 12 · Las dos auditorías») | Hallazgos, y «lo que no pude comprobar» | Nada | Leer la bandeja; aceptar como medido lo que el plan afirma |
+| **Auditor sin contexto** | Un subagente que no recibe la conversación (mecanismo: nace sin ella) ni la bandeja (mecanismo: su filtro de GitHub, por nombre); con `Bash` puede leer todo el disco (v2, «FASE 12 · Las dos auditorías») | Hallazgos, y «lo que no pude comprobar» | Nada | Leer la bandeja; aceptar como medido lo que el plan afirma |
 | **Quien decide** | La persona con autoridad de producto, que trabaja con **el revisor** | La ficha, las decisiones (con firma y fecha), el peso, el texto de producto | Qué se hace, en qué orden, con qué peso, con qué texto; la autorización de implementar | Dar por hecho lo que afirma sobre un fichero sin que se mida |
 
 **Lo único que no se delega es la autoridad de producto**: el texto que lee quien usa la app, y las decisiones que no son
@@ -664,6 +664,13 @@ Si ninguna aplica, sigue, y escribe en el informe que lo comprobaste.
   y nada vuelve a mirarlo, vuelve (en la plantilla, `#PP8` → `#PP28`).
 - **Cuando ya existe un verificador de la clase, extiéndelo; no escribas otro al lado** (v3). Dos verificadores de la
   misma clase divergen.
+- **Toda pieza que declare una propiedad dice qué mecanismo la sostiene, o no la declara** (v3, la revisión externa,
+  2026-11-12). «Solo lee», «no modifica», «sin acceso a», «hay protección de ramas»: cada una con su hook, su filtro, su
+  lista de herramientas o su regla; y si solo la sostiene una instrucción, se dice «por instrucción». Una propiedad sin
+  mecanismo se lee como garantizada. Cinco instancias, dos en el origen (un entorno de producción que no estaba separado;
+  la descripción de un auditor que prometía más que su filtro) y tres en la plantilla (la protección de ramas, los
+  agentes y los commands) [en el origen: dicho por la revisión externa; en la plantilla: medido]. **Su verificador es un
+  grep de frases**: caza las formulaciones vistas, falla hacia el silencio y no comprueba que el mecanismo sea cierto.
 - **Pon el incidente fuera**, en un registro (`wiki/trampas/`), con un puntero de una línea (v2, «FASE 9 · CLAUDE.md»).
 - **Escribe la regla para que la pueda cumplir quien la recibe.** Antes de escribirla, nombra quién la cumplirá y con qué
   herramienta. Ver §9, «Escribir una regla que nadie puede cumplir».
