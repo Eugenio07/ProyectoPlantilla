@@ -96,6 +96,19 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/plans/2026-11-12-revision-externa-v3.md`, *Revisiones*).
 
+### #PP31 · 2026-11-12 · Un agente podría no recibir todas las herramientas que declara su frontmatter (higiene) (por medir) (peso por decidir)
+
+- **Mecanismo:** en su revalidación, `revisor-externo` dijo «mi lista fue Read y Bash… Grep y Glob no estaban», y su
+  frontmatter declara `tools: Read, Grep, Glob, Bash` [dicho por el agente; sin medir]. Si es así, su descripción
+  («Herramientas: Read, Grep, Glob y Bash») promete más de lo que tiene. El listado de agentes de la sesión del ejecutor
+  lo muestra con las cuatro [leído]. Sin medir en el auditor.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. una medición en una sesión nueva (el agente intenta usar Grep y Glob, y se mira si la llamada existe) dice qué
+     herramientas recibe cada agente, y la descripción dice lo medido.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |

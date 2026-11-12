@@ -1,6 +1,6 @@
 # Decisiones de la revisión externa y la v3 de los manuales
 
-- **Estado:** Plan aprobado
+- **Estado:** Implementado
 - **Tamaño:** M
 - **Entrada:** la ficha son las decisiones literales de la revisión externa (A1–A9 y del 1 al 7), en
   `docs/mediciones/2026-11-12-revision-externa.md`.
@@ -108,24 +108,24 @@ Contra el commit: `ead1b3c` (`develop`). Rama medida: `operacion/v3-manuales`.
 
 ### Etapa final · Cierre
 
-- [ ] La puerta entera con `--rerun-tasks`
-- [ ] Auditoría visual: no aplica (no se toca UI)
-- [ ] Revisión de pre-PR con `/plantilla-review`: no se salta ni en un cambio de documentación (A2)
-- [ ] Overviews: no aplica · `barrido_texto.py`: no aplica
-- [ ] Cola: `#PP28`, `#PP29` y `#PP30` abiertas
-- [ ] `docs/entregables-del-arranque.md`: no aplica
+- [x] La puerta entera con `--rerun-tasks`
+- [x] Auditoría visual: no aplica (no se toca UI)
+- [x] Revisión de pre-PR con `/plantilla-review`: no se salta ni en un cambio de documentación (A2)
+- [x] Overviews: no aplica · `barrido_texto.py`: no aplica
+- [x] Cola: `#PP28`, `#PP29` y `#PP30` abiertas; y `#PP31` (por medir), salida de la revalidación
+- [x] `docs/entregables-del-arranque.md`: no aplica
 
 ### Verificación por criterio
 
 | Criterio | Clase | Método, quién y evidencia | Mutación · control | Resultado |
 |---|---|---|---|---|
-| A-ficha | Comprobación humana declarada | quien decide coteja la medición con sus mensajes | — | |
-| A-cola | Verificable | `cola.py` | quitar `**Peso:**` de `#PP28` → la línea `FALLO` nombra `#PP28` y `Peso` | |
-| A-hook | Verificable | `hooks_test.sh` | la de la tarea 2 → cae «sin python3 → 0» · control: con `python3`, 2 | |
-| A-claude | Verificable + declarada | `claude_md.py`, `wiki.py`, `sin_para_claude_md.py`; el diff lo lee quien decide | romper un puntero nuevo de `CLAUDE.md` → `wiki.py` sale 1 y nombra el puntero | |
-| A-v3 | Comprobación humana declarada | la revisión de pre-PR y quien decide, contra la tabla de alcance | — (`#PP29` lo mecanizará) | |
-| A-agentes | Comprobación humana declarada | quien decide, en una sesión nueva; los literales en `docs/mediciones/2026-11-12-validacion-agentes.md` | — | |
-| A-reviews | Comprobación humana declarada | el fichero en `.claude/reviews/` (local, sin rastrear: p1), escrito **antes** que las resoluciones; que sea literal lo declara el ejecutor | — | |
+| A-ficha | Comprobación humana declarada | quien decide coteja la medición con sus mensajes | —  | Declarada: `docs/mediciones/2026-11-12-revision-externa.md` (`47ebd70`) |
+| A-cola | Verificable | `cola.py` | quitar `**Peso:**` de `#PP28` → la línea `FALLO` nombra `#PP28` y `Peso`  | Pasó (`c10313d`): «FALLO: #PP28: falta el campo **Peso:**» (mutar.sh 0) |
+| A-hook | Verificable | `hooks_test.sh` | la de la tarea 2 → cae «sin python3 → 0» · control: con `python3`, 2  | Pasó (`c10313d`): mutación → «FALLO stop-verificadores.sh: sin python3 → 2 (esperado 0)»; control 2; verde también dentro de la puerta |
+| A-claude | Verificable + declarada | `claude_md.py`, `wiki.py`, `sin_para_claude_md.py`; el diff lo lee quien decide | romper un puntero nuevo de `CLAUDE.md` → `wiki.py` sale 1 y nombra el puntero  | Pasó (`3ed23fb`): mutación → «FALLO: CLAUDE.md apunta a una página que no existe: wiki/trampas/zsh-no-existe.md»; claude_md, wiki y sin_para verdes |
+| A-v3 | Comprobación humana declarada | la revisión de pre-PR y quien decide, contra la tabla de alcance | — (`#PP29` lo mecanizará)  | Declarada (`cd52963`): cada pieza en su sitio, según la tabla de `manuales_revisiones.md`, «v3»; la revisión de pre-PR la coteja |
+| A-agentes | Comprobación humana declarada | quien decide, en una sesión nueva; los literales en `docs/mediciones/2026-11-12-validacion-agentes.md` | —  | Pasó, declarada: 7 de 7 en una sesión nueva (`docs/mediciones/2026-11-12-validacion-agentes.md`); abierto `#PP31` (herramientas reales del revisor) |
+| A-reviews | Comprobación humana declarada | el fichero en `.claude/reviews/` (local, sin rastrear: p1), escrito **antes** que las resoluciones; que sea literal lo declara el ejecutor | —  | Declarada: `.claude/reviews/review-operacion-v3-manuales-2026-11-12.md` (local), escrito antes de las resoluciones |
 
 ### Lo que no podrá comprobarse aquí
 
@@ -150,3 +150,7 @@ Contra el commit: `ead1b3c` (`develop`). Rama medida: `operacion/v3-manuales`.
   - **13:** el coste de los nombres, en p2.
 - **2026-11-12 · Decisiones de quien decide** (literales): «Sí, impleméntalo»; p1: «No, como Rumba»; p2: «“v3” en el
   título, nombres igual (Recomendado)»; p3: «Sí, fírmalos».
+- **2026-11-12 · Implementación.** El texto de `revisor-externo` decía también «Eres el **revisor externo**»; ahora
+  dice «segundo auditor» (A9). Revalidación de los dos agentes: 7 de 7 (`docs/mediciones/2026-11-12-validacion-agentes.md`).
+  El revisor dijo recibir solo Read y Bash: va a la cola como `#PP31` (por medir). Las copias de los manuales del
+  escritorio de quien decide siguen en la v2.
