@@ -82,7 +82,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. `docs/contracts/config-endpoint.md` define la URL de la tienda por plataforma, y el DTO y el mapper la leen (test
      primero);
-  2. la pantalla muestra el botón con URL y no lo muestra sin ella (captura en Android e iOS) y el botón abre la tienda.
+  2. la pantalla muestra el botón con URL y no lo muestra sin ella (captura en Android e iOS) y el botón abre la URL de
+     su plataforma (medido en emulador y simulador); y las listas de release obligan a comprobar la ficha real en cada
+     app derivada (reformulada por quien decide, 2026-11-11: la plantilla no tiene ficha publicada).
 - **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; ninguna app derivada se publica sin esto. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
 ### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven 🟡
