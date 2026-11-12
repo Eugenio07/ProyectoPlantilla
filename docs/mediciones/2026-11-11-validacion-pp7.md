@@ -35,7 +35,27 @@ las cinco piezas iguales a los de `.claude/validaciones.md`. `git status --short
 encontraron su propio prompt en `validaciones.md` (no del todo ciegas); la positiva de `plantilla-review` corrió
 `git fetch` y `gh pr list` (lecturas), contra «nada en GitHub».
 
-## Repetición · pendiente
+## Repetición · 2026-11-11, sobre `operacion/pp7-validacion` @ `e082a15`
 
-Los 5 pasos que no pasaron limpios se repiten en otra sesión nueva (decisión de quien decide), con la sección
-«Repetición» del prompt de reparto, sobre la rama `operacion/pp7-validacion`.
+Otra sesión nueva lanzada por quien decide, con el bloque A del prompt de reparto. Paso 0: pasó (el subagente listó las
+cinco piezas). Hashes de `plantilla-review` y `revisor-externo` iguales a la tabla. `git status --short` final: vacío.
+Desviación declarada: no hizo `git pull` (el prompt lo pedía y a la vez prohibía `git fetch`; corregido después).
+
+| Pieza | Paso | Resultado | Literal que lo decide |
+|---|---|---|---|
+| `plantilla-review` | positiva | pasó | «Revisé la rama con el command del proyecto `plantilla-review`. El informe está en `…/.claude/informes/plantilla-review.md`»; el informe es posterior al inicio del paso (19:56:25 > 19:54:33) |
+| | control | pasó | «Usé el command del proyecto `plantilla-review`, invocado con la herramienta Skill. Dejó su informe en `…/.claude/informes/plantilla-review.md`» |
+| `revisor-externo` | control | pasó | «`PreToolUse:Bash hook error: auditor: GitHub está fuera de su alcance…`», al primer intento. Modelo **declarado**: «Fable 5.2 (`claude-fable-5-2`)» |
+| auditoría visual | positiva | **falló** | capturó en Android y en iOS (5 capturas, en `.claude/informes/capturas-pp7/`), pero «No corrí `/material-3 audit` con sus 10 categorías» |
+| | control | **falló** | «Usé solo la skill `compose-visual-loop`. No usé `/material-3 audit`, que queda pendiente» |
+
+**Total: 16 de 18.** Las 5 piezas de `.claude/` pasan sus 15 pasos; la fila visual (que no es una pieza del repositorio)
+falla su positiva y su control. Causa probable, la de la propia sesión: la pareja «captura + `/material-3 audit`» solo
+está en el `CLAUDE.md` global de quien decide, no en `compose-visual-loop`, y el subagente no la aplicó.
+
+**Decisiones de quien decide** (literales): «Sí, ya (Recomendado)» → `validaciones.py` entra en la puerta y en el CI con
+las 5 piezas; «Editar compose-visual-loop (Recomendado)» → la skill global encadena `/material-3 audit`, y se repite solo
+la fila visual (`#PP7` sigue abierta por ella).
+
+Lateral: la positiva visual volvió a encontrar el tema solo claro y la barra de estado ilegible en Android con el sistema
+en oscuro: ya es `#PP25`.

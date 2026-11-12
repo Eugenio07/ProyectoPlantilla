@@ -1,6 +1,6 @@
 # Validación en tres pasos (#PP7): registrar, repetir lo que faltó y meter validaciones.py en la puerta
 
-- **Estado:** Plan aprobado
+- **Estado:** Implementado
 - **Tamaño:** S
 - **Entrada:** el informe de la sesión de validación que quien decide lanzó con `.claude/validacion-sesion-nueva.md`
   (`.claude/informes/validacion-pp7.md`, ignorado) y que pegó en la conversación, más sus dos respuestas posteriores
@@ -113,20 +113,20 @@ en su sitio del histórico.
 
 ### Etapa final · Cierre
 
-- [ ] La puerta entera con `--rerun-tasks`, después de la tarea 5
-- [ ] Auditoría visual: no aplica. El padding es la entrada de una prueba, se revierte y no se commitea
-- [ ] Revisión de pre-PR con `/plantilla-review`
-- [ ] Cola: `#PP26` y `#PP27` abiertas; `#PP7` según A4
+- [x] La puerta entera con `--rerun-tasks`, después de la tarea 5
+- [x] Auditoría visual: no aplica. El padding es la entrada de una prueba, se revierte y no se commitea
+- [x] Revisión de pre-PR con `/plantilla-review`
+- [x] Cola: `#PP26` y `#PP27` abiertas; `#PP7` reescrita: solo queda la fila visual
 
 ### Verificación por criterio
 
 | Criterio | Clase | Mutación / quién, sobre qué build, evidencia | Resultado |
 |---|---|---|---|
-| A1 | Comprobación humana declarada | la sesión de validación (otra sesión nueva); literales en `docs/mediciones/2026-11-11-validacion-pp7.md` | |
-| A2 | Comprobación por lectura | el diff del prompt frente a los defectos del informe | |
-| A3 | Comprobación por lectura + verificador | `cola.py` con `#PP26` y `#PP27` | |
-| A4 | Verificable | `mutar.sh .claude/validaciones.md` (en la fila de `plantilla-review`, primer «pasó» → «falló») → `validaciones.py` sale 1 con «FALLO: command `plantilla-review`…»; y en la puerta, roja en «d) verificador validaciones.py» | |
-| A4 · CI | Comprobación por lectura | `calidad` llama al mismo guion que la puerta; el log del PR muestra que corrió | |
+| A1 | Comprobación humana declarada | la sesión de validación (otra sesión nueva); literales en `docs/mediciones/2026-11-11-validacion-pp7.md`  | Pasó parcial: 16 de 18 (`docs/mediciones/2026-11-11-validacion-pp7.md`); la fila visual falla positiva y control → `#PP7` sigue abierta |
+| A2 | Comprobación por lectura | el diff del prompt frente a los defectos del informe  | Pasó por lectura; el bloque A se rehízo después para la fila visual (sin `git pull`, capturas en `.claude/informes/`) |
+| A3 | Comprobación por lectura + verificador | `cola.py` con `#PP26` y `#PP27`  | Pasó: `cola.py` verde con `#PP26` y `#PP27` |
+| A4 | Verificable | `mutar.sh .claude/validaciones.md` (en la fila de `plantilla-review`, primer «pasó» → «falló») → `validaciones.py` sale 1 con «FALLO: command `plantilla-review`…»; y en la puerta, roja en «d) verificador validaciones.py»  | Pasó: rojo previo (rc=1); mutación → «FALLO: command `plantilla-review`: el paso positiva es «falló»» (mutar.sh 0) y la puerta, «PUERTA ROJA en «d) verificador validaciones.py»» (mutar.sh 0) |
+| A4 · CI | Comprobación por lectura | `calidad` llama al mismo guion que la puerta; el log del PR muestra que corrió  | Pendiente del log del CI de este PR |
 
 ### Lo que no podrá comprobarse aquí
 
@@ -144,7 +144,7 @@ en su sitio del histórico.
   - **Padding y puerta.** No coinciden nunca.
   - **Prompt del control del revisor.** Se registra el que se va a correr.
   - **La palabra «Cierre»** antes de la etapa final: este plan la evita, y va a `#PP26`.
-  - **Recuento.** 13 limpios, 2 con reserva y 5 que se repiten.
+  - **Recuento.** 13 limpios y 5 que se repiten (2 de ellos habían pasado con reserva).
   - **Hashes.** Medidos.
   - **Evidencia de los 13.** Se copia al repositorio.
   - **Capturas.** Van al informe.
@@ -153,3 +153,17 @@ en su sitio del histórico.
   - Método: «Otra sesión nueva (Recomendado)».
   - Puerta: «Sí, ciérralo (Recomendado)». Es decir, si los 18 pasan, se cierra `#PP7` y `validaciones.py` entra en la
     puerta y en el CI.
+- **2026-11-11 · Revisión de pre-PR** (la corrió la sesión de repetición sobre `e082a15`):
+  - **B1, PR antes de tiempo:** no se abrió hasta ahora.
+  - **D1, `git pull` frente a «ni git fetch»:** corregido en el bloque A nuevo.
+  - **D2, resultados vacíos:** rellenados.
+  - **D3, capturas fuera de `.claude/informes/`:** el bloque A dice qué hacer con ellas.
+  - **O1, estado:** corregido.
+  - **O2, recuento:** corregido.
+- **2026-11-11 · Repetición: 3 de 5.** `plantilla-review` (positiva y control) y el control de `revisor-externo` pasaron.
+  La auditoría visual falló positiva y control: no encadenó `/material-3 audit`.
+  - Quien decide respondió, literal: «Sí, ya (Recomendado)». `validaciones.py` entra en la puerta con las 5 piezas, y
+    `#PP7` sigue abierta por la fila visual. **Esto cambia A4**, que exigía los 18 pasos.
+  - Y también: «Editar compose-visual-loop (Recomendado)». La skill global encadena `/material-3 audit`; se corrigió el
+    2026-11-11, fuera del repositorio, y la repetición de la fila visual está pendiente.
+  - El texto del filtro de GitHub dice ahora «filtro de GitHub», no «auditor», porque lo usan los dos agentes.

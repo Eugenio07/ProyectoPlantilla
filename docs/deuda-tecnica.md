@@ -59,19 +59,19 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. Android Studio lista un simulador y corre `iosApp`. Mientras tanto, iOS se corre desde Xcode.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP7 · 2026-11-11 · Las skills y commands del proyecto no están validados en tres pasos (requisito de salida)
+### #PP7 · 2026-11-11 · La fila de la auditoría visual no pasa su validación en tres pasos (requisito de salida)
 
-- **Mecanismo:** la validación (positiva, control, negativa) exige una sesión NUEVA de Claude Code; la lanzada con
-  `claude -p` respondió «Failed to authenticate: OAuth session expired and could not be refreshed» [medido 2026-11-11].
-  Las cuatro filas de `.claude/validaciones.md` están en «no pude medir», y por eso `validaciones.py` no está todavía en
-  la puerta (saldría rojo y bloquearía todo commit).
-- **Quién lo desbloquea:** quien decide (iniciar sesión en la CLI, o correr la validación en una sesión nueva).
-- **Disparador:** cuando la CLI tenga sesión válida — estado medido 2026-11-11: caducada.
+- **Mecanismo:** la validación en tres pasos (`docs/mediciones/2026-11-11-validacion-pp7.md`) pasó 16 de 18 pasos: las
+  cinco piezas de `.claude/` pasan sus tres pasos y `validaciones.py` ya está en la puerta y en `calidad`. La fila de la
+  auditoría visual falló su positiva y su control: el subagente capturó en las dos plataformas pero no encadenó
+  `/material-3 audit`, porque esa pareja solo estaba escrita en el `CLAUDE.md` global [medido 2026-11-11]. La skill global
+  `compose-visual-loop` ya la encadena (corregida el 2026-11-11 por decisión de quien decide), sin repetir todavía.
+- **Quién lo desbloquea:** quien decide (corre el bloque A de `.claude/validacion-sesion-nueva.md` en una sesión nueva).
+- **Disparador:** cuando quien decide corra la repetición — estado medido 2026-11-11: pendiente.
 - **Vigente hasta que:**
-  1. todas las filas de `.claude/validaciones.md` tienen sus tres pasos en «pasó», sobre el hash actual de cada fichero
-     (el prompt para correrlo en una sesión nueva: `.claude/validacion-sesion-nueva.md`), y
-  2. `validaciones.py` está en `VERIFICADORES` de la puerta.
-- **Peso:** requisito de salida (fuera de escala): una skill que no se activa no ayuda a nadie, y sin validar no se sabe. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
+  1. la fila de la auditoría visual de `.claude/validaciones.md` tiene positiva y control en «pasó» (la negativa ya pasó).
+     `validaciones.py` no mira esa fila (no es una pieza del repositorio): la comprueba la lectura de la medición.
+- **Peso:** requisito de salida (fuera de escala): una auditoría visual que no se encadena deja UI sin auditar. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
 ### #PP11 · 2026-11-11 · Crashlytics de iOS recibiría todos los crashes como un único error sin traza (higiene)
 

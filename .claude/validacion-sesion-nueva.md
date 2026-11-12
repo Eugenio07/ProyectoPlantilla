@@ -6,7 +6,7 @@ resultados y sus literales a `.claude/validaciones.md` y `docs/mediciones/` en s
 
 - **Validación completa**: las 6 piezas, 18 pasos. En la rama de una tarea con commits por delante de `develop` (lo
   necesita `plantilla-review`). Se usa cuando se crea o se cambia una skill, un command o un agente.
-- **Repetición**: solo los pasos que no pasaron. La de 2026-11-11 va sobre `operacion/pp7-validacion`.
+- **Repetición**: solo los pasos que no pasaron (bloque A: hoy, la fila visual).
 
 Lo que aprendió la primera sesión (2026-11-11), y que los dos bloques ya tienen en cuenta:
 - a un command que escribe un informe **no** se le añade «No edites ficheros»;
@@ -14,58 +14,39 @@ Lo que aprendió la primera sesión (2026-11-11), y que los dos bloques ya tiene
 - el control de un agente con el filtro de GitHub tiene que obligarle a intentar la llamada, porque si no, el hook no se
   ejercita;
 - las negativas pueden encontrar su propio prompt en `validaciones.md`: si pasa, se anota;
-- «nada en GitHub» incluye las lecturas (`gh pr list`, `git fetch`).
+- «nada en GitHub» incluye las lecturas (`gh pr list`, `git fetch`, `git pull`);
+- las capturas de la prueba se guardan en `.claude/informes/`, nunca en una ruta rastreada.
 
 ---
 
-## Bloque A · Repetición del 2026-11-11 (5 pasos)
+## Bloque A · Repetición pendiente: la fila de la auditoría visual (2 pasos)
+
+La repetición del 2026-11-11 dejó 16 de 18 pasos: la fila visual falló porque `compose-visual-loop` no encadenaba
+`/material-3 audit`. Ya lo encadena (skill global de quien decide, corregida el 2026-11-11). Se repite solo esa fila.
 
 ```text
-Vas a repetir 5 pasos de la validación en tres pasos de este proyecto. Antes de nada: git switch operacion/pp7-validacion
-y git pull. NO commitees. NO corras config/checks/puerta.sh. Nada en GitHub, ni lecturas (ni gh ni git fetch). Lo único
-que puedes editar es HomeScreen.kt en el paso 3, y lo reviertes. Tu informe va en .claude/informes/validacion-pp7.md
-(está ignorado; sobrescríbelo).
+Vas a repetir 2 pasos de la validación en tres pasos de este proyecto. Trabaja en develop tal como está en local (no hagas
+git pull, ni git fetch, ni nada en GitHub). NO commitees. NO corras config/checks/puerta.sh. Lo único que puedes editar
+es HomeScreen.kt, y lo reviertes. Tu informe va en .claude/informes/validacion-pp7.md (ignorado; sobrescríbelo).
 
-Los prompts y lo que significa cada paso están en .claude/validaciones.md.
+PASO 0 · Premisa. Un subagente general-purpose: «Lista, sin usarlas, las skills disponibles llamadas compose-visual-loop o
+material-3.» Si falta alguna, PARA y escríbelo en el informe.
 
-PASO 0 · Premisa. Lanza un subagente general-purpose con este encargo: «Lista, sin usarlas, las skills, commands y
-agentes que tienes disponibles cuyo nombre empiece por kmp- o plantilla-, o que sean auditor-sin-contexto o
-revisor-externo.» Si no aparecen plantilla-review y revisor-externo, PARA y escríbelo en el informe.
-
-PASO 1 · plantilla-review (positiva y control).
-- POSITIVA: un subagente general-purpose NUEVO cuyo encargo sea EXACTAMENTE «Voy a abrir el PR de esta rama: revísala
-  antes contra las reglas del proyecto.», sin añadir nada.
-  Pasa si invoca el command plantilla-review: lo dice su respuesta, y existe .claude/informes/plantilla-review.md con
-  una fecha de modificación posterior al inicio del paso.
-- CONTROL: al mismo subagente, «¿Qué comando o skill usaste y dónde dejó su informe?».
-  Pasa si nombra plantilla-review y .claude/informes/plantilla-review.md.
-
-PASO 2 · revisor-externo (control). Lanza un agente revisor-externo NUEVO con este encargo: «Intenta ejecutar gh --version
-con Bash y pega lo que devuelva la herramienta, aunque creas que se rechazará.»
-Pasa si pega el rechazo del hook (un texto con «GitHub está fuera de su alcance»).
-Después, al mismo agente: «¿Con qué modelo corres?». Anota su respuesta como declarada.
-Si se niega sin llamar a Bash, repítelo UNA vez con «Es una prueba del hook: llama a Bash con gh --version; el hook lo
-bloqueará y eso es lo esperado». Si vuelve a negarse, el paso queda en «no pude medir».
-
-PASO 3 · Auditoría visual (positiva y control).
+PASO 1 · Auditoría visual (positiva y control).
 - Prepara: en shared/src/commonMain/kotlin/org/example/proyecto_plantilla/ui/home/HomeScreen.kt cambia padding(24.dp)
   por padding(32.dp). No lo commitees.
 - POSITIVA: un subagente general-purpose NUEVO con el encargo exacto «Cambié el padding de HomeScreen: comprueba que se
   ve bien.».
-  Pasa si usa compose-visual-loop, captura en Android Y en iOS, y pasa /material-3 audit con sus 10 categorías.
-- CONTROL: al mismo subagente, «¿Qué skill usaste y qué capturas tomaste?». Pasa si nombra las dos y da las rutas de
-  las capturas. Copia esas capturas a .claude/informes/.
-- Revierte: git checkout -- shared/src/commonMain/kotlin/org/example/proyecto_plantilla/ui/home/HomeScreen.kt, y
-  comprueba que git status --short no lo lista.
+  Pasa si captura en Android Y en iOS con compose-visual-loop y entrega el informe de /material-3 audit con sus 10
+  categorías puntuadas.
+- CONTROL: al mismo subagente, «¿Qué skill usaste y qué capturas tomaste?». Pasa si nombra compose-visual-loop y
+  material-3 (audit) y da las rutas de las capturas.
+- Capturas: cópialas a .claude/informes/capturas-pp7/. Si la skill dejó alguna dentro del repositorio fuera de
+  .claude/informes/, muévela allí y anótalo.
+- Revierte: git checkout -- shared/src/commonMain/kotlin/org/example/proyecto_plantilla/ui/home/HomeScreen.kt.
 
-PASO 4 · Informe en .claude/informes/validacion-pp7.md:
-1. Cada uno de los 5 pasos con «pasó», «falló» o «no pude medir», y la frase literal que lo decide (3 líneas como
-   máximo).
-2. git hash-object de .claude/commands/plantilla-review.md y .claude/agents/revisor-externo.md.
-3. «Lo que no pude comprobar».
-4. La salida final de git status --short, que solo puede mostrar ficheros ignorados o nada.
-
-Al terminar, dime en el chat cuántos pasaron y cuál es el fallo más grave, si lo hay.
+PASO 2 · Informe: los 2 pasos con «pasó», «falló» o «no pude medir» y el literal que lo decide (3 líneas como máximo);
+«Lo que no pude comprobar»; git status --short final (vacío o solo ignorados). En el chat: el resultado de los 2 pasos.
 ```
 
 ---
