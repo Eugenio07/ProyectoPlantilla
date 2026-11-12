@@ -79,3 +79,98 @@ crashear iOS. Antes de publicar, ejecuta `./gradlew :androidApp:verificarFirebas
 
 `develop` es la rama de trabajo y `main` la de versiones. Cada tarea va en su rama, con un PR contra `develop`, y se
 fusiona a mano cuando el CI está en verde (`CLAUDE.md` §9).
+
+## Crear un proyecto nuevo desde la plantilla
+
+Haz los pasos en este orden. Los marcados con **(PR)** van en commits de la primera rama del proyecto nuevo, con la
+puerta. En los ejemplos, el proyecto nuevo se llama «Mi App», su paquete es `com.miempresa.miapp` y su `rootProject.name`
+es `MiApp`.
+
+### 1. El repositorio
+
+1. Una sola vez, en GitHub, marca este repositorio como plantilla (*Settings → Template repository*).
+2. Crea el nuevo con todas las ramas, para que traiga `develop` y `main`:
+
+   ```bash
+   gh repo create miempresa/mi-app --private --template Eugenio07/ProyectoPlantilla --include-all-branches --clone
+   ```
+
+3. En el repositorio nuevo, pon `develop` como rama por defecto. Si el token no puede subir workflows:
+   `gh auth refresh -h github.com -s workflow`.
+4. En el clon, una sola vez: `git config core.hooksPath .githooks`.
+5. Abre el proyecto en Android Studio, que crea el fichero local con la ruta del SDK (no se versiona). Sin él, Gradle
+   falla con «SDK location not found». Desde la terminal, basta con exportar `ANDROID_HOME`.
+
+### 2. Renombrar (PR, una rama propia, un solo commit)
+
+El nombre de la plantilla aparece en:
+- el paquete de Kotlin, con sus carpetas;
+- el `applicationId`;
+- el bundle id de iOS;
+- el nombre de la app;
+- el paquete de recursos de Compose, que sale de `rootProject.name`;
+- el CI.
+
+Desde la raíz:
+
+```bash
+VIEJO=org.example.proyecto_plantilla; NUEVO=com.miempresa.miapp
+# 1) Las carpetas del paquete, en cada source set
+for d in $(git ls-files | grep '/kotlin/org/example/proyecto_plantilla/' | sed 's#\(.*/kotlin/\)org/example/proyecto_plantilla/.*#\1#' | sort -u); do
+  mkdir -p "$d$(dirname "${NUEVO//.//}")" && git mv "${d}org/example/proyecto_plantilla" "$d${NUEVO//.//}"
+done
+# 2) Los textos, solo en ficheros de texto vivos (docs/historico y docs/mediciones son registros con fecha: no se tocan)
+git grep -lzI -e "$VIEJO" -e "${VIEJO//.//}" -- . ':!docs/historico' ':!docs/mediciones' |
+  xargs -0 sed -i '' -e "s/${VIEJO//./\\.}/$NUEVO/g" -e "s#${VIEJO//.//}#${NUEVO//.//}#g"
+git grep -lzI -e 'proyectoplantilla\.shared' -- . ':!docs/historico' ':!docs/mediciones' |
+  xargs -0 sed -i '' 's/proyectoplantilla\.shared/miapp.shared/g'
+# 3) Las carpetas vacías que deja el paso 1 (git no las rastrea, pero quedan en disco)
+find . -type d -empty -path '*/kotlin/org*' -delete
+```
+
+Probado el 2026-11-11 sobre una copia de la plantilla: con `rootProject.name` cambiado, compila Android y Kotlin/Native
+para iOS, y pasan los 85 tests JVM.
+
+Y a mano:
+
+| Fichero | Qué |
+|---|---|
+| `settings.gradle.kts` | `rootProject.name = "MiApp"`. En minúsculas da el paquete de recursos (`miapp.shared.generated.resources`) |
+| `androidApp/src/main/res/values/strings.xml` | `app_name` |
+| `iosApp/Configuration/Config.xcconfig` | `PRODUCT_NAME` y `PRODUCT_BUNDLE_IDENTIFIER` (el bundle id de iOS no lleva guion bajo) |
+| `iosApp/iosApp.xcodeproj/project.pbxproj` y `.github/workflows/ci.yml` | `Proyecto Plantilla.app` → `Mi App.app`. En `ci.yml`, también el bundle id del paso que cierra la app |
+| `.editorconfig`, `config/detekt/detekt.yml`, `CLAUDE.md` §13 y `wiki/decisiones/paquete-con-guion-bajo.md` | Si el paquete nuevo **no** lleva guion bajo, quita la excepción |
+
+Comprueba que no queda nada:
+`git grep -nI "proyecto_plantilla\|proyectoplantilla\|ProyectoPlantilla\|Proyecto Plantilla" -- . ':!docs/historico' ':!docs/mediciones' ':!docs/manuales'`.
+Después, `config/checks/puerta.sh`.
+
+**Ojo:** el renombrado cambia `.claude/commands/plantilla-contract-sync.md`, así que `validaciones.py` pondrá la puerta en
+rojo hasta que lo valides otra vez, con el bloque B de `.claude/validacion-sesion-nueva.md` en una sesión nueva de Claude
+Code. Es lo esperado: cambiar una pieza caduca su validación.
+
+### 3. Lo que es del producto (PR, por tareas)
+
+- **Las ranuras de `CLAUDE.md` §2:** ruta crítica, activo crítico y dónde vive, backend, si está publicada, revisor
+  externo y bandeja. Se rellenan antes de la primera ficha.
+- **El backend:**
+  - `baseUrl` en `androidApp/build.gradle.kts` (`BASE_URL`) y en `iosApp/iosApp/iOSApp.swift`;
+  - los contratos de `docs/contracts/` pasan de borrador a la rama B o C (`CLAUDE.md` §12);
+  - el backend envía `minVersion` siempre, y `storeUrl` con las fichas de las dos tiendas.
+- **La marca:**
+  - los colores de `ui/theme/AppTheme.kt`, que son provisionales, con dirección de `frontend-design` y la auditoría
+    visual;
+  - el icono de la app.
+- **Los textos provisionales** (`CLAUDE.md` §2): `strings.xml`, `CrashSafeScreen` y las acciones de
+  `docs/contracts/api-errors.md`.
+- **Firebase:** el proyecto, la configuración de Android y la de iOS (el plist se copia desde Finder). Sigue las dos
+  listas de release.
+- **La cola:** `docs/deuda-tecnica.md` viaja con las entradas de la plantilla. Quédate con las que apliquen y usa un
+  prefijo propio para las nuevas (por ejemplo, `#MA1`), porque `cola.py` no deja reutilizar los identificadores del
+  historial.
+- **Este README:** sustituye esta sección por la del producto.
+
+### 4. Antes de publicar
+
+Sigue las listas de release: `docs/android-release-checklist.md` y `docs/ios-release-checklist.md`. Incluyen el keystore,
+R8, Crashlytics, `verificarFirebase`, la `baseUrl` de producción y comprobar que «Actualizar» abre la ficha real.
