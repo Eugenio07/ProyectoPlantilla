@@ -1,6 +1,6 @@
 # Botón «Actualizar» en la pantalla de actualización obligatoria (#PP24)
 
-- **Estado:** Implementado
+- **Estado:** Fusionado (PR #45, `5f5ef8f`)
 - **Tamaño:** M
 - **Entrada:** la cola, `#PP24` (requisito de salida, peso firmado). La decisión de producto es la opción (a) de `#PP5`
   (`docs/mediciones/2026-11-11-aprobacion-pp5.md`).

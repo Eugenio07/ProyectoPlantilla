@@ -27,7 +27,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   primera ficha**. Publicada: no. El ejecutor prueba contra: local (stub de §6). Bandeja: incidencias de GitHub
   (por confirmar). Zona horaria: America/Caracas.
 - Revisa, en cada app derivada y antes de su primera ficha, los textos provisionales de la plantilla (`strings.xml`,
-  `CrashSafeScreen`, acciones de `api-errors.md`). Prueba: ¿su primera ficha los cita?
+  `CrashSafeScreen`, acciones de `api-errors.md`) y los colores provisionales de `AppTheme` (`ui/theme/`). Prueba: ¿su
+  primera ficha los cita?
 - Auditoría visual de UI: la skill `compose-visual-loop` (captura real en las dos plataformas) más `/material-3 audit`
   con sus 10 categorías. Prueba: ¿el cierre de una tarea de UI cita las capturas en `docs/mediciones/` y el informe?
 - Herramienta de grafo: ninguna. Escribe una afirmación de alcanzabilidad como «no comprobada: sin herramienta de grafo».
