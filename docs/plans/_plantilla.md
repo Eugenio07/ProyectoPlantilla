@@ -3,6 +3,8 @@
 - **Estado:** Plan en borrador
 - **Tamaño:** S | M | L
 - **Entrada:** <ficha, o en el arranque: «v2, FASE n, incremento <nombre>»>
+- **Alcance autorizado, provisional hasta la pasada del auditor:** <sí/no, quién, fecha>
+- **Lo que el auditor cambió del alcance:** <tras la pasada>
 - **Implementación autorizada:** No
 
 > **En el arranque** un plan es solo la Parte 2: la Parte 1 es el prompt de la fase de v2, por referencia
