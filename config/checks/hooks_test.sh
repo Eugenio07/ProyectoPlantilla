@@ -69,7 +69,7 @@ done
 rm -rf "$FALSO"
 
 # Recordatorio de UI (#PP22): solo las vistas de Swift y la escena (iOSApp.swift, el App.kt de Swift) son UI.
-# Repositorio temporal con DOS commits: el hook mira HEAD~1..HEAD.
+# Repositorio temporal con DOS commits: el hook mira HEAD~1..HEAD (si HEAD no es un merge) y el árbol sucio.
 recordatorio() {  # $1 = fichero del último commit → código del hook
   local r; r="$(mktemp -d)"
   ( cd "$r" && git init -q && git config user.email t@t && git config user.name t && echo a > a && git add a &&
@@ -85,6 +85,31 @@ recordatorio iosApp/iosApp/iOSApp.swift; c=$?
 [ "$c" -eq 2 ] && ok "recordatorio UI: iOSApp.swift → 2" || ko "recordatorio UI: iOSApp → $c (esperado 2)"
 recordatorio shared/src/commonMain/kotlin/x/ui/Home.kt; c=$?
 [ "$c" -eq 2 ] && ok "recordatorio UI: Kotlin en ui/ → 2" || ko "recordatorio UI: ui/ → $c (esperado 2)"
+
+# #PP27: tras un MERGE (HEAD^2 existe), el último commit es el PR entero, ya auditado: no cuenta. El árbol sucio sí,
+# también lo SIN RASTREAR (una pantalla nueva sin git add). Historia divergente y --no-ff: en avance rápido no hay merge.
+merge_ui() {  # $1 = qué hacer después del merge: nada | modificar | nuevo → código del hook
+  local r; r="$(mktemp -d)"; local u=shared/src/commonMain/kotlin/x/ui
+  ( cd "$r" && git init -q -b main && git config user.email t@t && git config user.name t && echo a > a && git add a &&
+    git commit -qm uno && git switch -qc rama && mkdir -p $u && echo b > $u/A.kt && git add $u && git commit -qm ui &&
+    git switch -q main && echo c > c && git add c && git commit -qm otro && git merge -q --no-ff rama -m merge &&
+    case "$1" in modificar) echo d >> $u/A.kt ;; nuevo) echo e > $u/Nuevo.kt ;; esac )
+  printf '{}' | CLAUDE_PROJECT_DIR="$r" bash "$H/stop-ui-audit-reminder.sh" >/dev/null 2>&1; local c=$?
+  rm -rf "$r"; return "$c"
+}
+merge_ui nada; c=$?
+[ "$c" -eq 0 ] && ok "recordatorio UI: merge de un PR con UI (ya auditado) → 0" || ko "recordatorio UI: merge solo → $c (esperado 0)"
+merge_ui modificar; c=$?
+[ "$c" -eq 2 ] && ok "recordatorio UI: merge + UI rastreada modificada → 2" || ko "recordatorio UI: merge + modificado → $c (esperado 2)"
+nuevo_ui() {  # un commit sin UI y una pantalla nueva SIN RASTREAR → código del hook
+  local r; r="$(mktemp -d)"
+  ( cd "$r" && git init -q && git config user.email t@t && git config user.name t && echo a > a && git add a &&
+    git commit -qm uno && echo b > b && git add b && git commit -qm dos && mkdir -p x/ui && echo n > x/ui/Nueva.kt )
+  printf '{}' | CLAUDE_PROJECT_DIR="$r" bash "$H/stop-ui-audit-reminder.sh" >/dev/null 2>&1; local c=$?
+  rm -rf "$r"; return "$c"
+}
+nuevo_ui; c=$?
+[ "$c" -eq 2 ] && ok "recordatorio UI: pantalla nueva sin rastrear → 2" || ko "recordatorio UI: sin rastrear → $c (esperado 2)"
 
 if [ "${1:-}" = "--completo" ]; then
   GITDIR="$(git rev-parse --git-dir)"; LOCK="$GITDIR/puerta.lock"
