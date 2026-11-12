@@ -1,7 +1,6 @@
 package org.example.proyecto_plantilla
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import org.example.proyecto_plantilla.core.crash.CrashCircuitBreaker
 import org.example.proyecto_plantilla.ui.navigation.AppNavHost
 import org.example.proyecto_plantilla.ui.safemode.CrashSafeScreen
+import org.example.proyecto_plantilla.ui.theme.AppTheme
 import org.koin.compose.koinInject
 
 /**
@@ -21,7 +21,7 @@ import org.koin.compose.koinInject
  */
 @Composable
 fun App(startAtHome: Boolean = false) {
-    MaterialTheme {
+    AppTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             val breaker = koinInject<CrashCircuitBreaker>()
             var safeMode by remember { mutableStateOf(breaker.isTripped()) }

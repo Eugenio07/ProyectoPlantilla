@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tema de VENTANA (#PP25/#PP3): lo que se ve antes de que pinte Compose. Sigue al modo del sistema, como AppTheme. -->
+<resources>
+    <style name="Theme.Plantilla" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
