@@ -59,20 +59,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. Android Studio lista un simulador y corre `iosApp`. Mientras tanto, iOS se corre desde Xcode.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP7 · 2026-11-11 · La fila de la auditoría visual no pasa su validación en tres pasos (requisito de salida)
-
-- **Mecanismo:** la validación en tres pasos (`docs/mediciones/2026-11-11-validacion-pp7.md`) pasó 16 de 18 pasos: las
-  cinco piezas de `.claude/` pasan sus tres pasos y `validaciones.py` ya está en la puerta y en `calidad`. La fila de la
-  auditoría visual falló su positiva y su control: el subagente capturó en las dos plataformas pero no encadenó
-  `/material-3 audit`, porque esa pareja solo estaba escrita en el `CLAUDE.md` global [medido 2026-11-11]. La skill global
-  `compose-visual-loop` ya la encadena (corregida el 2026-11-11 por decisión de quien decide), sin repetir todavía.
-- **Quién lo desbloquea:** quien decide (corre el bloque A de `.claude/validacion-sesion-nueva.md` en una sesión nueva).
-- **Disparador:** cuando quien decide corra la repetición — estado medido 2026-11-11: pendiente.
-- **Vigente hasta que:**
-  1. la fila de la auditoría visual de `.claude/validaciones.md` tiene positiva y control en «pasó» (la negativa ya pasó).
-     `validaciones.py` no mira esa fila (no es una pieza del repositorio): la comprueba la lectura de la medición.
-- **Peso:** requisito de salida (fuera de escala): una auditoría visual que no se encadena deja UI sin auditar. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
-
 ### #PP11 · 2026-11-11 · Crashlytics de iOS recibiría todos los crashes como un único error sin traza (higiene)
 
 - **Mecanismo:** `SwiftCrashReporter` registra un `NSError` con dominio fijo, `code: 0` y solo el mensaje [leído; sin medir: no hay proyecto]. [TOCA-iOS] Hallazgo de `docs/historico/auditorias/AUDIT-2026-11-11.md`; búsqueda previa del mecanismo en la
@@ -143,6 +129,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP7` | Las skills, commands y agentes no estaban validados en tres pasos. 18 de 18 pasos en dos sesiones nuevas más la repetición de la fila visual (`docs/mediciones/2026-11-11-validacion-pp7.md`); `validaciones.py` en la puerta y en `calidad` (`c1d6ed5`); `compose-visual-loop` encadena `/material-3 audit` | (este commit) |
 | `#PP5` | Los textos de la Splash, de `CrashSafeScreen` y las acciones por code no estaban aprobados. Aprobados como provisionales de plantilla; `error_network` ya no afirma una causa; la salida de la actualización obligatoria, decidida (opción a) → `#PP24` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`) | `551786c` |
 | `#PP23` | El job `ios` compilaba el SDK de Firebase en frío en cada PR. `ios` restaura el DerivedData y `cache-ios` lo llena desde `develop`: «Construir la app» 8 min 07 s → 3 min 11 s (`docs/mediciones/2026-11-11-cache-ios.md`) | `f3f3317` |
 | `#PP12` | Nada impedía que el stub de config volviera a release de Android. `:androidApp:verificarSinStubEnRelease` (grafo resuelto) en la puerta y en el job `android`; mutación `debugImplementation`→`implementation` → roja | `4c6b662` |
