@@ -58,6 +58,44 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
+### #PP28 · 2026-11-12 · Nada vigila que `PreviewActivity` no vuelva al APK de release 🟡
+
+- **Mecanismo:** `#PP8` quitó `compose.uiTooling` de `androidMain` (`6f8ecf7`) y se midió **una vez** en el manifiesto
+  fusionado de release; ninguna guarda lo vuelve a mirar (`git grep PreviewActivity` en `config/`, `androidApp/`,
+  `shared/`, `.github/`: nada) [medido 2026-11-12]. Un arreglo sin verificador no se cumple (revisión externa, B1).
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. `verificarSinStubEnRelease` (la guarda de la clase, `#PP12`) **se extiende** —no se escribe otra al lado, decisión 2
+     de la revisión externa— a `ui-tooling` en los classpaths de release y a `PreviewActivity` en el manifiesto fusionado
+     de release, con su mutación.
+- **Peso:** 🟡: el mismo daño que `#PP8` (cualquier app del dispositivo podría lanzar composables). — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/plans/2026-11-12-revision-externa-v3.md`, *Revisiones*).
+
+### #PP29 · 2026-11-12 · `manuales.py` no existe: nada mantiene que los manuales cumplan sus reglas (higiene)
+
+- **Mecanismo:** `manuales_revisiones.md` lo asignó a este repositorio (quien decide, 2026-11-09) y nunca se escribió ni
+  se encoló [medido 2026-11-12]. Sus criterios (C1–C6) no están definidos en ningún sitio legible.
+- **Quién lo desbloquea:** nosotros, después de la v3.
+- **Disparador:** cuando la v3 esté fusionada — estado 2026-11-12: en escritura (plan `2026-11-12-revision-externa-v3`).
+- **Vigente hasta que:**
+  1. una pasada NUEVA del auditor sobre la v3 da los criterios (decisión 1 de la revisión externa: no se reconstruyen
+     los de la v2);
+  2. `config/checks/manuales.py` los verifica, está en la puerta y sale verde, con su mutación.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/plans/2026-11-12-revision-externa-v3.md`, *Revisiones*).
+
+### #PP30 · 2026-11-12 · Los defectos de forma de un plan los encuentra el auditor, y diluyen los de fondo (higiene)
+
+- **Mecanismo:** las columnas de la plantilla, las casillas de cierre, los antecedentes y la autorización antes de
+  tiempo salen en las pasadas del auditor mezclados con los hallazgos de fondo, y se leen igual. «Cerca del 40 %» de
+  sus hallazgos son de forma: **derivación, no recuento** (estimación del ejecutor sobre las pasadas de 2026-11-11 y
+  2026-11-12; los informes anteriores no se guardaron).
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. `config/checks/plan_lint.py` en la puerta comprueba la forma de los planes vivos (secciones de la plantilla, clases
+     de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/plans/2026-11-12-revision-externa-v3.md`, *Revisiones*).
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
