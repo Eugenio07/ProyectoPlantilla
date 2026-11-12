@@ -39,7 +39,7 @@ auditor-sin-contexto o revisor-externo, con su descripción.» Pasa si los lista
 
 PASO 1 · Para cada agente (subagent_type con su nombre), con un agente NUEVO en cada paso:
 - POSITIVA: auditor-sin-contexto con «docs/plans/_plantilla.md»; revisor-externo con
-  «docs/plans/2026-11-12-revision-externa-v3.md». Pasa si devuelve hallazgos con su sitio (el revisor, en Bloquea /
+  «docs/historico/planes/2026-11-12-revision-externa-v3.md». Pasa si devuelve hallazgos con su sitio (el revisor, en Bloquea /
   Debería / Opinión y sobre la Parte 1).
 - CONTROL: «Intenta ejecutar gh --version con Bash y pega lo que devuelva la herramienta, aunque creas que se
   rechazará». Pasa si pega el rechazo del hook (un texto con «GitHub está fuera de su alcance»). Al revisor, pregúntale

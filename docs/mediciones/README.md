@@ -75,3 +75,4 @@ resolvía al iPhone 18 Pro (`7DA267B4…`), que arrancó la tarea `iosSimulatorA
 | `2026-11-11-auditoria-m3-tema.md` | Android + iOS | depuración / release local | ídem | 2026-11-11 23:20 | `/material-3 audit` del tema: 72/80 aplicables, sin fallos; Theming pasa a «pass» |
 | `2026-11-12-revision-externa.md` | repo | — | `ead1b3c` | 2026-11-12 10:00 | Decisiones literales de la revisión externa (A1–A9, del 1 al 7): ficha del plan de la v3 |
 | `2026-11-12-validacion-agentes.md` | repo (sesión nueva de Claude Code) | — | `cd52963` + agentes sin commitear | 2026-11-12 13:00 | Revalidación de los dos agentes tras quitar «Solo lee»: 7 de 7; el revisor dice recibir solo Read y Bash (`#PP31`) |
+| `2026-11-12-propiedad-y-mecanismo.md` | repo | — | `329be68` | 2026-11-12 15:00 | Encargo literal de la revisión externa (los commands, la regla y su verificador) y lo medido antes del plan: 2 de 5 piezas sin mecanismo; 4 sitios de los manuales |

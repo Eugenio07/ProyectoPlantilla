@@ -1,6 +1,6 @@
 # Decisiones de la revisión externa y la v3 de los manuales
 
-- **Estado:** Implementado
+- **Estado:** Fusionado (PR #48, `329be68`)
 - **Tamaño:** M
 - **Entrada:** la ficha son las decisiones literales de la revisión externa (A1–A9 y del 1 al 7), en
   `docs/mediciones/2026-11-12-revision-externa.md`.

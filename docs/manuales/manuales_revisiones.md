@@ -55,7 +55,7 @@ C1, C2, C4, C5 y C6 de la segunda pasada, y los hallazgos de esa pasada que no s
 ## v3, 2026-11-12
 
 **Origen:** las decisiones de la revisión externa (Rumba) sobre el reporte del arranque de la plantilla, literales en
-`docs/mediciones/2026-11-12-revision-externa.md` del repo plantilla. Plan: `docs/plans/2026-11-12-revision-externa-v3.md`.
+`docs/mediciones/2026-11-12-revision-externa.md` del repo plantilla. Plan: `docs/historico/planes/2026-11-12-revision-externa-v3.md`.
 Ninguna de las 39 notas del arranque (`notas-del-arranque-2026-11-11.md`) contradice estos cambios [leído: cotejadas una
 a una].
 
