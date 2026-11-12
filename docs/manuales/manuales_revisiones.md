@@ -87,7 +87,7 @@ escribió quien la tomó:** «La escribí sin comprobar que sus criterios pudier
 ## v3, 2026-11-12 (segunda entrada): toda propiedad declarada dice su mecanismo
 
 **Origen:** el encargo de la revisión externa, literal en `docs/mediciones/2026-11-12-propiedad-y-mecanismo.md` del repo
-plantilla. Plan: `docs/plans/2026-11-12-propiedad-y-mecanismo.md`.
+plantilla. Plan: `docs/historico/planes/2026-11-12-propiedad-y-mecanismo.md`.
 
 | Cambio | Dónde |
 |---|---|

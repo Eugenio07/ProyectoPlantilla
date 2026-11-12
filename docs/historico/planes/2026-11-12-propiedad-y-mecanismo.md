@@ -1,6 +1,6 @@
 # Toda propiedad declarada dice su mecanismo: la regla, su verificador, los commands y #PP31
 
-- **Estado:** Implementado
+- **Estado:** Fusionado (PR #49, `ca0eba9`)
 - **Tamaño:** M
 - **Entrada:** la ficha es el encargo de la revisión externa del 2026-11-12, literal en
   `docs/mediciones/2026-11-12-propiedad-y-mecanismo.md`.
