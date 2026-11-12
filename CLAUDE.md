@@ -7,12 +7,16 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
 ## §1 · Qué es
 
 - Plantilla Kotlin Multiplatform (Compose Multiplatform, Android + iOS) sobre la que se construyen apps. Manuales en
-  `docs/manuales/`: el de arranque (v2) montó esto; el de operación dice cómo se trabaja.
-- Para trabajar una tarea, sigue el ciclo del manual de operación §2: ficha → plan en `docs/plans/` con
-  `docs/plans/_plantilla.md` → auditor sin contexto → autorización escrita → rama → puerta → PR. Prueba: ¿el plan tiene
-  la línea `Implementación autorizada: Sí (…)` antes del primer commit de código?
+  `docs/manuales/` (v3): el de arranque montó esto; el de operación dice cómo se trabaja.
+- Para trabajar una tarea, sigue el ciclo del manual de operación §2: ficha y alcance autorizado (provisional) → plan
+  con `docs/plans/_plantilla.md` → auditor sin contexto → autorización escrita → rama → puerta → PR. Prueba: ¿el plan
+  tiene `Implementación autorizada: Sí (…)` antes del primer commit de código?
 - Lanza el subagente `auditor-sin-contexto` con SOLO la ruta del plan, siempre y sin preguntar, antes de enseñarlo.
   Prueba: ¿*Revisiones* tiene la pasada con su fecha antes de la revisión?
+- Salta plan y auditor solo en el carril ligero: un cambio S que toca documentación o configuración sin conducta nueva.
+  La revisión de pre-PR no se salta nunca. Prueba: ¿el PR sin plan toca solo eso, y cita su revisión?
+- Guarda cada pasada del auditor, literal y antes de aplicar ningún hallazgo, en
+  `.claude/reviews/review-<rama>-<fecha>[-pasada-N].md` (local, sin rastrear). Prueba: ¿existe el fichero de la pasada?
 
 ## §2 · Ranuras
 
@@ -21,8 +25,10 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   `wiki/decisiones/ci-alojado.md`.
 - Protección de ramas: no disponible (403). Rigen las reglas de fusión de §9. Por qué:
   `wiki/decisiones/fusion-sin-proteccion.md`.
-- Backend: ninguno → contratos en rama A (§12). Personas: una. Quien decide: Eugenio Martínez. Revisor externo: el
-  agente `revisor-externo` (otro modelo; juzga la Parte 1), lanzado en la puerta del plan si quien decide lo pide.
+- Backend: ninguno → contratos en rama A (§12). Personas: una. Quien decide: Eugenio Martínez. Revisor externo: un
+  agente en otra conversación que NO lee el código (hoy, la revisión de Rumba, por medio de quien decide).
+- El agente `revisor-externo` NO es esa ranura: lee el repositorio, así que es un segundo auditor con otro modelo, que
+  juzga la Parte 1 si quien decide lo pide. Prueba: su `tools:` incluye Read y Bash.
 - Ruta crítica, activo crítico y dónde vive: no aplican a la plantilla; **cada app derivada los rellena antes de su
   primera ficha**. Publicada: no. El ejecutor prueba contra: local (stub de §6). Bandeja: incidencias de GitHub
   (por confirmar). Zona horaria: America/Caracas.
@@ -138,6 +144,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   `local.properties`. Prueba: `.githooks/pre-commit` (una vez por clon: `git config core.hooksPath .githooks`).
 - No uses `git add -A` ni `git add .`: nombra los ficheros nuevos.
 - Lee una lista `-z` por sustitución de proceso, nunca de una variable. Por qué: `wiki/trampas/nul-en-sustitucion.md`.
+- Corre en bash los comandos que manejan listas de ficheros o de tareas (`bash -c '…'` o un guion): zsh no parte una
+  variable en palabras. Prueba: ¿el comando con la lista empieza por `bash`? Por qué: `wiki/trampas/zsh-no-parte-variables.md`.
 
 ## §12 · Contratos
 

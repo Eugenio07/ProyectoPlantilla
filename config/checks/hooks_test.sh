@@ -65,6 +65,16 @@ for h in stop-run-jvm-tests.sh stop-verificadores.sh stop-ui-audit-reminder.sh; 
   printf '{"stop_hook_active": true}' | CLAUDE_PROJECT_DIR="$dir" bash "$H/$h" >/dev/null 2>&1
   [ $? -eq 0 ] && ok "$h: stop_hook_active → 0" || ko "$h: stop_hook_active"
 done
+# stop-verificadores.sh SIN python3 (decisión 7 de la revisión externa, 2026-11-12): falla abierto (0). Proyecto FALSO:
+# su cola.py sale 1 y no tiene candado.sh, así que también vale dentro de la puerta (con el candado vivo, el hook real
+# saldría 0 antes de mirar nada). Control: con python3, el mismo proyecto sale 2.
+PV="$(mktemp -d)"; mkdir -p "$PV/config/checks"; printf 'import sys\nprint("FALLO: falso")\nsys.exit(1)\n' > "$PV/config/checks/cola.py"
+SINPY="$(mktemp -d)"; for b in bash cat grep head; do p="$(command -v $b)"; [ -n "$p" ] && ln -s "$p" "$SINPY/$b"; done
+printf '{}' | CLAUDE_PROJECT_DIR="$PV" PATH="$SINPY" bash "$H/stop-verificadores.sh" >/dev/null 2>&1; c=$?
+[ "$c" -eq 0 ] && ok "stop-verificadores.sh: sin python3 → 0 (no revienta)" || ko "stop-verificadores.sh: sin python3 → $c (esperado 0)"
+printf '{}' | CLAUDE_PROJECT_DIR="$PV" bash "$H/stop-verificadores.sh" >/dev/null 2>&1; c=$?
+[ "$c" -eq 2 ] && ok "stop-verificadores.sh: control, con python3 y un verificador rojo → 2" || ko "stop-verificadores.sh: control → $c (esperado 2)"
+rm -rf "$PV" "$SINPY"
 [ -f "$FALSO/gradle-llamado" ] && ok "stop-run-jvm-tests.sh: con JSON ilegible llega a Gradle (el falso), no al real" || ko "stop-run-jvm-tests.sh: no llegó a Gradle"
 rm -rf "$FALSO"
 

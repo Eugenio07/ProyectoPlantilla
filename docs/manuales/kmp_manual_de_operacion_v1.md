@@ -1,6 +1,6 @@
-# Manual de operación · Cómo se trabaja con Claude Code una vez montada la infraestructura · v1
+# Manual de operación · Cómo se trabaja con Claude Code una vez montada la infraestructura · v3
 
-Es el segundo de dos documentos. El **manual de arranque (v2)** monta la infraestructura fase a fase. Este dice **cómo se
+Es el segundo de dos documentos. El **manual de arranque** monta la infraestructura fase a fase. Este dice **cómo se
 trabaja** una vez montada: quién decide qué, el ciclo de una tarea, qué cuenta como verificado, cómo se encola y se pesa
 un defecto, cuándo se para, cómo se escriben las reglas y las decisiones, cómo se encarga trabajo a una sesión y cómo
 falla quien decide.
@@ -18,6 +18,33 @@ su registro, no reproduciéndolos.
 
 **Si algo de aquí no coincide con lo que encuentras, gana lo que encuentras**, y la discrepancia vuelve al manual como
 nota con su fecha (la misma regla que v2).
+
+**v3 (2026-11-12).** Los dos manuales llevan un solo número de versión. Este se llamó v1 y conserva su nombre de
+fichero, porque lo citan `CLAUDE.md`, `wiki/` y los guiones. Qué cambió y por qué: `manuales_revisiones.md`, entrada
+«v3».
+
+---
+
+## El ciclo en una página
+
+Lo mínimo para trabajar una tarea. Cada paso remite a su sección; el detalle vive allí, no aquí.
+
+1. **Ficha y alcance.** Quien decide escribe qué y para quién, y autoriza el alcance, **provisional hasta la pasada
+   del auditor** (§2, «El ciclo»).
+2. **¿Carril ligero?** Si el cambio es S y solo toca documentación o configuración sin conducta nueva, salta al paso 7.
+   **La revisión no se salta nunca** (§2, «El carril ligero»).
+3. **Medición y plan.** Se mide lo que la ficha da por hecho. El plan sigue la plantilla: Parte 1 (qué), Parte 2 (cómo,
+   verificación previa y criterios con su clase), con ~150 líneas como máximo (§2, «El plan por dentro»).
+4. **Auditor sin contexto.** Lo lanza quien redacta, siempre. Su informe se **guarda literal**, un fichero por pasada,
+   **antes** de resolver nada. Los hallazgos se resuelven con las reglas de §2.1, y lo que no cae bajo ninguna sube.
+5. **Autorización.** Quien decide confirma el alcance (y escribe lo que el auditor cambió) y autoriza implementar
+   (`Implementación autorizada: Sí`). Sin esa línea no hay código.
+6. **Rama y tareas.** Cada tarea, en su orden por capa: el test primero, rojo **por una aserción**, después el código,
+   después la **mutación vista** con su control. La UI, con captura real. Cada commit, a través de la puerta (§3, §4).
+7. **Cierre y revisión.** La etapa de cierre casilla a casilla, y la revisión de pre-PR (§2).
+8. **PR y fusión.** El PR se abre cuando no queda nada por cambiar. Se fusiona a mano: CI en verde y la cabeza
+   comprobada. El plan pasa al histórico en la rama siguiente (§2).
+9. **La cola.** Lo que se encuentra y no toca se escribe en la cola con su mecanismo, y el peso lo pone quien decide (§5).
 
 ---
 
@@ -71,7 +98,7 @@ sitio del trabajo»), y pasan a `CLAUDE.md` en la Fase 9. Cada sección que depe
 | **Si la app está publicada** | Si ya la usa alguien fuera del equipo | Hay usuarios que no son del equipo | El orden de los requisitos de salida (§5) |
 | **Contra qué entorno prueba el ejecutor** | Local · un entorno de pruebas · producción | El entorno al que llegan las llamadas cuando el ejecutor prueba | Cuántas pruebas pasan por la pregunta de las escrituras (§6) y qué datos de prueba se usan |
 | **Quien decide** | La persona con la autoridad de producto | Una sola persona, con nombre | §1 |
-| **El revisor** | Un agente en otra conversación, con la memoria de las decisiones | Que no comparta contexto con el ejecutor ni lea el código | §1 |
+| **El revisor** | Un agente en otra conversación, con la memoria de las decisiones | Que no comparta contexto con el ejecutor ni lea el código. **Un agente que puede leer el repositorio no es esta ranura**: es un segundo auditor con otro modelo, y se nombra así (v3, A9) | §1 |
 | **Los otros equipos** | Quien sirve lo que la app consume (backend, API de un tercero) | Si existe | §8 |
 | **La bandeja** | Donde llegan las peticiones: un gestor de incidencias, un correo, un canal | Es autoridad sobre **qué se pidió y quién lo pidió**, no sobre el trabajo | §5 |
 | **La auditoría visual de UI** | La herramienta que el proyecto usa para auditar la UI | La que valida v2 en la Fase 11 | El cierre (§2) |
@@ -104,6 +131,13 @@ lectura del auditor de lo que el texto supone, aceptada como alcance]:
 **Lo único que no se delega es la autoridad de producto**: el texto que lee quien usa la app, y las decisiones que no son
 técnicas.
 
+**Lo que un agente puede hacer lo dicen sus herramientas, no su descripción** (v3). «Solo lee» en un agente con `Bash` es
+una instrucción, no una frontera. Su descripción dice lo que es: «Read, Grep, Glob y Bash; GitHub, denegado por nombre;
+no edita por instrucción». **No se amplía el filtro para negar escrituras por nombre**, porque hereda el mismo agujero
+que se midió en el origen con `git ls-remote`. El auditor necesita `Bash` [leído: sus pasadas guardadas usan `git
+check-ignore`, `git ls-files`, `git merge-base`, corren los verificadores y leen las fuentes de una librería dentro de un
+jar]. Si algún día le bastan Read, Grep y Glob, quitarle `Bash` es la frontera de verdad.
+
 ### Quien escribe no pesa
 **El ejecutor propone el peso con las preguntas respondidas una a una; quien decide lo pone. Quien está afectado por un
 defecto no lo pesa solo.** *Caso [leído]:* un defecto de un instrumento de verificación se pesó como 🟡 cuando era higiene,
@@ -129,6 +163,12 @@ equivocado.
 
 ## §2 · El ciclo de una tarea
 
+**El alcance se autoriza primero, y es provisional hasta la pasada del auditor** (v3, A1). Si quien decide autoriza en la
+conversación y el manual pide autorizar después del auditor, o la autorización es provisional, o la pasada del auditor es
+teatro. En el origen, el hallazgo 1 de un auditor **cambió una decisión de alcance ya tomada** [leído: lo contó la
+revisión externa, 2026-11-12]. Por eso la cabecera del plan lleva, literales, dos líneas:
+«Alcance autorizado, provisional hasta la pasada del auditor.» y «Lo que el auditor cambió del alcance: …».
+
 **La autorización se escribe en el plan, con firma y fecha: una aprobación que vive en una conversación no ocurrió**
 [leído; en el origen, una instrucción que vivió solo en un chat la habría aplicado mal otra sesión que no la conocía].
 **En el arranque** el ciclo cambia, y lo describe v2 («0 · Filosofía de trabajo», «Plan antes de aplicar»): el prompt
@@ -139,11 +179,12 @@ todavía no existe tiene su sustituto escrito en una tabla.
 | Paso | Documento | Lo escribe | Lo aprueba | Parada |
 |---|---|---|---|---|
 | **Ficha** | Media página en lenguaje llano: qué y para quién | Quien decide (o un encargo del revisor que **declara** que hace de ficha) | — | **Sin ficha no se escribe nada**: ni spec ni tareas. Se pide |
+| **Alcance** | En la cabecera del plan: «Alcance autorizado, provisional hasta la pasada del auditor.» | Quien decide | Quien decide | Es provisional: lo confirma la autorización, que dice qué cambió el auditor |
 | **Medición** | Una **nota de medición** en `docs/mediciones/`, con el formato de v2 (ruta, plataforma, build, commit, fecha), cada afirmación marcada | Ejecutor | — | Si la ficha se apoya en una premisa **sin medir**: se mide, **se para** y se reporta. No se implementa «para ver» |
 | **Plan** | `docs/plans/AAAA-MM-DD-<feature>.md` con la plantilla de v2 (Fase 0, «El sitio del trabajo»): Parte 1 (spec) y Parte 2 (plan y tareas) | Ejecutor | — | Si no cabe en ~150 líneas, **son dos features**, y se dice **antes** de escribirlo. Lo comprueba `tope_plan.py` (abajo) |
 | **Auditoría** | *Revisiones*, con cada hallazgo y su resolución (§2.1) | Auditor (hallazgos) · ejecutor (resoluciones) | — | Los hallazgos que ninguna regla resuelve |
 | **Revisión** | Las correcciones, en *Revisiones* | Quien decide, con el revisor | Quien decide | **Es una sola.** Si quien decide pide cambios, se aplican y se le devuelve el plan dentro de la misma revisión, sin abrir otra. Lo que no vale es aprobar, abrir el PR y seguir pidiendo |
-| **Autorización** | La línea `Implementación autorizada: Sí (<quién>, <fecha>, <granularidad>)` en la cabecera del plan | Quien decide. Si la escribe el ejecutor al dictado, **copia literal el mensaje de la autorización en *Revisiones*** con su fecha, para que viva en el repositorio | — | **Sin esa línea no se escribe código.** Aprobar el plan no autoriza implementarlo |
+| **Autorización** | «Lo que el auditor cambió del alcance: …» y la línea `Implementación autorizada: Sí (<quién>, <fecha>, <granularidad>)` en la cabecera del plan | Quien decide. Si la escribe el ejecutor al dictado, **copia literal el mensaje de la autorización en *Revisiones*** con su fecha, para que viva en el repositorio | — | **Sin esa línea no se escribe código.** Aprobar el plan no autoriza implementarlo |
 | **Rama** | Una rama nueva, **subida al remoto al crearla** | Ejecutor | — | — |
 | **Tareas** | Commits, cada uno con la puerta (`puerta.sh --commit`, v2, «FASE 6.5») | Ejecutor | — | Todo cambio de conducta **no nombrado** en la autorización para y pregunta. También las paradas de §6 |
 | **Cierre** | La etapa final del plan, marcada casilla a casilla (abajo) | Ejecutor | — | — |
@@ -163,6 +204,19 @@ caso, en §9, «Poner una decisión donde no es el encargo»).
 
 **Una tarea va en una rama y sale en un PR**: dentro van el código, el plan, la documentación, las mediciones, las
 correcciones de la revisión, los cambios en la cola y el barrido del texto de producto.
+
+### El carril ligero (v3, A2)
+
+**Un cambio S que solo toca documentación o configuración, sin conducta nueva, se salta el plan y el auditor. No se
+salta la revisión.** El ciclo entero sobre tres PR de solo documentación fue caro en el origen; y el único defecto
+crítico de esos tres lo cazó **la revisión**, en un PR de solo documentación: un absoluto («el resto del documento sigue
+valiendo») sobre filas que esa rama no había comprobado [leído: lo contó la revisión externa, 2026-11-12]. Un documento
+afirma cosas falsas igual que el código.
+- **Entra en el carril:** documentación, configuración del proyecto o de las herramientas, sin conducta nueva de la app
+  ni de un verificador.
+- **No entra:** un verificador nuevo o cambiado (cambia lo que la puerta deja pasar), un hook, un agente o una skill
+  (caducan su validación), ni nada que toque la ruta crítica.
+- **Sigue en pie:** la rama, la puerta, la revisión de pre-PR y el PR. El PR dice «carril ligero» y por qué entra.
 
 ### El plan por dentro
 
@@ -194,7 +248,8 @@ Parte 2 (CÓMO):
 - Lo que no podrá comprobarse aquí, y qué haría falta.
 REVISIONES (no cuenta para el tope): cada corrección de un punto de control con su nombre, su sitio y su commit; la
 pasada del auditor; las correcciones del revisor.
-Estado: "Plan en borrador". Implementación autorizada: No.
+Estado: "Plan en borrador". "Alcance autorizado, provisional hasta la pasada del auditor: <sí/no, quién, fecha>." "Lo que
+el auditor cambió del alcance: (tras la pasada)". Implementación autorizada: No.
 ```
 
 **El tope de ~150 líneas se queda, con su verificador** (quien decide, 2026-11-09). **Un tope sobre un documento que
@@ -262,6 +317,16 @@ después, porque otra feature cambió una guarda, y nada la volvió a mirar.
 - **Qué recibe:** la ruta del plan. Nada más: ni la conversación ni la bandeja.
 - **Qué devuelve:** hallazgos con el sitio del código (fichero y línea, con el commit) o del documento (por su sección), y
   «lo que no pude comprobar».
+- **Dónde queda (v3):** quien lo lanzó guarda el informe **literal, antes de resolver ningún hallazgo**, en un fichero
+  por pasada: `.claude/reviews/review-<rama>-<fecha>[-pasada-N].md`, la forma del origen. Sin eso, la evidencia de lo que
+  el auditor encontró la redacta quien aplicó los hallazgos. Si se rastrea en git es una decisión de cada proyecto; en la
+  plantilla, no.
+- **La forma, mecanizada (v3, A3; no montado: la plantilla lo tiene en la cola como `#PP30`):** un `plan_lint.py` en la
+  puerta comprueba la forma del plan (secciones de la plantilla, la clase de cada criterio, las casillas de cierre, las
+  dos líneas del alcance). Dos motivos. El primero: más de un tercio de los hallazgos de una pasada eran de forma
+  [derivación del ejecutor de la plantilla, no un recuento: los informes anteriores no se guardaban]. El segundo, que no
+  necesita la cifra: **un hallazgo de forma y uno de fondo se leen igual en la lista, y los de forma diluyen la atención.
+  Cuando todos los hallazgos del auditor son de fondo, se creen más.**
 
 **Antes de corregir al auditor, corrige el criterio:** si entendió mal lo que mediste, empieza por cómo lo escribiste.
 *Caso [leído]:* reportó como «no pude medir» una mutación que sí se había corrido, porque el enunciado del criterio
@@ -448,6 +513,12 @@ cualquier peso sobre varios mecanismos infla los pequeños o entierra el grande.
 **Mira en qué sistema ocurre el daño antes de pesarlo.** Si ocurre en un sistema que no tienes, no es una medición tuya,
 y el peso dice que se apoya en cómo se comporta un sistema ajeno.
 
+**Las cuatro preguntas, solo para lo que toca la ruta crítica; para todo lo demás, la escala de tres** (v3, A4):
+`requisito de salida`, 🟡 si alguien queda peor, `higiene` si solo lo ve el equipo. Fuera de la ruta crítica las cuatro
+salen siempre «no» y son ceremonia. Dentro, hacen trabajo: en el origen, de siete usos, cuatro dieron cuatro «no»; en
+los otros tres, una pregunta destapó una premisa falsa de quien pesaba, otra se sospechó y la medición la desmintió, y
+un 🔴 salió directamente de (a) [leído: lo contó la revisión externa, 2026-11-12].
+
 **Las cuatro preguntas** (la escala, cerrada: quien decide, 2026-11-09):
 - **(a)** ¿Se pierde **el activo crítico** sin poder recuperarlo? **🔴.** Recuperar es **por la app o automáticamente**;
   deshacerlo pidiéndoselo a alguien no es recuperar, porque depende de la voluntad de otro y ocurre fuera de la app.
@@ -589,7 +660,10 @@ Si ninguna aplica, sigue, y escribe en el informe que lo comprobaste.
   formulación es del manual]. *Mal:* «Los verificadores colapsan el no-pude-medir en verde». *Bien:* «Un verificador sale
   3 cuando no pudo medir, y la puerta lo trata como rojo».
 - **Dale a cada regla su prueba**: el verificador que la comprueba, o la pregunta que hay que contestar. Una regla sin
-  verificador no se cumple [leído; con varias instancias en el origen].
+  verificador no se cumple [leído; con varias instancias en el origen]. **Un arreglo tampoco:** si un defecto se arregla
+  y nada vuelve a mirarlo, vuelve (en la plantilla, `#PP8` → `#PP28`).
+- **Cuando ya existe un verificador de la clase, extiéndelo; no escribas otro al lado** (v3). Dos verificadores de la
+  misma clase divergen.
 - **Pon el incidente fuera**, en un registro (`wiki/trampas/`), con un puntero de una línea (v2, «FASE 9 · CLAUDE.md»).
 - **Escribe la regla para que la pueda cumplir quien la recibe.** Antes de escribirla, nombra quién la cumplirá y con qué
   herramienta. Ver §9, «Escribir una regla que nadie puede cumplir».
