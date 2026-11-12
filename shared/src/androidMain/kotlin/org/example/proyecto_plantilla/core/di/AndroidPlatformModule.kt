@@ -17,6 +17,7 @@ import org.example.proyecto_plantilla.core.log.Logger
 import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.platform.AndroidAppVersionProvider
 import org.example.proyecto_plantilla.core.platform.AppBuildInfo
+import org.example.proyecto_plantilla.core.platform.AppPlatform
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
@@ -40,5 +41,6 @@ fun androidPlatformModule(
         single { HealthyUptimeReset(get(), get(), CoroutineScope(SupervisorJob() + Dispatchers.Default)) }
         single<HttpClientEngine> { engineOverride ?: OkHttp.create() }
         single<AppVersionProvider> { AndroidAppVersionProvider(androidContext()) }
+        single { AppPlatform.ANDROID }
         single<Logger> { AndroidLogger() }
     }

@@ -23,5 +23,5 @@ val dataModule: Module =
         }
         single<ConfigApi> { get<Ktorfit>().createConfigApi() }
         single<ConfigRepository> { ConfigRepositoryImpl(get(), get()) }
-        factory { CheckForceUpdateUseCase(get(), get(), get()) }
+        factory { CheckForceUpdateUseCase(get(), get(), get(), get()) }
     }

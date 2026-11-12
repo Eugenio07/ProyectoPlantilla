@@ -12,6 +12,7 @@ import org.example.proyecto_plantilla.core.log.IosLogger
 import org.example.proyecto_plantilla.core.log.Logger
 import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.platform.AppBuildInfo
+import org.example.proyecto_plantilla.core.platform.AppPlatform
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.core.platform.IosAppVersionProvider
 import org.koin.core.module.Module
@@ -34,5 +35,6 @@ fun iosPlatformModule(
         single { CrashBreakerConfig(threshold = 3, windowMs = 60_000, healthyUptimeMs = 75_000) }
         single<HttpClientEngine> { engineOverride ?: Darwin.create() }
         single<AppVersionProvider> { IosAppVersionProvider() }
+        single { AppPlatform.IOS }
         single<Logger> { IosLogger() }
     }

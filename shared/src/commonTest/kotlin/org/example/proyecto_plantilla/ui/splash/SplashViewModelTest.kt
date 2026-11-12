@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.example.proyecto_plantilla.core.error.AppError
 import org.example.proyecto_plantilla.core.log.Logger
+import org.example.proyecto_plantilla.core.platform.AppPlatform
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.core.result.Resource
 import org.example.proyecto_plantilla.domain.model.AppConfig
@@ -52,6 +53,7 @@ class SplashViewModelTest {
                 object : AppVersionProvider {
                     override fun versionName() = "1.0.0"
                 },
+            platform = AppPlatform.ANDROID,
             logger = logger,
         )
 
