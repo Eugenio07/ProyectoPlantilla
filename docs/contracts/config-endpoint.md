@@ -14,6 +14,10 @@ url(baseUrl) }`). Sin cuerpo. *(Sin autenticación: propuesta del ejecutor, no l
 ```json
 {
   "minVersion": "1.4.0",
+  "storeUrl": {
+    "android": "https://play.google.com/store/apps/details?id=<applicationId>",
+    "ios": "https://apps.apple.com/app/id<appStoreId>"
+  },
   "...": "otras claves futuras"
 }
 ```
@@ -21,6 +25,11 @@ url(baseUrl) }`). Sin cuerpo. *(Sin autenticación: propuesta del ejecutor, no l
 | Clave | Tipo | Obligatoria | Qué es |
 |---|---|---|---|
 | `minVersion` | string, versión semántica `x.y.z` (admite sufijos `-rc1`, `+build`) | **Sí, para el backend** | La versión mínima de la app que se puede usar. Una app más vieja muestra la pantalla de actualización obligatoria (bloqueante) |
+| `storeUrl` | objeto `{"android": string, "ios": string}`, cada clave opcional | No (pero sin ella la pantalla de actualización no tiene salida) | La ficha de la app en la tienda de cada plataforma. La pantalla de actualización muestra «Actualizar» y la abre. Solo vale `https://` con host y sin espacios |
+
+**Tolerancia de `storeUrl` (`#PP24`):** la URL nunca decide si se bloquea. Ausente, de la otra plataforma solamente, o
+inválida (otro esquema, vacía, con espacios, sin host, otro tipo, o `storeUrl` que no es un objeto) → la pantalla de
+actualización sale **sin** botón y el cliente registra un aviso (ausente / inválida). Cada app derivada pone sus URLs.
 
 **Claves desconocidas:** el cliente las ignora (`ignoreUnknownKeys = true`), así que el backend puede añadir claves sin
 romper a las apps publicadas. *(Que renombrar o cambiar el tipo de una clave exija una versión nueva del endpoint es

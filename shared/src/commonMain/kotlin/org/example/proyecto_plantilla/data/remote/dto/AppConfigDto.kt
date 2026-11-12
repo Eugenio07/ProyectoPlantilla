@@ -11,4 +11,6 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class AppConfigDto(
     @SerialName("minVersion") val minVersion: JsonElement? = null,
+    // `#PP24`: objeto por plataforma; `JsonElement` por la misma razón que `minVersion` (un tipo raro no rompe nada).
+    @SerialName("storeUrl") val storeUrl: JsonElement? = null,
 )
