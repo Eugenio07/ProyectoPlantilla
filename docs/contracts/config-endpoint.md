@@ -57,7 +57,8 @@ JSON). Eso no es «al día»: la Splash muestra el error con **Reintentar** (v2 
 | Escenario | Respuesta | Resultado esperado |
 |---|---|---|
 | Al día | `200 {"minVersion":"0.0.1"}` | Home |
-| Actualización obligatoria | `200 {"minVersion":"999.0.0"}` | Pantalla de actualización (bloqueante) |
+| Actualización obligatoria | `200 {"minVersion":"999.0.0","storeUrl":{"android":"https://play.google.com/…","ios":"https://apps.apple.com/…"}}` | Pantalla de actualización (bloqueante) con «Actualizar» |
+| Actualización obligatoria sin tienda | `200 {"minVersion":"999.0.0"}` | Pantalla de actualización, sin botón (y un aviso) |
 | `minVersion` ausente | `200 {}` | Fail-open: Home + aviso |
 | `minVersion` malformado | `200 {"minVersion":"abc"}` | Fail-open: Home + aviso |
 | Error del servidor | `503` con envelope `MAINTENANCE` | Error con Reintentar |

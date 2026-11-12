@@ -10,12 +10,18 @@ package org.example.proyecto_plantilla.core.network
  * extra `mockScenario` del intent (solo en depuración); en iOS con el argumento de lanzamiento `-mockScenario` (solo en
  * `#if DEBUG`).
  */
+private const val STUB_ANDROID = "https://play.google.com/store/apps/details?id=org.example.proyecto_plantilla"
+private const val STUB_IOS = "https://apps.apple.com/app/id0000000000"
+
 enum class ConfigMockScenario(
     val status: Int,
     val body: String,
 ) {
     UP_TO_DATE(200, """{"minVersion":"0.0.1"}"""),
-    UPDATE_REQUIRED(200, """{"minVersion":"999.0.0"}"""),
+
+    // #PP24: con las URLs de la tienda (de ejemplo: la plantilla no tiene ficha) → «Actualizar»; NO_STORE, sin ellas.
+    UPDATE_REQUIRED(200, """{"minVersion":"999.0.0","storeUrl":{"android":"$STUB_ANDROID","ios":"$STUB_IOS"}}"""),
+    UPDATE_REQUIRED_NO_STORE(200, """{"minVersion":"999.0.0"}"""),
     MIN_VERSION_ABSENT(200, "{}"),
     MIN_VERSION_MALFORMED(200, """{"minVersion":"abc"}"""),
     SERVER_ERROR(503, """{"code":"MAINTENANCE","message":"stub: mantenimiento"}"""),

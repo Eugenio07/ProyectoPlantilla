@@ -13,4 +13,6 @@ Pasos que una versión de iOS exige antes de publicarse. Alimenta PASOS DECLARAD
    y ver el evento. En iOS el handler solo registra: no hay recuperación.
 5. **baseUrl de producción** en `iOSApp.swift` (hoy `https://api.example.invalid/`) y el stub apagado en la rama
    no-`DEBUG` (`useMockConfig: false`).
-6. La puerta en verde y el CI en verde (con `#PP6` cerrada), en un PR a `main`.
+6. **`storeUrl.ios` real** en la config de producción (`#PP24`): con una versión de prueba por debajo de `minVersion`,
+   «Actualizar» abre la ficha de ESTA app en el App Store.
+7. La puerta en verde y el CI en verde (con `#PP6` cerrada), en un PR a `main`.
