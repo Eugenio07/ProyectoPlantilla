@@ -72,21 +72,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP24 · 2026-11-11 · La pantalla de actualización obligatoria no tiene salida (requisito de salida)
-
-- **Mecanismo:** la pantalla es bloqueante y no ofrece ninguna acción: la persona queda sin nada que pulsar dentro de la
-  app [leído]. Quien decide eligió la opción (a) de `#PP5` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`): un botón
-  «Actualizar» que abre la tienda, con la URL por plataforma en la config remota; sin URL, sin botón.
-- **Quién lo desbloquea:** nosotros (plan propio: contrato de config, DTO, UI con captura en las dos plataformas).
-- **Fecha de revisión:** antes de la primera versión publicada de una app derivada.
-- **Vigente hasta que:**
-  1. `docs/contracts/config-endpoint.md` define la URL de la tienda por plataforma, y el DTO y el mapper la leen (test
-     primero);
-  2. la pantalla muestra el botón con URL y no lo muestra sin ella (captura en Android e iOS) y el botón abre la URL de
-     su plataforma (medido en emulador y simulador); y las listas de release obligan a comprobar la ficha real en cada
-     app derivada (reformulada por quien decide, 2026-11-11: la plantilla no tiene ficha publicada).
-- **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; ninguna app derivada se publica sin esto. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
-
 ### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven 🟡
 
 - **Mecanismo:** `enableEdgeToEdge()` elige iconos claros cuando el sistema está en oscuro, pero la app pinta siempre el
@@ -105,6 +90,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP24` | La pantalla de actualización obligatoria no tenía salida. `storeUrl` por plataforma en la config (contrato, DTO, mapper); el caso de uso elige y valida la de su plataforma; botón «Actualizar» que abre la URL (Android: Play Store; iOS: Safari, sin App Store en el simulador); las listas de release obligan a comprobar la ficha real (condición reformulada por quien decide) | `75fd2e3` |
 | `#PP26` | `skills_de_cierre.py` leía otro trozo si la palabra de la etapa final salía antes en el plan, y las secciones `###` de detrás. Lee solo la sección «Etapa final» hasta el siguiente encabezado de nivel igual o superior; `skills_de_cierre_test.sh` en la puerta, con mutaciones | `ffd7d56` |
 | `#PP27` | El recordatorio de UI avisaba en cada parada tras un merge y no veía lo sin rastrear. Ignora el último commit si es un merge y suma lo sin rastrear; casos con `merge --no-ff` y mutaciones | `8e31300` |
 | `#PP7` | Las skills, commands y agentes no estaban validados en tres pasos. 18 de 18 pasos en dos sesiones nuevas más la repetición de la fila visual (`docs/mediciones/2026-11-11-validacion-pp7.md`); `validaciones.py` en la puerta y en `calidad` (`c1d6ed5`); `compose-visual-loop` encadena `/material-3 audit` | `3f7b362` |

@@ -1,6 +1,6 @@
 # Botón «Actualizar» en la pantalla de actualización obligatoria (#PP24)
 
-- **Estado:** Plan aprobado
+- **Estado:** Implementado
 - **Tamaño:** M
 - **Entrada:** la cola, `#PP24` (requisito de salida, peso firmado). La decisión de producto es la opción (a) de `#PP5`
   (`docs/mediciones/2026-11-11-aprobacion-pp5.md`).
@@ -122,25 +122,25 @@ Contra el commit: `1cc5146` (`develop`). Rama medida: `feature/pp24-boton-tienda
 
 ### Etapa final · Cierre
 
-- [ ] Capturas en `docs/mediciones/` con su índice
-- [ ] La puerta entera con `--rerun-tasks`
-- [ ] Auditoría visual de UI: `compose-visual-loop` (captura en Android e iOS) y `/material-3 audit` (10 categorías)
-- [ ] Revisión de pre-PR con `/plantilla-review`; `/plantilla-contract-sync` (el DTO cambia)
-- [ ] Overviews: no aplica (la plantilla no tiene áreas)
-- [ ] `barrido_texto.py`: `splash_force_update_body` sigue siendo cierto con el botón
-- [ ] Cola: `#PP24` cerrada con la condición reformulada
+- [x] Capturas en `docs/mediciones/` con su índice
+- [x] La puerta entera con `--rerun-tasks`
+- [x] Auditoría visual de UI: `compose-visual-loop` (captura en Android e iOS) y `/material-3 audit` (10 categorías)
+- [x] Revisión de pre-PR con `/plantilla-review`; `/plantilla-contract-sync` (el DTO cambia)
+- [x] Overviews: no aplica (la plantilla no tiene áreas)
+- [x] `barrido_texto.py`: `splash_force_update_body` sigue siendo cierto con el botón
+- [x] Cola: `#PP24` cerrada con la condición reformulada
 
 ### Verificación por criterio
 
 | Criterio | Clase | Mutación (fichero, cambio, lo que cae) · control | Resultado |
 |---|---|---|---|
-| A1 | Verificable | `AppConfigMapper.kt`: `null` en la URL de `ios` → cae `bothStoreUrlsAreMapped` · control: `absentStoreUrlIsNull` sigue verde | |
-| A2 · plataforma | Verificable | elegir siempre la URL de `android` → cae `iosGetsItsUrl` · control: `androidGetsItsUrl` sigue verde | |
-| A2 · validez | Verificable | quitar la comprobación de `https://` → caen `httpIsInvalid` y `javascriptIsInvalid`; la de espacios → cae `spacesAreInvalid`; la de host → caen `noHostIsInvalid` y `emptyIsInvalid` | |
-| A3 | Verificable | `ForceUpdate(status.minVersion, null)` → cae `forceUpdateCarriesStoreUrl`; quitar el `runCatching` → cae `openStoreFailureWarnsAndDoesNotThrow` | |
-| A4 | Comprobación humana declarada | el ejecutor, sobre builds de depuración con `UPDATE_REQUIRED` y `UPDATE_REQUIRED_NO_STORE`, en Android (emulador) e iOS (simulador por UDID); capturas e informe M3 en `docs/mediciones/` | |
-| A5 | Verificable | registrar `IOS` en el módulo de Android → cae `AndroidGraphTest`; registrar `ANDROID` en el de iOS → cae `KoinIosTest` | |
-| A6 | Comprobación por lectura | el diff de las dos listas | |
+| A1 | Verificable | `AppConfigMapper.kt`: `null` en la URL de `ios` → cae `bothStoreUrlsAreMapped` · control: `absentStoreUrlIsNull` sigue verde  | Pasó (`2f22cf9`): 4 rojos previos; la mutación tumba 4, control verde. El test cazó un agujero (una cadena suelta pasaba como URL válida) |
+| A2 · plataforma | Verificable | elegir siempre la URL de `android` → cae `iosGetsItsUrl` · control: `androidGetsItsUrl` sigue verde  | Pasó (`19986b9`): cae `iosGetsItsUrl` (y `otherPlatformOnly…`); `androidGetsItsUrl` verde |
+| A2 · validez | Verificable | quitar la comprobación de `https://` → caen `httpIsInvalid` y `javascriptIsInvalid`; la de espacios → cae `spacesAreInvalid`; la de host → caen `noHostIsInvalid` y `emptyIsInvalid`  | Pasó (`19986b9`): https → http y javascript; espacios → spaces; host → noHost. **Desvío:** `emptyIsInvalid` lo caza la regla de https, no la de host |
+| A3 | Verificable | `ForceUpdate(status.minVersion, null)` → cae `forceUpdateCarriesStoreUrl`; quitar el `runCatching` → cae `openStoreFailureWarnsAndDoesNotThrow`  | Pasó (`eaacdf3`): URL a null → caen los 3; throw → cae `openStoreFailure…` |
+| A4 | Comprobación humana declarada | el ejecutor, sobre builds de depuración con `UPDATE_REQUIRED` y `UPDATE_REQUIRED_NO_STORE`, en Android (emulador) e iOS (simulador por UDID); capturas e informe M3 en `docs/mediciones/`  | Pasó (`75fd2e3`): capturas y auditoría (67/80) en `docs/mediciones/`; tras pulsar, Android abre la Play Store e iOS Safari |
+| A5 | Verificable | registrar `IOS` en el módulo de Android → cae `AndroidGraphTest`; registrar `ANDROID` en el de iOS → cae `KoinIosTest`  | Pasó (`19986b9`): «AppPlatform (#PP24) expected:<ANDROID> but was:<IOS>» y su par en iOS |
+| A6 | Comprobación por lectura | el diff de las dos listas  | Pasó por lectura (`75fd2e3`): paso 8 de Android, paso 6 de iOS |
 
 ### Lo que no podrá comprobarse aquí
 
