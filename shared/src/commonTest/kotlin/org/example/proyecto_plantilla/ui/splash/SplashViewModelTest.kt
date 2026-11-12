@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.example.proyecto_plantilla.core.error.AppError
 import org.example.proyecto_plantilla.core.log.Logger
+import org.example.proyecto_plantilla.core.platform.AppPlatform
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.core.result.Resource
 import org.example.proyecto_plantilla.domain.model.AppConfig
@@ -23,6 +24,8 @@ import kotlin.test.assertEquals
 class SplashViewModelTest {
     private var config: Resource<AppConfig> = Resource.Success(AppConfig("1.0.0"))
 
+    private val warnings = mutableListOf<String>()
+
     private val logger =
         object : Logger {
             override fun info(
@@ -33,7 +36,9 @@ class SplashViewModelTest {
             override fun warn(
                 tag: String,
                 message: String,
-            ) = Unit
+            ) {
+                warnings += message
+            }
 
             override fun error(
                 tag: String,
@@ -52,10 +57,11 @@ class SplashViewModelTest {
                 object : AppVersionProvider {
                     override fun versionName() = "1.0.0"
                 },
+            platform = AppPlatform.ANDROID,
             logger = logger,
         )
 
-    private fun vm() = SplashViewModel(useCase, ErrorKindMapper(logger))
+    private fun vm() = SplashViewModel(useCase, ErrorKindMapper(logger), logger)
 
     @BeforeTest
     fun setUp() = Dispatchers.setMain(UnconfinedTestDispatcher())
@@ -87,5 +93,31 @@ class SplashViewModelTest {
         config = Resource.Success(AppConfig("1.0.0"))
         vm.retry()
         assertEquals(SplashUiState.Ready, vm.state.value)
+    }
+
+    // #PP24 · el botón «Actualizar».
+    private val url = "https://play.google.com/store/apps/details?id=x"
+
+    @Test
+    fun forceUpdateCarriesStoreUrl() {
+        config = Resource.Success(AppConfig("2.0.0", storeUrlAndroid = url))
+        assertEquals(SplashUiState.ForceUpdate("2.0.0", url), vm().state.value)
+    }
+
+    @Test
+    fun openStoreCallsOpenWithUrl() {
+        config = Resource.Success(AppConfig("2.0.0", storeUrlAndroid = url))
+        val opened = mutableListOf<String>()
+        vm().openStore { opened += it }
+        assertEquals(listOf(url), opened)
+    }
+
+    @Test
+    fun openStoreFailureWarnsAndDoesNotThrow() {
+        config = Resource.Success(AppConfig("2.0.0", storeUrlAndroid = url))
+        val vm = vm()
+        warnings.clear()
+        vm.openStore { throw IllegalStateException("nada que la abra") }
+        assertEquals(listOf("${SplashViewModel.WARN_STORE_OPEN_FAILED}: IllegalStateException"), warnings)
     }
 }

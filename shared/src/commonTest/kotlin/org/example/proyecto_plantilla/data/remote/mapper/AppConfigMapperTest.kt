@@ -28,4 +28,38 @@ class AppConfigMapperTest {
 
     @Test
     fun arrayKeepsItsJsonSoValidationRejectsIt() = assertEquals("[1,4,0]", minVersionOf("""{"minVersion":[1,4,0]}"""))
+
+    // #PP24 · storeUrl: las dos URLs crudas; la validez la decide el caso de uso.
+    private fun storeUrlsOf(json: String): Pair<String?, String?> =
+        AppJson
+            .decodeFromString(
+                AppConfigDto.serializer(),
+                json,
+            ).toDomain()
+            .let { it.storeUrlAndroid to it.storeUrlIos }
+
+    @Test
+    fun bothStoreUrlsAreMapped() =
+        assertEquals(
+            "https://a.example/app" to "https://i.example/app",
+            storeUrlsOf("""{"storeUrl":{"android":"https://a.example/app","ios":"https://i.example/app"}}"""),
+        )
+
+    @Test
+    fun onlyOnePlatformUrl() =
+        assertEquals(null to "https://i.example/app", storeUrlsOf("""{"storeUrl":{"ios":"https://i.example/app"}}"""))
+
+    @Test
+    fun absentStoreUrlIsNull() = assertEquals(null to null, storeUrlsOf("""{"minVersion":"1.0.0"}"""))
+
+    @Test
+    fun nonStringUrlKeepsItsJson() =
+        assertEquals("42" to """{"x":1}""", storeUrlsOf("""{"storeUrl":{"android":42,"ios":{"x":1}}}"""))
+
+    @Test
+    fun storeUrlNotAnObjectGoesToBothAsJson() =
+        assertEquals(
+            "\"https://x.example\"" to "\"https://x.example\"",
+            storeUrlsOf("""{"storeUrl":"https://x.example"}"""),
+        )
 }

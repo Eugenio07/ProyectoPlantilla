@@ -15,6 +15,7 @@
     <string name="error_validation">No se pudo procesar la solicitud.</string>
     <string name="error_generic">No se pudo completar la acción.</string>
     <string name="action_retry">Reintentar</string>
+    <string name="action_update">Actualizar</string>
     <string name="home_title">Inicio</string>
     <string name="home_open_detail">Ver detalle</string>
     <string name="detail_title">Detalle %1$s</string>

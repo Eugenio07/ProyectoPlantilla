@@ -7,9 +7,10 @@ sealed interface SplashUiState {
 
     data object Ready : SplashUiState
 
-    /** Bloqueante: no hay forma de seguir sin actualizar. */
+    /** Bloqueante: sin actualizar no se sigue. [storeUrl] → botón «Actualizar» (`#PP24`); `null`, sin botón. */
     data class ForceUpdate(
         val minVersion: String,
+        val storeUrl: String? = null,
     ) : SplashUiState
 
     /** No se pudo traer la config: lo pinta `ErrorState`, con Reintentar si el tipo lo admite. */

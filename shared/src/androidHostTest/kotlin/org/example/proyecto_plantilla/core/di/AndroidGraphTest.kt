@@ -11,6 +11,7 @@ import org.example.proyecto_plantilla.core.crash.HealthyUptimeReset
 import org.example.proyecto_plantilla.core.network.NetworkConfig
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
 import org.example.proyecto_plantilla.core.platform.AppBuildInfo
+import org.example.proyecto_plantilla.core.platform.AppPlatform
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
@@ -56,6 +57,7 @@ class AndroidGraphTest {
         assertNotNull(koin.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(koin.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(koin.getOrNull<AppVersionProvider>(), "AppVersionProvider")
+        assertEquals(AppPlatform.ANDROID, koin.getOrNull<AppPlatform>(), "AppPlatform (#PP24)")
         assertNotNull(koin.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
         assertNotNull(koin.getOrNull<ErrorKindMapper>(), "ErrorKindMapper")
         assertNotNull(koin.getOrNull<SplashViewModel>(), "SplashViewModel")

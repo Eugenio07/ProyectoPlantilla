@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -25,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.example.proyecto_plantilla.ui.components.ErrorState
 import org.jetbrains.compose.resources.stringResource
 import proyectoplantilla.shared.generated.resources.Res
+import proyectoplantilla.shared.generated.resources.action_update
 import proyectoplantilla.shared.generated.resources.splash_force_update_body
 import proyectoplantilla.shared.generated.resources.splash_force_update_title
 import proyectoplantilla.shared.generated.resources.splash_loading
@@ -39,13 +42,15 @@ fun SplashScreen(
     LaunchedEffect(state) {
         if (state == SplashUiState.Ready) onReady()
     }
-    SplashContent(state = state, onRetry = viewModel::retry)
+    val uriHandler = LocalUriHandler.current
+    SplashContent(state = state, onRetry = viewModel::retry, onUpdate = { viewModel.openStore(uriHandler::openUri) })
 }
 
 @Composable
 fun SplashContent(
     state: SplashUiState,
     onRetry: () -> Unit,
+    onUpdate: () -> Unit = {},
 ) {
     // liveRegion: el lector de pantalla anuncia el paso de Cargando a Error o a Actualización.
     Box(
@@ -82,6 +87,10 @@ fun SplashContent(
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Center,
                     )
+                    // #PP24: la salida de la pantalla bloqueante. Sin URL válida de la tienda, sin botón (como antes).
+                    if (state.storeUrl != null) {
+                        Button(onClick = onUpdate) { Text(stringResource(Res.string.action_update)) }
+                    }
                 }
             }
 

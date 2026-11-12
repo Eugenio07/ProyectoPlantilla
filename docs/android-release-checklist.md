@@ -20,4 +20,6 @@ Pasos que una versión de Android exige antes de publicarse. Alimenta la secció
    evento en el panel. Recordar el trade-off: con recover-to-home, el crash recuperado llega como NO FATAL; «Crashes: 0»
    no significa salud.
 7. **baseUrl de producción** en `BuildConfig.BASE_URL` (hoy `https://api.example.invalid/`).
-8. La puerta en verde y el CI en verde (con `#PP6` cerrada), en un PR a `main`.
+8. **`storeUrl.android` real** en la config de producción (`#PP24`): con una versión de prueba por debajo de `minVersion`,
+   «Actualizar» abre la ficha de ESTA app en Play.
+9. La puerta en verde y el CI en verde (con `#PP6` cerrada), en un PR a `main`.

@@ -7,6 +7,7 @@ import org.example.proyecto_plantilla.core.crash.CrashReporter
 import org.example.proyecto_plantilla.core.crash.GlobalCrashHandler
 import org.example.proyecto_plantilla.core.crash.NoOpCrashReporter
 import org.example.proyecto_plantilla.core.network.NetworkErrorMapper
+import org.example.proyecto_plantilla.core.platform.AppPlatform
 import org.example.proyecto_plantilla.core.platform.AppVersionProvider
 import org.example.proyecto_plantilla.domain.repository.ConfigRepository
 import org.example.proyecto_plantilla.domain.usecase.CheckForceUpdateUseCase
@@ -47,6 +48,7 @@ class KoinIosTest {
         assertNotNull(first.getOrNull<NetworkErrorMapper>(), "NetworkErrorMapper")
         assertNotNull(first.getOrNull<ConfigRepository>(), "ConfigRepository")
         assertNotNull(first.getOrNull<AppVersionProvider>(), "AppVersionProvider")
+        assertEquals(AppPlatform.IOS, first.getOrNull<AppPlatform>(), "AppPlatform (#PP24)")
         assertNotNull(first.getOrNull<CheckForceUpdateUseCase>(), "CheckForceUpdateUseCase")
         assertNotNull(first.getOrNull<ErrorKindMapper>(), "ErrorKindMapper")
         assertNotNull(first.getOrNull<SplashViewModel>(), "SplashViewModel")
