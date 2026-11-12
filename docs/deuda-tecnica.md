@@ -59,19 +59,19 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. Android Studio lista un simulador y corre `iosApp`. Mientras tanto, iOS se corre desde Xcode.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP7 · 2026-11-11 · Las skills y commands del proyecto no están validados en tres pasos (requisito de salida)
+### #PP7 · 2026-11-11 · La fila de la auditoría visual no pasa su validación en tres pasos (requisito de salida)
 
-- **Mecanismo:** la validación (positiva, control, negativa) exige una sesión NUEVA de Claude Code; la lanzada con
-  `claude -p` respondió «Failed to authenticate: OAuth session expired and could not be refreshed» [medido 2026-11-11].
-  Las cuatro filas de `.claude/validaciones.md` están en «no pude medir», y por eso `validaciones.py` no está todavía en
-  la puerta (saldría rojo y bloquearía todo commit).
-- **Quién lo desbloquea:** quien decide (iniciar sesión en la CLI, o correr la validación en una sesión nueva).
-- **Disparador:** cuando la CLI tenga sesión válida — estado medido 2026-11-11: caducada.
+- **Mecanismo:** la validación en tres pasos (`docs/mediciones/2026-11-11-validacion-pp7.md`) pasó 16 de 18 pasos: las
+  cinco piezas de `.claude/` pasan sus tres pasos y `validaciones.py` ya está en la puerta y en `calidad`. La fila de la
+  auditoría visual falló su positiva y su control: el subagente capturó en las dos plataformas pero no encadenó
+  `/material-3 audit`, porque esa pareja solo estaba escrita en el `CLAUDE.md` global [medido 2026-11-11]. La skill global
+  `compose-visual-loop` ya la encadena (corregida el 2026-11-11 por decisión de quien decide), sin repetir todavía.
+- **Quién lo desbloquea:** quien decide (corre el bloque A de `.claude/validacion-sesion-nueva.md` en una sesión nueva).
+- **Disparador:** cuando quien decide corra la repetición — estado medido 2026-11-11: pendiente.
 - **Vigente hasta que:**
-  1. todas las filas de `.claude/validaciones.md` tienen sus tres pasos en «pasó», sobre el hash actual de cada fichero
-     (el prompt para correrlo en una sesión nueva: `.claude/validacion-sesion-nueva.md`), y
-  2. `validaciones.py` está en `VERIFICADORES` de la puerta.
-- **Peso:** requisito de salida (fuera de escala): una skill que no se activa no ayuda a nadie, y sin validar no se sabe. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
+  1. la fila de la auditoría visual de `.claude/validaciones.md` tiene positiva y control en «pasó» (la negativa ya pasó).
+     `validaciones.py` no mira esa fila (no es una pieza del repositorio): la comprueba la lectura de la medición.
+- **Peso:** requisito de salida (fuera de escala): una auditoría visual que no se encadena deja UI sin auditar. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
 ### #PP11 · 2026-11-11 · Crashlytics de iOS recibiría todos los crashes como un único error sin traza (higiene)
 
@@ -112,6 +112,32 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      el estilo de la barra sigue al tema de la app.
 - **Peso:** (peso por decidir) — propuesta: 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en
   pantalla, fuera de la ruta crítica.
+
+### #PP26 · 2026-11-11 · `skills_de_cierre.py` lee la etapa equivocada si la palabra «Cierre» sale antes en el plan (higiene) (peso por decidir)
+
+- **Mecanismo:** `skills_de_cierre.py:25-26` corta el texto del plan en la PRIMERA aparición de «Cierre» y lee hasta el
+  siguiente `## `. Un plan con «Cierre» en el título o en la Parte 1 hace que lea otro trozo, y la lista de cierre
+  verdadera puede no leerse [leído; lo reprodujo el auditor sin contexto con un borrador del plan `pp7-validacion`, y lo
+  encontró la validación de `#PP7`]. Encontrado durante `#PP7`: va a la cola, no se corrige ahí.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-11.
+- **Vigente hasta que:**
+  1. el verificador busca el encabezado de la etapa final (`### Etapa final`), con un caso de prueba de un plan que
+     tiene «Cierre» en el título, y su mutación.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
+### #PP27 · 2026-11-11 · El recordatorio de UI salta en cada parada tras fusionar un PR que tocó UI (higiene) (peso por decidir)
+
+- **Mecanismo:** `stop-ui-audit-reminder.sh` mira `HEAD~1..HEAD`; tras un merge, `HEAD~1` es el primer padre y el diff
+  abarca el PR entero, así que avisa en cada parada hasta el siguiente commit, aunque la auditoría del PR ya se hizo
+  [medido 2026-11-11: tras fusionar el PR #41, en esta sesión y en la de validación]. Un aviso que salta sin motivo
+  enseña a ignorarlo (como `#PP22`).
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-11.
+- **Vigente hasta que:**
+  1. el hook no avisa cuando `HEAD` es un merge (o mira solo el árbol sucio y los commits que no están en `develop`), con
+     su caso en `hooks_test.sh` sobre un repositorio temporal con un merge.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
 
 ## Cerrados
 
