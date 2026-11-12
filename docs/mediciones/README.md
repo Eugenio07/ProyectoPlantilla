@@ -73,3 +73,4 @@ resolvía al iPhone 18 Pro (`7DA267B4…`), que arrancó la tarea `iosSimulatorA
 | `2026-11-11-tema-ios-cambio-de-modo.png` | iOS (iPhone 18 Pro) | depuración | ídem | 2026-11-11 23:15 | De oscuro a claro con la app abierta en Detail: recompone en claro sin salir de Detail |
 | `2026-11-11-tema-ios-pantalla-segura-oscuro.png` | iOS (iPhone 18 Pro) | depuración | ídem | 2026-11-11 23:16 | Cuarta apertura tras tres crashes del andamiaje: la pantalla segura en oscuro |
 | `2026-11-11-auditoria-m3-tema.md` | Android + iOS | depuración / release local | ídem | 2026-11-11 23:20 | `/material-3 audit` del tema: 72/80 aplicables, sin fallos; Theming pasa a «pass» |
+| `2026-11-12-revision-externa.md` | repo | — | `ead1b3c` | 2026-11-12 10:00 | Decisiones literales de la revisión externa (A1–A9, del 1 al 7): ficha del plan de la v3 |
