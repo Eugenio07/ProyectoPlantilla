@@ -70,6 +70,8 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   de abrir un PR con `/plantilla-review`; sin backend, `/plantilla-contract-sync` reporta divergencias DTO-contrato.
 - Valida cada skill, command o agente nuevo en tres pasos (positiva, control, negativa) en una sesión nueva, con su fila
   en `.claude/validaciones.md`. Prueba: `config/checks/validaciones.py` (declarada, no verificada; `#PP7`).
+- Declara una propiedad de una pieza («solo lee», «no modifica») solo con el mecanismo que la sostiene, o «por
+  instrucción». Prueba: `config/checks/validaciones.py`. Por qué: `wiki/decisiones/propiedad-con-mecanismo.md`.
 
 ## §5 · Arquitectura y red
 

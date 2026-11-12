@@ -144,7 +144,7 @@ Cada ranura se rellena **al arrancar**, se escribe en `docs/para-claude-md.md` (
      |---|---|---|
      | El auditor sin contexto como subagente con su filtro | Fase 12 | **Una sesión nueva de Claude Code que recibe solo la ruta del plan**: sin la conversación y sin la bandeja. Lo que la Fase 12 añade es empaquetarla como subagente con su filtro |
      | La puerta (`puerta.sh --commit`) | Fase 6.5 | **Los cuatro verdes a mano** (§0, «Los cuatro verdes, y después una sola puerta») y un commit que nombra los ficheros nuevos, nunca `git add -A` |
-     | `<proyecto>-review` | Fase 11 | Una sesión nueva que recibe la rama y `docs/para-claude-md.md` (o `CLAUDE.md` desde la Fase 9), y solo informa |
+     | `<proyecto>-review` | Fase 11 | Una sesión nueva que recibe la rama y `docs/para-claude-md.md` (o `CLAUDE.md` desde la Fase 9), e informa: no edita, por instrucción (la sesión tiene todas sus herramientas) |
      | El CI | Fase 7 | La puerta local (o los cuatro verdes a mano); el PR lo dice |
      | `cola.py` | Fase 6.5 | La cola existe desde la Fase 0; hasta la 6.5, sus ids se comprueban a mano |
 
@@ -847,7 +847,8 @@ PROMPT · Cristalizar el proceso en herramientas. Plan. Commands y skills CARGAN
 reiniciar.
 1. Prefijo del proyecto en TODO command (<proyecto>-review...): los built-ins (/review, /init...) tienen
    PRECEDENCIA. Documentar la convención en CLAUDE.md.
-2. <proyecto>-review (.claude/commands/): revisión de pre-PR contra CLAUDE.md (referencia, no copia). SOLO lee y
+2. <proyecto>-review (.claude/commands/): revisión de pre-PR contra CLAUDE.md (referencia, no copia). No edita, POR
+   INSTRUCCIÓN (un command corre en la sesión principal con todas sus herramientas: escribe eso, nunca «solo lee»), y
    escribe su informe en un sitio fijo; hallazgos con archivo:línea. Se corre ANTES de abrir el PR, no después.
 3. <proyecto>-test: OPCIONAL. Solo si en el primer mes hay tests escritos fuera de la matriz; si no, no se crea.
 4. Sin backend real, <proyecto>-contract-sync que REPORTA divergencias con los borradores. Con backend real, no:
@@ -907,7 +908,7 @@ Son **dos piezas distintas** y hacen falta las dos.
 | Qué caza | Lo que su autor no puede ver, **antes de que exista el código** | Lo que los revisores atentos dejan pasar durante semanas |
 | Cuándo | Cada plan, antes de llevarlo a revisión | Al cerrar el bootstrap, y después por etapas |
 | Quién la lanza | **Quien redacta el plan**, siempre, sin preguntar | El desarrollador |
-| Con qué | Un subagente sin contexto que solo ve el documento y el código | El modelo más capaz, en dos fases |
+| Con qué | Un subagente sin contexto: no recibe la conversación (mecanismo: nace sin ella); la bandeja la niega su filtro por nombre; con `Bash` lee todo el disco | El modelo más capaz, en dos fases |
 
 Un paso que depende de que alguien conteste «¿lo lanzo?» falla en silencio cuando nadie contesta: en el origen pasó
 así, y por eso lo lanza quien redacta [leído]. **En el arranque corre una vez por fase**, no por incremento (§0, «Plan antes de
@@ -937,7 +938,8 @@ cola. Cómo se escribe, se pesa y se cierra una entrada: ver el manual de operac
 
 ```text
 PROMPT B · AUDITORÍA INTEGRAL EN DOS FASES ESTRICTAMENTE SEPARADAS.
-FASE A (solo lectura, PROHIBIDO modificar): audita código, CI, hooks, docs y estado git. Por hallazgo: TRIAJE P0
+FASE A (no modifica nada, POR INSTRUCCIÓN: la sesión tiene todas sus herramientas): audita código, CI, hooks, docs y
+estado git. Por hallazgo: TRIAJE P0
 (bug real) / P1 (deuda que morderá) / P2 (higiene), archivo:línea, EVIDENCIA verificada y marcada (medido / leído /
 sin medir), riesgo concreto, arreglo MÍNIMO, esfuerzo S/M/L, flags [TOCA-iOS][DECISIÓN-DE-PRODUCTO][CAMBIA-CONTRATO].
 Verificación adversarial: re-verifica cada hallazgo intentando refutarlo. Una afirmación de ausencia ("no hay forma de

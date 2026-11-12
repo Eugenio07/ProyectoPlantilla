@@ -83,3 +83,16 @@ se escribe sobre una reconstrucción; espera a la v3, y sus criterios salen de u
 (`#PP29` del repo plantilla). **La razón:** eran criterios de la v2, a punto de cambiar, y su definición no está en
 ningún sitio legible (el repo plantilla solo los nombra) [medido: `grep`, 2026-11-12]. **Y la autocorrección, como la
 escribió quien la tomó:** «La escribí sin comprobar que sus criterios pudieran leerse; eso también va escrito.»
+
+## v3, 2026-11-12 (segunda entrada): toda propiedad declarada dice su mecanismo
+
+**Origen:** el encargo de la revisión externa, literal en `docs/mediciones/2026-11-12-propiedad-y-mecanismo.md` del repo
+plantilla. Plan: `docs/plans/2026-11-12-propiedad-y-mecanismo.md`.
+
+| Cambio | Dónde |
+|---|---|
+| La regla: «Toda pieza que declare una propiedad dice qué mecanismo la sostiene, o no la declara», con sus cinco instancias | Operación §7, «Una regla» |
+| Cinco sitios que declaraban una propiedad sin mecanismo, escritos por quien escribió los manuales (punto 6 del encargo): la tabla de sustitutos («solo informa»), el PROMPT de la FASE 11, punto 2 («SOLO lee»: **el origen del texto del command de la plantilla**), la tabla de la FASE 12 («solo ve»), el PROMPT B («solo lectura, PROHIBIDO modificar») y la tabla de papeles de operación §1 («solo ve») | Arranque y operación, en su sitio |
+
+**Fuera, y por qué:** «Solo informa» de `que_va_ahora.py` y `barrido_texto.py` (arranque, FASE 6.5). No declaran una
+capacidad: dicen que no bloquean, y el texto ya da el mecanismo («No va en la puerta»).
