@@ -72,7 +72,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP24 · 2026-11-11 · La pantalla de actualización obligatoria no tiene salida (requisito de salida) (peso por decidir)
+### #PP24 · 2026-11-11 · La pantalla de actualización obligatoria no tiene salida (requisito de salida)
 
 - **Mecanismo:** la pantalla es bloqueante y no ofrece ninguna acción: la persona queda sin nada que pulsar dentro de la
   app [leído]. Quien decide eligió la opción (a) de `#PP5` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`): un botón
@@ -83,9 +83,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   1. `docs/contracts/config-endpoint.md` define la URL de la tienda por plataforma, y el DTO y el mapper la leen (test
      primero);
   2. la pantalla muestra el botón con URL y no lo muestra sin ella (captura en Android e iOS) y el botón abre la tienda.
-- **Peso:** (peso por decidir) — propuesta: requisito de salida (fuera de escala): no daña a nadie hoy; impide publicar.
+- **Peso:** requisito de salida (fuera de escala): no daña a nadie hoy; ninguna app derivada se publica sin esto. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
-### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven (peso por decidir)
+### #PP25 · 2026-11-11 · En Android con el sistema en oscuro, los iconos de la barra de estado no se ven 🟡
 
 - **Mecanismo:** `enableEdgeToEdge()` elige iconos claros cuando el sistema está en oscuro, pero la app pinta siempre el
   tema claro (`MaterialTheme {}` sin esquema oscuro, `App.kt:24`) [medido 2026-11-11: captura
@@ -96,39 +96,15 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. con el sistema en oscuro, la barra de estado se lee en Android (captura), sea porque la app tiene tema oscuro o porque
      el estilo de la barra sigue al tema de la app.
-- **Peso:** (peso por decidir) — propuesta: 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en
-  pantalla, fuera de la ruta crítica.
-
-### #PP26 · 2026-11-11 · `skills_de_cierre.py` lee la etapa equivocada si la palabra «Cierre» sale antes en el plan (higiene) (peso por decidir)
-
-- **Mecanismo:** `skills_de_cierre.py:25-26` corta el texto del plan en la PRIMERA aparición de «Cierre» y lee hasta el
-  siguiente `## `. Un plan con «Cierre» en el título o en la Parte 1 hace que lea otro trozo, y la lista de cierre
-  verdadera puede no leerse [leído; lo reprodujo el auditor sin contexto con un borrador del plan `pp7-validacion`, y lo
-  encontró la validación de `#PP7`]. Encontrado durante `#PP7`: va a la cola, no se corrige ahí.
-- **Quién lo desbloquea:** nosotros.
-- **Fecha de revisión:** 2026-12-11.
-- **Vigente hasta que:**
-  1. el verificador busca el encabezado de la etapa final (`### Etapa final`), con un caso de prueba de un plan que
-     tiene «Cierre» en el título, y su mutación.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
-
-### #PP27 · 2026-11-11 · El recordatorio de UI salta en cada parada tras fusionar un PR que tocó UI (higiene) (peso por decidir)
-
-- **Mecanismo:** `stop-ui-audit-reminder.sh` mira `HEAD~1..HEAD`; tras un merge, `HEAD~1` es el primer padre y el diff
-  abarca el PR entero, así que avisa en cada parada hasta el siguiente commit, aunque la auditoría del PR ya se hizo
-  [medido 2026-11-11: tras fusionar el PR #41, en esta sesión y en la de validación]. Un aviso que salta sin motivo
-  enseña a ignorarlo (como `#PP22`).
-- **Quién lo desbloquea:** nosotros.
-- **Fecha de revisión:** 2026-12-11.
-- **Vigente hasta que:**
-  1. el hook no avisa cuando `HEAD` es un merge (o mira solo el árbol sucio y los commits que no están en `develop`), con
-     su caso en `hooks_test.sh` sobre un repositorio temporal con un merge.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** 🟡: (a) no; (b) no; (c) quien usa la app pierde la hora y la batería en pantalla, fuera de la ruta
+  crítica. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP26` | `skills_de_cierre.py` leía otro trozo si la palabra de la etapa final salía antes en el plan, y las secciones `###` de detrás. Lee solo la sección «Etapa final» hasta el siguiente encabezado de nivel igual o superior; `skills_de_cierre_test.sh` en la puerta, con mutaciones | `ffd7d56` |
+| `#PP27` | El recordatorio de UI avisaba en cada parada tras un merge y no veía lo sin rastrear. Ignora el último commit si es un merge y suma lo sin rastrear; casos con `merge --no-ff` y mutaciones | `8e31300` |
 | `#PP7` | Las skills, commands y agentes no estaban validados en tres pasos. 18 de 18 pasos en dos sesiones nuevas más la repetición de la fila visual (`docs/mediciones/2026-11-11-validacion-pp7.md`); `validaciones.py` en la puerta y en `calidad` (`c1d6ed5`); `compose-visual-loop` encadena `/material-3 audit` | `3f7b362` |
 | `#PP5` | Los textos de la Splash, de `CrashSafeScreen` y las acciones por code no estaban aprobados. Aprobados como provisionales de plantilla; `error_network` ya no afirma una causa; la salida de la actualización obligatoria, decidida (opción a) → `#PP24` (`docs/mediciones/2026-11-11-aprobacion-pp5.md`) | `551786c` |
 | `#PP23` | El job `ios` compilaba el SDK de Firebase en frío en cada PR. `ios` restaura el DerivedData y `cache-ios` lo llena desde `develop`: «Construir la app» 8 min 07 s → 3 min 11 s (`docs/mediciones/2026-11-11-cache-ios.md`) | `f3f3317` |

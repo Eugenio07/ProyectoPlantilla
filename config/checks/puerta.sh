@@ -64,7 +64,7 @@ done
 VERDES=":shared:compileCommonMainKotlinMetadata :androidApp:assembleDebug :androidApp:assembleRelease :androidApp:verificarSinStubEnRelease :shared:testAndroidHostTest :shared:compileKotlinIosSimulatorArm64 :shared:iosSimulatorArm64Test"
 
 # Verificadores que son paso de la puerta (los informativos, como que_va_ahora.py, no van aquí).
-VERIFICADORES="entregables.py recuento_tests_test.sh versiones.py versiones_test.sh cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py hooks_test.sh skills_de_cierre.py validaciones.py"
+VERIFICADORES="entregables.py recuento_tests_test.sh versiones.py versiones_test.sh cola.py tope_plan.py wiki.py sin_para_claude_md.py claude_md.py hooks_test.sh skills_de_cierre.py skills_de_cierre_test.sh validaciones.py"
 # validaciones.py (#PP7): cambiar una skill, un command o un agente caduca su validación y pone la puerta roja hasta
 # validarlo de nuevo (.claude/validacion-sesion-nueva.md, bloque B).
 

@@ -40,3 +40,10 @@ Respuesta literal de quien decide:
 **Lectura del ejecutor:** el nivel P2 cubre `#PP12`–`#PP23` salvo `#PP11` (pendiente solo de un proyecto real); los
 pesos de `#PP22` y `#PP23` se firman como higiene; la fase B ya estaba autorizada (punto 1 de arriba), y `#PP21`–`#PP23`
 entran en ella por esta respuesta.
+
+## Pesos de `#PP24`–`#PP27` (2026-11-11, misma conversación)
+
+El ejecutor propuso: `#PP24` requisito de salida (ninguna app derivada se publica sin esto); `#PP25` 🟡; `#PP26` y
+`#PP27` higiene. Respuesta literal de quien decide:
+
+> Vale, firma los pesos y empieza con #PP26 y #PP27
