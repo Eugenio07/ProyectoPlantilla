@@ -9,7 +9,8 @@ Está destilado de un proyecto real que trabajó así durante meses. **No nombra
 dependía de qué hace la app entra como **ranura con su criterio**, y lo que solo acota entra como **alcance declarado**.
 
 **Cómo leer las marcas:**
-- **[medido]**: se corrió o se contó en el proyecto de origen, o sobre estos dos manuales, con la fecha.
+- **[medido]**: se corrió o se contó en el proyecto de origen, en la plantilla o sobre estos dos manuales, con la fecha
+  (la plantilla como base: quien decide, 2026-11-12).
 - **[leído]**: está escrito en el código, las reglas o los documentos del origen, pero nadie lo corrió para este manual.
 - **[sin medir]**: inferencia o **propuesta de este manual**, nunca probada.
 
@@ -31,7 +32,8 @@ Lo mínimo para trabajar una tarea. Cada paso remite a su sección; el detalle v
 
 1. **Ficha y alcance.** Quien decide escribe qué y para quién, y autoriza el alcance, **provisional hasta la pasada
    del auditor** (§2, «El ciclo»).
-2. **¿Carril ligero?** Si el cambio es S y solo toca documentación o configuración sin conducta nueva, salta al paso 7.
+2. **¿Carril ligero?** Si el cambio es S y solo toca documentación o configuración sin conducta nueva, salta a «Cierre y
+   revisión».
    **La revisión no se salta nunca** (§2, «El carril ligero»).
 3. **Medición y plan.** Se mide lo que la ficha da por hecho. El plan sigue la plantilla: Parte 1 (qué), Parte 2 (cómo,
    verificación previa y criterios con su clase), con ~150 líneas como máximo (§2, «El plan por dentro»).
@@ -82,6 +84,9 @@ nombre de su sección en v2**, nunca por línea (ver «Cómo se cita en este man
   commit**, o se lee como «en este commit». Lo prohibido es **citar un documento** por línea para que alguien lo
   encuentre después.
 - **Una entrada de la cola se cita por su identificador** (`#AB1`).
+- **Un registro con fecha se puede citar por su numeración** (una nota, un punto) si la misma frase nombra el fichero
+  fechado: un registro no se reescribe, así que su numeración no se mueve (quien decide, 2026-11-12).
+- **Rige los dos manuales** (quien decide, 2026-11-12), y lo comprueba `manuales.py`.
 
 ---
 
@@ -289,7 +294,7 @@ después, porque otra feature cambió una guarda, y nada la volvió a mirar.
     - una captura que **el proyecto no puede alcanzar** no retiene el PR: es una **comprobación humana declarada no
       ejecutable**, va a los requisitos de salida de la entrada, y la entrada **sigue abierta**.
     Lo mismo, dicho en §4.
-- La puerta entera con `--rerun-tasks`.
+- La puerta entera (sin `--rapido`).
 - **La auditoría visual de UI** (ranura) si se tocó UI.
 - **Los overviews** del área que la feature cambió (v2, «FASE 9», «Overviews y reversiones»).
 - **El barrido del texto que deja de ser cierto.** Al construir una salida nueva, se busca el texto que describía la
@@ -307,7 +312,7 @@ después, porque otra feature cambió una guarda, y nada la volvió a mirar.
 | Si no cabe en ~150 líneas, son dos features | `tope_plan.py` (v2, «FASE 6.5») |
 | La revisión es una | ¿Hay una sola sección de revisión con fecha? ¿Llegó alguna instrucción con el PR abierto? |
 | Sin autorización escrita no hay código | ¿El primer commit de código es posterior a la línea de autorización? |
-| La rama se sube al crearla | `git ls-remote` de la rama tras su primer commit |
+| La rama se sube al crearla | ¿`git ls-remote` muestra la rama tras su primer commit? |
 | El PR se abre cuando no queda nada | ¿Algún commit posterior a la apertura que no sea un conflicto? |
 | El plan se mueve después de fusionar | ¿El commit que lo mueve es de la rama siguiente? |
 
@@ -325,7 +330,8 @@ después, porque otra feature cambió una guarda, y nada la volvió a mirar.
 - **La forma, mecanizada (v3, A3; no montado: la plantilla lo tiene en la cola como `#PP30`):** un `plan_lint.py` en la
   puerta comprueba la forma del plan (secciones de la plantilla, la clase de cada criterio, las casillas de cierre, las
   dos líneas del alcance). Dos motivos. El primero: más de un tercio de los hallazgos de una pasada eran de forma
-  [derivación del ejecutor de la plantilla, no un recuento: los informes anteriores no se guardaban]. El segundo, que no
+  [sin medir: derivación del ejecutor de la plantilla, no un recuento; los informes anteriores no se guardaban]. El
+  segundo, que no
   necesita la cifra: **un hallazgo de forma y uno de fondo se leen igual en la lista, y los de forma diluyen la atención.
   Cuando todos los hallazgos del auditor son de fondo, se creen más.**
 
@@ -412,6 +418,12 @@ PROMPT · Antes de dar por verificado el criterio <CA>, contesta cada pregunta c
 - ¿Alguna tarea salió UP-TO-DATE, FROM-CACHE o skipped (v2, «Verde no es corrió»)?
 Si alguna es "no pude medir", el criterio no está verificado.
 ```
+
+| Regla de §3 | La prueba |
+|---|---|
+| **Toda comprobación tiene tres resultados: pasó, falló y no pude medir** | ¿Algún «no pude medir» se escribió como ✅? |
+| **Lo que sí prueba, por cada trampa de la tabla** | ¿El criterio se vio rojo por su aserción, con la mutación aplicada y su brazo de control? |
+| **Relee una premisa con caducidad inmediatamente antes de actuar** | ¿La lectura es más joven que la vida del estado leído? |
 
 ---
 
@@ -608,7 +620,8 @@ es el trabajo.
 | **No, porque no se puede restaurar** (un registro que solo añade, un panel de un tercero, un mensaje enviado) | **Escritura irreversible** | **Confirmación** de quien decide. Antes se escribe **qué va a quedar ahí** |
 | **No, porque alguien ya dependió de él** (un contrato publicado, un identificador expuesto, un formato persistido, un aviso ya leído) | **Decisión de un solo sentido** | **Confirmación** de quien decide. Antes se escribe **quién ya depende de ello** |
 
-**Es la tercera vez que esto vuelve** [medido: primera pasada del auditor, hallazgo 5.6; segunda, hallazgo 6.1]. Las dos
+**Es la tercera vez que esto vuelve** [medido 2026-11-09: lo encontraron la primera y la segunda pasada del auditor
+sobre este manual]. Las dos
 primeras veces se nombraron las clases sin definir la frontera, y de ahí salía el término contradictorio «escritura
 irreversible que se revierte». **Una clase nombrada no es una clase definida: lo que la define es la pregunta que la
 decide.**
@@ -670,7 +683,8 @@ Si ninguna aplica, sigue, y escribe en el informe que lo comprobaste.
   lista de herramientas o su regla; y si solo la sostiene una instrucción, se dice «por instrucción». Una propiedad sin
   mecanismo se lee como garantizada. Cinco instancias, dos en el origen (un entorno de producción que no estaba separado;
   la descripción de un auditor que prometía más que su filtro) y tres en la plantilla (la protección de ramas, los
-  agentes y los commands) [en el origen: dicho por la revisión externa; en la plantilla: medido]. **Su verificador es un
+  agentes y los commands) [medido en la plantilla, 2026-11-12; en el origen, dicho por la revisión externa]. **Su
+  verificador es un
   grep de frases**: caza las formulaciones vistas, falla hacia el silencio y no comprueba que el mecanismo sea cierto.
 - **Pon el incidente fuera**, en un registro (`wiki/trampas/`), con un puntero de una línea (v2, «FASE 9 · CLAUDE.md»).
 - **Escribe la regla para que la pueda cumplir quien la recibe.** Antes de escribirla, nombra quién la cumplirá y con qué
@@ -693,6 +707,7 @@ Si ninguna aplica, sigue, y escribe en el informe que lo comprobaste.
 - **Cada atribución dice de quién es**, en una de estas formas:
   - **de quien decide**, con su firma;
   - **de otro equipo**, citado literal y con fecha;
+  - **de la revisión externa** (la ranura «Revisor externo»), citada literal y con fecha (quien decide, 2026-11-12);
   - **del auditor**, con su hallazgo;
   - **derivada por la sesión** a partir de una decisión, citándola;
   - **del manual**: una formulación o propuesta de quien escribe un documento de método como este, sin la decisión de nadie
@@ -806,8 +821,9 @@ siguiente, salvo que bloquee algo con fecha o esté vivo en la ruta crítica (§
 
 ### Escribir una regla que nadie puede cumplir
 Una regla inejecutable no se incumple a la vista: se sustituye en silencio por otra cosa. *Casos:* se pidió que cada
-captura se adjuntara a su PR, y la herramienta del ejecutor no podía adjuntar una imagen a un PR [no se pudo comprobar
-desde este manual: ver «Lo que el auditor no pudo comprobar»]. Otra regla pedía **ejecutar el cierre de una entrada en el
+captura se adjuntara a su PR, y la herramienta del ejecutor no podía adjuntar una imagen a un PR [sin medir: no se pudo
+comprobar desde este manual; ver «Lo que el auditor no pudo comprobar»]. Otra regla pedía **ejecutar el cierre de una
+entrada en el
 registro** «en el mismo turno», y la escribió quien no tenía acceso al registro. **Esa segunda regla se reescribió**, y la
 que la sustituyó está en §5, «Cómo se cierra»: «cuando una medición le quita la razón a una entrada, genera en el mismo
 turno la línea que pide su cierre» [leído: la cabecera de la cola del origen dice que una sustituye a la otra].
@@ -850,13 +866,13 @@ Las que ya están en §1 a §9 no se repiten aquí. [leído en el origen; la for
 | **Contesta por separado dos preguntas que comparten sujetos** | ¿La respuesta a una se está usando como respuesta a la otra? |
 | **Comprueba el otro lado de una comparación en el mismo movimiento en que cambias uno**, y declara la base de cada pregunta | ¿Las dos bases están escritas al lado de las dos preguntas? |
 | **Re-verifica las filas que tocó un lote de correcciones de citas** | ¿Cuáles se tocaron? |
-| **Declara un renombrado del concepto central y lee el documento entero con esa pregunta** | Un `grep` no alcanza las referencias posicionales ni las frases que dicen lo viejo con otras palabras |
+| **Declara un renombrado del concepto central y lee el documento entero con esa pregunta** | ¿Se leyó el documento entero con esa pregunta? Un `grep` no alcanza las referencias posicionales ni las frases que dicen lo viejo con otras palabras |
 | **Vuelve a comprobar por su nombre las correcciones que vivían en una sección que reestructuraste** | ¿Siguen ahí, una por una? |
 | **Al cortar un documento en dos, reconcilia por pareja requisito-criterio** | ¿Cada requisito que salió aterrizó con su criterio? |
-| **Al corregir un valor, busca el viejo en todo el documento, empezando por los criterios**; una frase también es un valor | `grep` del valor y de la frase |
+| **Al corregir un valor, busca el viejo en todo el documento, empezando por los criterios**; una frase también es un valor | ¿Qué devuelve el `grep` del valor y de la frase? |
 | **Empieza por su propia entrada la lista de documentos que deja desfasados un cambio** | ¿Está en la lista la ficha que lo originó? |
 | **Parte el dominio cuando un texto afirme de menos**, en vez de ajustar la frase | ¿La corrección mueve la cadena de un dominio a otro? |
-| **Haz que el texto de un caso desconocido no afirme causa ni diga qué hacer**: que diga que no se pudo y ofrezca la acción neutra | Si necesita saber la causa, no es desconocido: se mapea |
+| **Haz que el texto de un caso desconocido no afirme causa ni diga qué hacer**: que diga que no se pudo y ofrezca la acción neutra | ¿El texto afirma una causa o dice qué hacer? Si necesita saber la causa, no es desconocido: se mapea |
 | **Retira la acción tras un rechazo que no cambia por reintentar; pinta una invitación solo si la acción funciona ahora** | ¿Qué pasa si se pulsa? |
 | **Mide en qué condiciones se pinta un sitio de la interfaz antes de nombrarlo en un texto** | ¿Hay un caso en que no se pinta? Entonces la cadena se parte |
 | **Escribe cada cadena como una frase entera**; compón solo en los límites de frase | ¿Se puede leer y juzgar sola? |

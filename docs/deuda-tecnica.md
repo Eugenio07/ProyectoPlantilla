@@ -71,18 +71,6 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      de release, con su mutación.
 - **Peso:** 🟡: el mismo daño que `#PP8` (cualquier app del dispositivo podría lanzar composables). — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
 
-### #PP29 · 2026-11-12 · `manuales.py` no existe: nada mantiene que los manuales cumplan sus reglas (higiene)
-
-- **Mecanismo:** `manuales_revisiones.md` lo asignó a este repositorio (quien decide, 2026-11-09) y nunca se escribió ni
-  se encoló [medido 2026-11-12]. Sus criterios (C1–C6) no están definidos en ningún sitio legible.
-- **Quién lo desbloquea:** nosotros, después de la v3.
-- **Disparador:** cuando la v3 esté fusionada — estado 2026-11-12: en escritura (plan `2026-11-12-revision-externa-v3`).
-- **Vigente hasta que:**
-  1. una pasada NUEVA del auditor sobre la v3 da los criterios (decisión 1 de la revisión externa: no se reconstruyen
-     los de la v2);
-  2. `config/checks/manuales.py` los verifica, está en la puerta y sale verde, con su mutación.
-- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
-
 ### #PP30 · 2026-11-12 · Los defectos de forma de un plan los encuentra el auditor, y diluyen los de fondo (higiene)
 
 - **Mecanismo:** las columnas de la plantilla, las casillas de cierre, los antecedentes y la autorización antes de
@@ -96,23 +84,63 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
 
-### #PP32 · 2026-11-12 · La plantilla de plan pide «la puerta con `--rerun-tasks`» y `puerta.sh` no acepta ese argumento (higiene)
+### #PP33 · 2026-11-12 · Los manuales escriben la versión de la app de escritorio, y `versiones.py` no los mira (higiene) (peso por decidir)
 
-- **Mecanismo:** `docs/plans/_plantilla.md` (etapa final) y el manual de operación §2 («La etapa de cierre») dicen «La
-  puerta entera con `--rerun-tasks`». `puerta.sh` ya corre así por defecto (`--rapido` lo quita), y un argumento
-  `--rerun-tasks` sale «argumento desconocido» (código 2) [leído: el bucle de argumentos de `puerta.sh`]. Lo encontró el
-  auditor en la positiva de su revalidación (`docs/mediciones/2026-11-12-pp31-validacion-agentes.md`). Va a la cola: no
-  se corrige en `#PP31`.
+- **Mecanismo:** `versiones.py` solo recorre `CLAUDE.md`, `README.md`, `wiki/` y `.claude/`; sobre los dos manuales
+  sale 1 con cuatro avisos: la versión de la app de escritorio dos veces, y «hallazgo 5.6» y «6.1», que son falsos
+  positivos porque `NO_VERSION` no conoce «hallazgo» [medido 2026-11-12, `docs/mediciones/2026-11-12-pp29-ficha.md`].
+  Decisión 4 de quien decide: la versión sale a la medición fechada y se cita.
 - **Quién lo desbloquea:** nosotros.
 - **Fecha de revisión:** 2026-12-12.
 - **Vigente hasta que:**
-  1. la plantilla de plan y el manual dicen «La puerta entera (sin `--rapido`)».
-- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — la revisión externa, por medio de Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/mediciones/2026-11-12-derivar.md`, la ficha, punto 5).
+  1. los manuales citan la medición en vez de la versión, y `versiones.py` recorre `docs/manuales/kmp_*.md` y sale
+     verde, con su mutación.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
+### #PP34 · 2026-11-12 · `validaciones.py --mecanismos` da seis falsos positivos sobre los manuales (higiene) (peso por decidir)
+
+- **Mecanismo:** mira línea a línea y cuenta las frases citadas: sobre los manuales, sus seis fallos son un mecanismo
+  partido entre dos líneas, citas «…» de lo que no vale, una condición («Sin acceso a GitHub sale 3») y dos frases
+  excluidas a propósito [medido 2026-11-12 por el auditor, pasada 2 de `#PP29`]. Por eso no puede ser paso de la puerta
+  sobre los manuales.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. `validaciones.py --mecanismos` une los párrafos y no cuenta las frases entre «», y corre sobre los manuales en la
+     puerta, verde y con su mutación.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
+### #PP35 · 2026-11-12 · Nada comprueba las atribuciones ni la base de las marcas de los manuales (higiene) (peso por decidir)
+
+- **Mecanismo:** los criterios C6 (la base de cada marca) y C7 (las formas de atribución) de la pasada 2 de `#PP29`
+  esperaban la decisión 5, ya tomada: «la revisión externa» es una atribución válida y «en la plantilla» una base válida
+  de `[medido]`, escritas en operación §7 y en los dos «Cómo leer las marcas». Falta el verificador.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. `manuales.py` comprueba C6 y C7, verde y con su mutación.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+
+### #PP36 · 2026-11-12 · Las reglas de los manuales que piden juicio no tienen ni aviso (higiene) (peso por decidir)
+
+- **Mecanismo:** los candidatos C9 (las reglas «(v3…)» sin fila en su tabla), C10 (afirmaciones sin marca), C12
+  (recuentos), C13 (reglas escritas como «X sale mal») y C14 (la tabla de lo que el arranque deja a operación) necesitan
+  juicio, y la pasada 2 de `#PP29` los recomendó solo como avisos. La misma pasada leyó, sin mecanizar: operación llama
+  «v2» al arranque, que se titula v3; «Lo que el auditor no pudo comprobar» dice que los guiones no existen; y los
+  `[medido]` del 2026-11-09 remiten a informes que no están en el repositorio.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. los avisos salen en `manuales.py` (salida 0 con la línea), y lo leído está corregido en los manuales o tiene su
+     porqué.
+- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
 
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
+| `#PP29` | `manuales.py` no existía: nada mantenía que los manuales cumplieran sus reglas. Criterios de una pasada nueva del auditor sobre la v3; cinco en la puerta (C1, C2, C3, C5, C8) y los manuales corregidos hasta verde; lo que quedó fuera, en `#PP33`–`#PP36` | `4798b77` |
+| `#PP32` | La plantilla de plan pedía «la puerta con `--rerun-tasks`». Dicen «La puerta entera (sin `--rapido`)» la plantilla y operación §2 | `4798b77` |
 | `#PP3` | Los iconos de la barra de estado de Android no se leían sobre el fondo claro (tema de ventana y de la app fijos en claro). Mismo mecanismo que `#PP25`; cerrada con él | `2dbdf81` |
 | `#PP25` | Con el sistema en oscuro, la barra de estado de Android no se leía. `AppTheme` (claro/oscuro, sigue al sistema, colores base de Material provisionales) y tema de ventana con `values-night`; capturas en las dos plataformas, claro, oscuro y cambio de modo | `2dbdf81` |
 | `#PP31` | Los agentes declaraban Grep y Glob y no los recibían. Causa más cercana, medida: la app de escritorio no ofrece Grep ni Glob a ninguna sesión (la versión, en `docs/mediciones/2026-11-12-pp31-causa.md`; el porqué dentro del binario, sin medir). Opción A: `tools: Read, Bash` y descripciones con lo medido; revalidados 6 de 6. El manual (FASE 12) dice que `tools:` no es un suelo | `48048e0` |

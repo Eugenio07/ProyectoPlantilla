@@ -14,10 +14,14 @@ proyecto entra como **ranura con su criterio**.
 verificado, cómo se pesa y se encola un defecto, quién decide qué) es **el manual de operación**, que va aparte.
 
 **Cómo leer las marcas.** Cada afirmación sobre lo que pasa lleva una:
-- **[medido]**: se corrió o se contó en el proyecto de origen.
+- **[medido]**: se corrió o se contó en el proyecto de origen, o en la plantilla (quien decide, 2026-11-12).
 - **[leído]**: está escrito en su código, sus workflows o sus documentos, pero nadie lo corrió para este manual.
 - **[sin medir]**: es inferencia o **propuesta nueva de este manual**, nunca probada en ningún proyecto. Las propuestas
   [sin medir] se prueban la primera vez que se usan; si no se prueban, no se dan por hechas.
+
+**Cómo se cita.** Este manual sigue la regla del manual de operación, «Cómo se cita en este manual»: por el nombre o el
+identificador de la sección, nunca por número de línea ni de punto (quien decide, 2026-11-12). Lo comprueba
+`manuales.py`.
 
 ---
 
@@ -431,11 +435,13 @@ serializado por name. Comprueba que la app ARRANCA en el simulador iOS, no solo 
 ```
 **Aviso:** un enum como argumento de ruta compila en las dos plataformas, funciona en Android y **mata la app iOS al
 arrancar**, porque la navegación type-safe resuelve argumentos por reflexión y Kotlin/Native no la tiene. No lo caza el
-cuarto verde: solo arrancar la app [leído; gotcha 9 del catálogo].
+cuarto verde: solo arrancar la app [leído; en el catálogo de trampas, «Un enum como argumento de ruta type-safe mata la
+app en iOS»].
 
 ### FASE 6 · CrashHandler + Circuit Breaker (el salvavidas)
 Sin cambios de fondo respecto a v1: lo que v1 prescribe sigue en el origen [leído]. **Son tres incrementos, A, B y C,
-cada uno con su rama, su PR y su prueba de comportamiento** (§0.1): el prompt se pega entero para dar el contexto, y se
+cada uno con su rama, su PR y su prueba de comportamiento** (§0, «Fases pequeñas y verificables, una cosa a la vez»): el
+prompt se pega entero para dar el contexto, y se
 pide uno cada vez.
 ```text
 PROMPT · Recuperación ante crashes + protección anti-bucle. Plan; los cuatro verdes; prueba real en las dos
@@ -890,7 +896,8 @@ verificador (`.claude/validaciones.md` y `validaciones.py`), que son [sin medir]
 **Qué comprueba `validaciones.py`, y qué no** [sin medir]. La validación en tres pasos es una **conversación**, y su
 resultado lo escribe alguien a mano en un fichero. Así que el verificador **no comprueba que la validación pasara**:
 comprueba que alguien **declaró** que pasó. Es una **comprobación humana declarada**, y por la regla de este manual no
-cuenta como verificada (§0.6: «pasó» se establece positivamente, y aquí lo establece una persona, no el guion). Lo que
+cuenta como verificada (§0, «Toda comprobación tiene tres resultados»: «pasó» se establece positivamente, y aquí lo
+establece una persona, no el guion). Lo que
 sí garantiza:
 - **que la fila existe**, con su fecha y sus tres prompts escritos, de modo que la validación se puede repetir;
 - **que caduca**: si el `SKILL.md` o el command cambia después de la fecha de su fila, la puerta se pone roja hasta que
@@ -966,7 +973,8 @@ aceptadas a conciencia]. Entregable: el informe, en docs/historico/auditorias/AU
 LA COLA: antes, busca su mecanismo; si ya tiene
 entrada, se añade ahí; si no, entrada nueva. El peso de la entrada NO lo pones tú: lo propones, y lo pone quien decide
 (manual de operación §5). DETENTE y espera mi aprobación.
-FASE B (tras aprobar la lista): una rama y un PR por nivel (excepción declarada a §0.1); SOLO lo aprobado, P0→P1→P2,
+FASE B (tras aprobar la lista): una rama y un PR por nivel (excepción declarada a §0, «Una tarea, una rama, un PR»);
+SOLO lo aprobado, P0→P1→P2,
 UN COMMIT POR HALLAZGO ("audit(Pn): resumen [#id]") hecho con la puerta; los [TOCA-iOS] con prueba de arranque en
 simulador; PAUSA ante [DECISIÓN-DE-PRODUCTO]/[CAMBIA-CONTRATO] o cualquier "ask" del guard. Cada commit CITA su
 entrada; el sha cierra el commit, NO la entrada: la entrada se cierra contra su "Vigente hasta que", condición por
@@ -977,7 +985,8 @@ mecanismo). Entregable: resumen de commits + no aplicados con su razón (que sig
 lote, y muere con él. **El peso de la entrada** se pone como dice el manual de operación: el ejecutor propone, quien
 decide pone, se busca el mecanismo antes y se cierra condición por condición. **El sha cierra el commit, no la entrada.**
 
-**Excepción declarada a §0.1** (quien decide, 2026-11-09): la Fase B va en **un PR por nivel (P0, P1, P2)**, con un commit por
+**Excepción declarada a §0, «Una tarea, una rama, un PR»** (quien decide, 2026-11-09): la Fase B va en **un PR por nivel
+(P0, P1, P2)**, con un commit por
 hallazgo dentro. La revisión ya ocurrió en el punto de control de la Fase A, donde el humano aprobó la lista antes de
 escribir una línea; un PR por hallazgo no añade revisión, añade una ejecución de CI por hallazgo, que el modelo de coste
 de la Fase 7 desaconseja.
@@ -1081,7 +1090,8 @@ preguntar, y en un manual genérico quien decidió no es quien lee: un nombre ah
 - `graphify` y su grafo versionado: es una herramienta de consulta de ese proyecto, no infraestructura.
 - Lo que dependía de la persona del backend (dos guiones y el registro literal de sus mensajes): depende de una segunda
   persona con su propio repo. Su regla general está en el manual de operación (§8).
-- El flujo de una tarea, la cola, el peso, agrupar por mecanismo y las reglas de razonamiento de `CLAUDE.md` §11: van
+- El flujo de una tarea, la cola, el peso, agrupar por mecanismo y las reglas de razonamiento del `CLAUDE.md` del
+  origen: van
   al manual de operación. Aquí solo se nombran.
 
 ### Qué de v1 se quitó, y por qué
@@ -1094,7 +1104,8 @@ preguntar, y en un manual genérico quien decidió no es quien lee: un nombre ah
   6.5 con una persona.
 - **Los cuatro verdes como comandos sueltos**: los sustituye la puerta (Fase 6.5).
 - **`docs/audit/AUDIT-<fecha>.md` como entregable que vive**: el informe se archiva y lo que vive es la cola (Fase 12).
-- **«El job iOS tarda ~3 min»**: era la cifra de compilar, no del job con arranque (§5.3).
+- **«El job iOS tarda ~3 min»**: era la cifra de compilar, no del job con arranque (§5, «Las decisiones con estimaciones
+  se reabren cuando llegan los datos»).
 - **«Activar branch protection» como paso incondicional**: pasa a ranura, porque hay planes donde la API responde 403.
 - **«Fases pequeñas, rama por fase» sin más**: se sustituye por una tarea, una rama, un PR, la rama subida al crearla y
   el PR abierto cuando no queda nada.
@@ -1119,7 +1130,8 @@ Se prueban en este orden la primera vez que se usan (ver «Cómo se usa este man
 11. El recordatorio de la auditoría visual de UI y su validación (Fases 10 y 11).
 12. `tope_plan.py` y su fichero de exclusiones (Fase 6.5).
 
-La partición en incrementos de §0.1 también es una propuesta [sin medir], pero no es una pieza que se prueba: se
+La partición en incrementos de §0, «Fases pequeñas y verificables, una cosa a la vez», también es una propuesta [sin
+medir], pero no es una pieza que se prueba: se
 corrige con la primera fase que no quepa en ella.
 
 ---

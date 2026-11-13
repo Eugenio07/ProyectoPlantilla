@@ -55,3 +55,6 @@ runs:
     - name: El renombrado de la plantilla (config/derivar.sh)
       shell: bash
       run: bash config/checks/derivar_test.sh
+    - name: Los manuales cumplen sus propias reglas (#PP29)
+      shell: bash
+      run: bash config/checks/manuales_test.sh && python3 -I config/checks/manuales.py

@@ -47,7 +47,7 @@ Cada tarea dice su orden por capa:
 ### Etapa final · Cierre
 
 - [ ] Capturas (si se tocó UI), en `docs/mediciones/` con su índice
-- [ ] La puerta entera con `--rerun-tasks` (antes de la Fase 6.5: los cuatro verdes a mano)
+- [ ] La puerta entera (sin `--rapido`; antes de la Fase 6.5: los cuatro verdes a mano)
 - [ ] Auditoría visual de UI (ranura) si se tocó UI: `compose-visual-loop` (captura en Android e iOS) y
   `/material-3 audit` (10 categorías)
 - [ ] Revisión de pre-PR: `/plantilla-review`, antes de abrir el PR
