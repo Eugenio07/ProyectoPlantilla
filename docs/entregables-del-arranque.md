@@ -75,3 +75,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 12 B | `.claude/validacion-sesion-nueva.md` | Prompt de reparto para la validación en tres pasos (`#PP7`) |
 | 12 B | `config/checks/skills_de_cierre_test.sh` | Pruebas de `skills_de_cierre.py` (`#PP26`) |
 | 12 B | `config/checks/validaciones_test.sh` | Pruebas de `validaciones.py --mecanismos` (toda propiedad declarada dice su mecanismo) |
+| — | `config/derivar.sh` | Renombra la plantilla en un proyecto nuevo; se borra a sí mismo al terminar |
+| — | `config/checks/derivar_test.sh` | Su test, en la puerta y en `calidad` (se borra con el guion) |
