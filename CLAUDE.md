@@ -31,7 +31,7 @@ los guiones. Ante conflicto entre un documento y el código, **gana el código**
   juzga la Parte 1 si quien decide lo pide. Prueba: su `tools:` incluye Read y Bash.
 - Ruta crítica, activo crítico y dónde vive: no aplican a la plantilla; **cada app derivada los rellena antes de su
   primera ficha**. Publicada: no. El ejecutor prueba contra: local (stub de §6). Bandeja: incidencias de GitHub
-  (por confirmar). Zona horaria: America/Caracas.
+  (confirmada por quien decide, 2026-11-11). Zona horaria: America/Caracas.
 - Revisa, en cada app derivada y antes de su primera ficha, los textos provisionales de la plantilla (`strings.xml`,
   `CrashSafeScreen`, acciones de `api-errors.md`) y los colores provisionales de `AppTheme` (`ui/theme/`). Prueba: ¿su
   primera ficha los cita?
