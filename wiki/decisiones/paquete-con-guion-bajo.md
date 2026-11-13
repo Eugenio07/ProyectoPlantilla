@@ -1,4 +1,4 @@
-# El paquete es `org
+# El paquete lleva guion bajo
 
 - **Firma:** Quien decide
 - **Fecha:** 2026-11-11

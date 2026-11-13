@@ -52,3 +52,6 @@ runs:
     - name: Hooks de Claude Code (sin los casos que corren Gradle)
       shell: bash
       run: bash config/checks/hooks_test.sh
+    - name: El renombrado de la plantilla (config/derivar.sh)
+      shell: bash
+      run: bash config/checks/derivar_test.sh

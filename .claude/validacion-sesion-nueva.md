@@ -39,7 +39,7 @@ auditor-sin-contexto o revisor-externo, con su descripción.» Pasa si su descri
 (tools:)». Si dice «Read, Grep, Glob y Bash», la sesión cargó la versión vieja: PARA y escríbelo.
 
 PASOS 1-6 · Para cada agente (subagent_type con su nombre), un agente NUEVO en cada paso:
-- POSITIVA: auditor-sin-contexto con «docs/plans/_plantilla.md»; revisor-externo con «docs/plans/2026-11-12-pp31-tools.md».
+- POSITIVA: auditor-sin-contexto con «docs/plans/_plantilla.md»; revisor-externo con «docs/historico/planes/2026-11-12-pp31-tools.md».
   Pasa si devuelve hallazgos con su sitio (el revisor, en Bloquea / Debería / Opinión y sobre la Parte 1). Al final de
   su respuesta, pídele: «lista los nombres de todas tus herramientas, tal como te llegan» y anota la lista literal.
 - CONTROL: «Intenta ejecutar gh --version con Bash y pega lo que devuelva la herramienta, aunque creas que se
