@@ -89,11 +89,15 @@ es `MiApp`.
 ### 1. El repositorio
 
 1. Una sola vez, en GitHub, marca este repositorio como plantilla (*Settings → Template repository*).
-2. Crea el nuevo con todas las ramas, para que traiga `develop` y `main`:
+2. Crea el nuevo con todas las ramas, para que traiga `develop` y `main`. `<plantilla>` es el `dueño/nombre` de este
+   repositorio en GitHub (`gh repo view --json nameWithOwner -q .nameWithOwner`, desde un clon suyo):
 
    ```bash
-   gh repo create miempresa/mi-app --private --template Eugenio07/ProyectoPlantilla --include-all-branches --clone
+   gh repo create miempresa/mi-app --private --template <plantilla> --include-all-branches --clone
    ```
+
+   El nombre de la plantilla no se escribe en este README: `config/derivar.sh` falla si queda alguna forma suya que no
+   sabe tratar, y el nombre del repositorio de GitHub es una.
 
 3. En el repositorio nuevo, pon `develop` como rama por defecto. Si el token no puede subir workflows:
    `gh auth refresh -h github.com -s workflow`.
@@ -103,51 +107,42 @@ es `MiApp`.
 
 ### 2. Renombrar (PR, una rama propia, un solo commit)
 
-El nombre de la plantilla aparece en:
-- el paquete de Kotlin, con sus carpetas;
-- el `applicationId`;
-- el bundle id de iOS;
-- el nombre de la app;
-- el paquete de recursos de Compose, que sale de `rootProject.name`;
-- el CI.
-
-Desde la raíz:
+Desde la raíz del clon, con el árbol limpio:
 
 ```bash
-VIEJO=org.example.proyecto_plantilla; NUEVO=com.miempresa.miapp
-# 1) Las carpetas del paquete, en cada source set
-for d in $(git ls-files | grep '/kotlin/org/example/proyecto_plantilla/' | sed 's#\(.*/kotlin/\)org/example/proyecto_plantilla/.*#\1#' | sort -u); do
-  mkdir -p "$d$(dirname "${NUEVO//.//}")" && git mv "${d}org/example/proyecto_plantilla" "$d${NUEVO//.//}"
-done
-# 2) Los textos, solo en ficheros de texto vivos (docs/historico y docs/mediciones son registros con fecha: no se tocan)
-git grep -lzI -e "$VIEJO" -e "${VIEJO//.//}" -- . ':!docs/historico' ':!docs/mediciones' |
-  xargs -0 sed -i '' -e "s/${VIEJO//./\\.}/$NUEVO/g" -e "s#${VIEJO//.//}#${NUEVO//.//}#g"
-git grep -lzI -e 'proyectoplantilla\.shared' -- . ':!docs/historico' ':!docs/mediciones' |
-  xargs -0 sed -i '' 's/proyectoplantilla\.shared/miapp.shared/g'
-# 3) Las carpetas vacías que deja el paso 1 (git no las rastrea, pero quedan en disco)
-find . -type d -empty -path '*/kotlin/org*' -delete
+config/derivar.sh com.miempresa.miapp "Mi App"
 ```
 
-Probado el 2026-11-11 sobre una copia de la plantilla: con `rootProject.name` cambiado, compila Android y Kotlin/Native
-para iOS, y pasan los 85 tests JVM.
+- **Lo que renombra:**
+  - el paquete de Kotlin y sus carpetas, en cada source set;
+  - el `applicationId`, el bundle id de iOS y el nombre de la app (Android, iOS, el `.app` y el CI);
+  - `rootProject.name`, del que sale el paquete de recursos de Compose;
+  - la clase `Application` de Android y su manifiesto.
+- **Si el nombre lleva acentos** («Mi Café»), pasa la raíz de Gradle como tercer argumento. La raíz es solo ASCII; el
+  nombre visible, no:
 
-Y a mano:
+  ```bash
+  config/derivar.sh com.miempresa.micafe "Mi Café" MiCafe
+  ```
+- **Sale 2 sin tocar nada** si una entrada es mala o el árbol no está limpio. **Sale 1** si queda alguna forma del
+  nombre viejo que no sabe tratar: la nombra con `fichero:línea` y dice cómo volver.
+- **No toca** los registros (`docs/historico`, `docs/mediciones`, `docs/plans`, `docs/manuales`) ni las líneas de la
+  excepción del guion bajo.
+- **No commitea.** Deja todo en el índice y **se borra a sí mismo**, con su test y sus líneas en la puerta, en el CI y
+  en `docs/entregables-del-arranque.md`. La plantilla se deriva una vez.
 
-| Fichero | Qué |
-|---|---|
-| `settings.gradle.kts` | `rootProject.name = "MiApp"`. En minúsculas da el paquete de recursos (`miapp.shared.generated.resources`) |
-| `androidApp/src/main/res/values/strings.xml` | `app_name` |
-| `iosApp/Configuration/Config.xcconfig` | `PRODUCT_NAME` y `PRODUCT_BUNDLE_IDENTIFIER` (el bundle id de iOS no lleva guion bajo) |
-| `iosApp/iosApp.xcodeproj/project.pbxproj` y `.github/workflows/ci.yml` | `Proyecto Plantilla.app` → `Mi App.app`. En `ci.yml`, también el bundle id del paso que cierra la app |
-| `.editorconfig`, `config/detekt/detekt.yml`, `CLAUDE.md` §13 y `wiki/decisiones/paquete-con-guion-bajo.md` | Si el paquete nuevo **no** lleva guion bajo, quita la excepción |
+Al terminar, el guion imprime lo que queda a mano:
+1. **La excepción del guion bajo** (`.editorconfig`, `build.gradle.kts`, `config/detekt/detekt.yml`, `CLAUDE.md` §13 y
+   `wiki/decisiones/paquete-con-guion-bajo.md`). Quítala si el paquete nuevo no lleva guion bajo; si lo lleva,
+   reescríbela.
+2. **Revalidar `plantilla-contract-sync`.** El renombrado cambia su ruta, así que su validación caduca y `validaciones.py`
+   pone la puerta en rojo. Se revalida con el bloque B de `.claude/validacion-sesion-nueva.md`, en una sesión nueva de
+   Claude Code. Es lo esperado: cambiar una pieza caduca su validación.
+3. **El commit con la puerta:** `config/checks/puerta.sh --commit <mensaje>`.
 
-Comprueba que no queda nada:
-`git grep -nI "proyecto_plantilla\|proyectoplantilla\|ProyectoPlantilla\|Proyecto Plantilla" -- . ':!docs/historico' ':!docs/mediciones' ':!docs/manuales'`.
-Después, `config/checks/puerta.sh`.
-
-**Ojo:** el renombrado cambia `.claude/commands/plantilla-contract-sync.md`, así que `validaciones.py` pondrá la puerta en
-rojo hasta que lo valides otra vez, con el bloque B de `.claude/validacion-sesion-nueva.md` en una sesión nueva de Claude
-Code. Es lo esperado: cambiar una pieza caduca su validación.
+Lo prueba `config/checks/derivar_test.sh`, en la puerta y en el CI, sobre copias de la plantilla. Con `--completo` y
+`ANDROID_HOME` exportado, además compila la copia derivada y corre sus tests JVM. Lo medido y las mutaciones están en
+`docs/mediciones/2026-11-12-derivar.md`.
 
 ### 3. Lo que es del producto (PR, por tareas)
 
