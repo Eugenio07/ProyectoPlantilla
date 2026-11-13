@@ -76,7 +76,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Mecanismo:** `manuales_revisiones.md` lo asignó a este repositorio (quien decide, 2026-11-09) y nunca se escribió ni
   se encoló [medido 2026-11-12]. Sus criterios (C1–C6) no están definidos en ningún sitio legible.
 - **Quién lo desbloquea:** nosotros, después de la v3.
-- **Disparador:** cuando la v3 esté fusionada — estado 2026-11-12: en escritura (plan `2026-11-12-revision-externa-v3`).
+- **Disparador:** cuando la v3 esté fusionada — estado medido 2026-11-12: fusionada en el #48 (`329be68`); disparado.
 - **Vigente hasta que:**
   1. una pasada NUEVA del auditor sobre la v3 da los criterios (decisión 1 de la revisión externa: no se reconstruyen
      los de la v2);
