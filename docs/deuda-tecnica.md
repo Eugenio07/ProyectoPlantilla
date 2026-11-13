@@ -58,12 +58,64 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
   2. un crash de prueba en un proyecto real se ve agrupado por su causa en el panel.
 - **Peso:** fuera de escala (higiene): lo ve el equipo en el panel. — Eugenio Martínez (quien decide), 2026-11-11, aceptando la propuesta (`docs/mediciones/2026-11-11-aprobacion-fase-b.md`).
 
+### #PP28 · 2026-11-12 · Nada vigila que `PreviewActivity` no vuelva al APK de release 🟡
+
+- **Mecanismo:** `#PP8` quitó `compose.uiTooling` de `androidMain` (`6f8ecf7`) y se midió **una vez** en el manifiesto
+  fusionado de release; ninguna guarda lo vuelve a mirar (`git grep PreviewActivity` en `config/`, `androidApp/`,
+  `shared/`, `.github/`: nada) [medido 2026-11-12]. Un arreglo sin verificador no se cumple (revisión externa, B1).
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. `verificarSinStubEnRelease` (la guarda de la clase, `#PP12`) **se extiende** —no se escribe otra al lado, decisión 2
+     de la revisión externa— a `ui-tooling` en los classpaths de release y a `PreviewActivity` en el manifiesto fusionado
+     de release, con su mutación.
+- **Peso:** 🟡: el mismo daño que `#PP8` (cualquier app del dispositivo podría lanzar composables). — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
+
+### #PP29 · 2026-11-12 · `manuales.py` no existe: nada mantiene que los manuales cumplan sus reglas (higiene)
+
+- **Mecanismo:** `manuales_revisiones.md` lo asignó a este repositorio (quien decide, 2026-11-09) y nunca se escribió ni
+  se encoló [medido 2026-11-12]. Sus criterios (C1–C6) no están definidos en ningún sitio legible.
+- **Quién lo desbloquea:** nosotros, después de la v3.
+- **Disparador:** cuando la v3 esté fusionada — estado 2026-11-12: en escritura (plan `2026-11-12-revision-externa-v3`).
+- **Vigente hasta que:**
+  1. una pasada NUEVA del auditor sobre la v3 da los criterios (decisión 1 de la revisión externa: no se reconstruyen
+     los de la v2);
+  2. `config/checks/manuales.py` los verifica, está en la puerta y sale verde, con su mutación.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
+
+### #PP30 · 2026-11-12 · Los defectos de forma de un plan los encuentra el auditor, y diluyen los de fondo (higiene)
+
+- **Mecanismo:** las columnas de la plantilla, las casillas de cierre, los antecedentes y la autorización antes de
+  tiempo salen en las pasadas del auditor mezclados con los hallazgos de fondo, y se leen igual. «Cerca del 40 %» de
+  sus hallazgos son de forma: **derivación, no recuento** (estimación del ejecutor sobre las pasadas de 2026-11-11 y
+  2026-11-12; los informes anteriores no se guardaron).
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. `config/checks/plan_lint.py` en la puerta comprueba la forma de los planes vivos (secciones de la plantilla, clases
+     de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
+
+### #PP32 · 2026-11-12 · La plantilla de plan pide «la puerta con `--rerun-tasks`» y `puerta.sh` no acepta ese argumento (higiene)
+
+- **Mecanismo:** `docs/plans/_plantilla.md` (etapa final) y el manual de operación §2 («La etapa de cierre») dicen «La
+  puerta entera con `--rerun-tasks`». `puerta.sh` ya corre así por defecto (`--rapido` lo quita), y un argumento
+  `--rerun-tasks` sale «argumento desconocido» (código 2) [leído: el bucle de argumentos de `puerta.sh`]. Lo encontró el
+  auditor en la positiva de su revalidación (`docs/mediciones/2026-11-12-pp31-validacion-agentes.md`). Va a la cola: no
+  se corrige en `#PP31`.
+- **Quién lo desbloquea:** nosotros.
+- **Fecha de revisión:** 2026-12-12.
+- **Vigente hasta que:**
+  1. la plantilla de plan y el manual dicen «La puerta entera (sin `--rapido`)».
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — la revisión externa, por medio de Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/mediciones/2026-11-12-derivar.md`, la ficha, punto 5).
+
 ## Cerrados
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
 | `#PP3` | Los iconos de la barra de estado de Android no se leían sobre el fondo claro (tema de ventana y de la app fijos en claro). Mismo mecanismo que `#PP25`; cerrada con él | `2dbdf81` |
 | `#PP25` | Con el sistema en oscuro, la barra de estado de Android no se leía. `AppTheme` (claro/oscuro, sigue al sistema, colores base de Material provisionales) y tema de ventana con `values-night`; capturas en las dos plataformas, claro, oscuro y cambio de modo | `2dbdf81` |
+| `#PP31` | Los agentes declaraban Grep y Glob y no los recibían. Causa más cercana, medida: la app de escritorio no ofrece Grep ni Glob a ninguna sesión (la versión, en `docs/mediciones/2026-11-12-pp31-causa.md`; el porqué dentro del binario, sin medir). Opción A: `tools: Read, Bash` y descripciones con lo medido; revalidados 6 de 6. El manual (FASE 12) dice que `tools:` no es un suelo | `48048e0` |
 | `#PP24` | La pantalla de actualización obligatoria no tenía salida. `storeUrl` por plataforma en la config (contrato, DTO, mapper); el caso de uso elige y valida la de su plataforma; botón «Actualizar» que abre la URL (Android: Play Store; iOS: Safari, sin App Store en el simulador); las listas de release obligan a comprobar la ficha real (condición reformulada por quien decide) | `75fd2e3` |
 | `#PP26` | `skills_de_cierre.py` leía otro trozo si la palabra de la etapa final salía antes en el plan, y las secciones `###` de detrás. Lee solo la sección «Etapa final» hasta el siguiente encabezado de nivel igual o superior; `skills_de_cierre_test.sh` en la puerta, con mutaciones | `ffd7d56` |
 | `#PP27` | El recordatorio de UI avisaba en cada parada tras un merge y no veía lo sin rastrear. Ignora el último commit si es un merge y suma lo sin rastrear; casos con `merge --no-ff` y mutaciones | `8e31300` |

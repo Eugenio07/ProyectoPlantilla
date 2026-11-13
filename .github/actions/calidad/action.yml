@@ -48,7 +48,10 @@ runs:
       run: python3 -I config/checks/claude_md.py
     - name: Validación en tres pasos declarada y al día (#PP7)
       shell: bash
-      run: python3 -I config/checks/validaciones.py
+      run: bash config/checks/validaciones_test.sh && python3 -I config/checks/validaciones.py
     - name: Hooks de Claude Code (sin los casos que corren Gradle)
       shell: bash
       run: bash config/checks/hooks_test.sh
+    - name: El renombrado de la plantilla (config/derivar.sh)
+      shell: bash
+      run: bash config/checks/derivar_test.sh

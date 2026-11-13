@@ -1,4 +1,7 @@
-# Manual de arranque · Bootstrap de una app KMP con Claude Code · v2
+# Manual de arranque · Bootstrap de una app KMP con Claude Code · v3
+
+**v3 (2026-11-12):** un solo número de versión para los dos manuales. Este fichero conserva su nombre (`…_v2.md`) porque
+lo citan `CLAUDE.md`, `wiki/` y los guiones; qué cambió, en `manuales_revisiones.md`, entrada «v3».
 
 ## Qué es este manual
 
@@ -141,7 +144,7 @@ Cada ranura se rellena **al arrancar**, se escribe en `docs/para-claude-md.md` (
      |---|---|---|
      | El auditor sin contexto como subagente con su filtro | Fase 12 | **Una sesión nueva de Claude Code que recibe solo la ruta del plan**: sin la conversación y sin la bandeja. Lo que la Fase 12 añade es empaquetarla como subagente con su filtro |
      | La puerta (`puerta.sh --commit`) | Fase 6.5 | **Los cuatro verdes a mano** (§0, «Los cuatro verdes, y después una sola puerta») y un commit que nombra los ficheros nuevos, nunca `git add -A` |
-     | `<proyecto>-review` | Fase 11 | Una sesión nueva que recibe la rama y `docs/para-claude-md.md` (o `CLAUDE.md` desde la Fase 9), y solo informa |
+     | `<proyecto>-review` | Fase 11 | Una sesión nueva que recibe la rama y `docs/para-claude-md.md` (o `CLAUDE.md` desde la Fase 9), e informa: no edita, por instrucción (la sesión tiene todas sus herramientas) |
      | El CI | Fase 7 | La puerta local (o los cuatro verdes a mano); el PR lo dice |
      | `cola.py` | Fase 6.5 | La cola existe desde la Fase 0; hasta la 6.5, sus ids se comprueban a mano |
 
@@ -182,9 +185,16 @@ Cada ranura se rellena **al arrancar**, se escribe en `docs/para-claude-md.md` (
 
 **La lección de ABI que gobierna todo:** las librerías KMP publican sus binarios de iOS (`.klib`) compilados con una
 versión concreta de Kotlin. Si tu Kotlin es más vieja que la de una dependencia, **Android compila e iOS revienta**.
-Por eso: **Kotlin a la última estable, salvo que una dependencia exija una versión exacta.** Ktorfit lo exige: su
-plugin de compilador va atado a una Kotlin concreta [leído]. Entonces la Kotlin **se fija**, se escribe por qué, y
-subirla pasa por verificar esa dependencia primero.
+Por eso: **Kotlin a la última estable, salvo que una dependencia la restrinja.** Un plugin de compilador (el de Ktorfit,
+por ejemplo) puede estar atado a un rango de Kotlin; si lo está, la Kotlin **se fija** dentro de ese rango, se escribe por
+qué, y subirla pasa por verificar esa dependencia primero.
+
+**Un prompt que nombra una versión es un prompt con fecha de caducidad** (v3, A6). Se nombra **la restricción**, nunca
+el número ni la relación del día. En la v2, «KSP emparejada con esa Kotlin» y «si Ktorfit exige una versión exacta»
+dejaron de ser ciertas antes de usarse: KSP dejó de ir emparejada y Ktorfit pasó a elegir compilador por rango [medido
+en la plantilla, 2026-11-11: notas 6 y 7 de `notas-del-arranque-2026-11-11.md`]. Lo mismo vale para «la última
+estable»: puede no existir (material3 multiplataforma) o traer una regresión publicada; por eso se miran los issues
+abiertos de la versión elegida, no solo su número.
 
 **Stack fijo (el qué):** Ktor + **Ktorfit** para red (NO Retrofit/OkHttp: son solo JVM) con engines OkHttp (Android) y
 Darwin (iOS) · kotlinx-serialization (`ignoreUnknownKeys = true`) · **Koin** (BOM) · navigation-compose multiplataforma
@@ -196,10 +206,11 @@ para los tests con `MockEngine`) y como `debugImplementation` en la app, para el
 ```text
 Antes de crear nada: resuelve la matriz de versiones con búsqueda web, verificando compatibilidad real, no supuesta:
 1. Kotlin: última ESTABLE.
-2. KSP emparejada con esa Kotlin (documentación de JetBrains).
+2. KSP compatible con esa Kotlin (su documentación; y los issues abiertos de la versión que elijas).
 3. Compose Multiplatform: última estable que soporte esa Kotlin.
-4. Ktorfit: verifica EXPLÍCITAMENTE que su plugin de compilador soporte esa Kotlin EXACTA y que sus klibs de iOS
-   estén publicados para ella. Si exige una versión exacta, la Kotlin del proyecto queda FIJADA a esa, y lo escribes.
+4. Ktorfit: verifica EXPLÍCITAMENTE qué Kotlin admite hoy su plugin de compilador (rango o versión) y que sus klibs de
+   iOS estén publicados para la tuya. Si la restringe, la Kotlin del proyecto queda FIJADA dentro de esa restricción, y
+   lo escribes.
 5. Ktor, kotlinx-serialization, coroutines, Koin BOM, navigation-compose: últimas estables.
 6. AGP y Gradle compatibles con esa Kotlin.
 Entrégame la tabla con la evidencia (enlaces) de cada compatibilidad ANTES de escribir el catálogo. Todo va a
@@ -234,6 +245,9 @@ iOS).
 - **Repos devuelven `Resource<T>` y nunca lanzan** (solo re-lanzan `CancellationException`). **`domain` puro**, y su
   regla de dependencias **enumera** los paquetes de `core` permitidos: la lista crecerá (en el origen pasó de cuatro a
   cinco con `core/version` [leído]), y la versión corta genera falsos positivos o «correcciones» de código sano.
+- **Listas de ficheros o de tareas, en bash** (v3, A8): zsh no parte en palabras una variable sin comillas, así que una
+  lista en una variable llega como una sola ruta o una sola tarea (cuatro casos, en dos repositorios, el mismo día)
+  [medido en la plantilla, 2026-11-11]. Va a `CLAUDE.md` con su trampa.
 - **Nada de `git add -A` ni `git add .`:** los ficheros nuevos se nombran. El `.gitignore` no protege de lo que git ya
   sigue, ni de un add forzado [leído; tres incidentes en el origen].
 
@@ -833,7 +847,8 @@ PROMPT · Cristalizar el proceso en herramientas. Plan. Commands y skills CARGAN
 reiniciar.
 1. Prefijo del proyecto en TODO command (<proyecto>-review...): los built-ins (/review, /init...) tienen
    PRECEDENCIA. Documentar la convención en CLAUDE.md.
-2. <proyecto>-review (.claude/commands/): revisión de pre-PR contra CLAUDE.md (referencia, no copia). SOLO lee y
+2. <proyecto>-review (.claude/commands/): revisión de pre-PR contra CLAUDE.md (referencia, no copia). No edita, POR
+   INSTRUCCIÓN (un command corre en la sesión principal con todas sus herramientas: escribe eso, nunca «solo lee»), y
    escribe su informe en un sitio fijo; hallazgos con archivo:línea. Se corre ANTES de abrir el PR, no después.
 3. <proyecto>-test: OPCIONAL. Solo si en el primer mes hay tests escritos fuera de la matriz; si no, no se crea.
 4. Sin backend real, <proyecto>-contract-sync que REPORTA divergencias con los borradores. Con backend real, no:
@@ -841,7 +856,14 @@ reiniciar.
 5. Skill kmp-ios-gotchas (.claude/skills/<nombre>/SKILL.md): la description ES el disparador. Gatillos concretos:
    "editar iosMain", "expect/actual", "añadir dependencia a commonMain", "arranque de iOS", "registrar en Koin algo
    bi-plataforma". Contenido: el catálogo de la sección 4 (síntoma→causa→solución).
-6. VALIDACIÓN DE CADA SKILL Y CADA COMMAND, en tres pasos, con su registro:
+6. VALIDACIÓN DE CADA SKILL, CADA COMMAND Y CADA AGENTE NUEVO O CAMBIADO (no de lo que no cambió), en tres pasos, con
+   su registro. EL MÉTODO (v3, A5): se corre en una SESIÓN NUEVA de Claude Code, porque skills, commands y la
+   DEFINICIÓN DE UN AGENTE se cargan al arrancar la sesión: editar el fichero de un agente a mitad de sesión no cambia el
+   agente que se lanza, así que su validación, y también su paso de control, necesita otra sesión nueva. Dentro de esa
+   sesión, cada paso con un SUBAGENTE NUEVO (los subagentes cargan las piezas del proyecto); antes, un PASO 0 que
+   comprueba esa premisa (un subagente lista las piezas) y, si falla, para. A un command que escribe un informe no se le
+   añade «no edites ficheros». La sesión no commitea: deja su informe y el ejecutor copia los literales a
+   docs/mediciones/. Los pasos:
    - POSITIVA: una tarea de su territorio sin nombrarla → tiene que activarse.
    - CONTROL: "¿qué skill consultaste y qué gotcha aplica?" → la nombra y cita el gotcha. Responder bien SIN nombrarla
      es haber respondido de memoria: el disparador falló.
@@ -886,7 +908,7 @@ Son **dos piezas distintas** y hacen falta las dos.
 | Qué caza | Lo que su autor no puede ver, **antes de que exista el código** | Lo que los revisores atentos dejan pasar durante semanas |
 | Cuándo | Cada plan, antes de llevarlo a revisión | Al cerrar el bootstrap, y después por etapas |
 | Quién la lanza | **Quien redacta el plan**, siempre, sin preguntar | El desarrollador |
-| Con qué | Un subagente sin contexto que solo ve el documento y el código | El modelo más capaz, en dos fases |
+| Con qué | Un subagente sin contexto: no recibe la conversación (mecanismo: nace sin ella); la bandeja la niega su filtro por nombre; con `Bash` lee todo el disco | El modelo más capaz, en dos fases |
 
 Un paso que depende de que alguien conteste «¿lo lanzo?» falla en silencio cuando nadie contesta: en el origen pasó
 así, y por eso lo lanza quien redacta [leído]. **En el arranque corre una vez por fase**, no por incremento (§0, «Plan antes de
@@ -894,8 +916,10 @@ aplicar»). Cuándo pasa exactamente, cómo se resuelven sus hallazgos y cuándo
 de parchear y se rehace la forma: ver el manual de operación.
 
 ```text
-PROMPT A · El auditor sin contexto. Crea .claude/agents/auditor-sin-contexto.md: tools Read, Grep, Glob, Bash; solo
-lectura; juzga un documento solo por lo escrito y por el código del repositorio. Le niega GitHub (gh, github.com) un
+PROMPT A · El auditor sin contexto. Crea .claude/agents/auditor-sin-contexto.md: en tools, SOLO las herramientas que el
+entorno ofrece (compruébalo antes: ver «tools: no es un suelo», debajo), con Bash si ha de leer git o correr guiones; no
+edita, POR INSTRUCCIÓN (con Bash, ningún mecanismo lo impide), y su descripción lo dice así; juzga un documento solo por
+lo escrito y por el código del repositorio. Le niega GitHub (gh, github.com) un
 hook PreToolUse propio que FALLA CERRADO: si no puede leer el comando, deniega. Motivo: si lee las incidencias y los
 PR, comparte las suposiciones de quien escribió el plan. Lo que solo se sabría por ahí va a una sección "Lo que no pude
 comprobar". Valídalo en tres pasos con su fila en .claude/validaciones.md (Fase 11), adaptados a un agente: POSITIVA
@@ -903,6 +927,22 @@ comprobar". Valídalo en tres pasos con su fila en .claude/validaciones.md (Fase
 rechazado), NEGATIVA (se le pide editar un fichero → no lo edita). Añade el filtro a config/checks/hooks_test.sh: un
 comando con gh se deniega, y sin python3 también.
 ```
+
+**`tools:` no es un suelo, ni un techo estricto** (v3, medido en la plantilla el 2026-11-12, `#PP31`). Un agente con
+`tools: Read, Grep, Glob, Bash` recibió **Read y Bash**: 2 de las 4 herramientas declaradas. La causa más cercana: la app
+de escritorio de Claude Code **2.1.321** no ofrece Grep ni Glob a **ninguna** sesión, tampoco a la principal. Ninguna
+configuración las deniega; por qué el binario no las ofrece está sin medir, y otro entorno (la CLI) no se pudo medir.
+Además, el entorno **añade** una herramienta que no se declara (`SubagentHandback`, para devolver el informe).
+`tools:` concede lo declarado **dentro de lo que ofrece el entorno**: no garantiza lo que declara. Por eso:
+- **antes de declarar una herramienta,** comprueba que el entorno la ofrece (en la sesión principal, `ToolSearch`
+  «select:<nombre>»), y escribe en la descripción **la versión** donde lo mediste;
+- **declara solo lo que llega.** Una descripción que promete herramientas que no llegan es una propiedad sin mecanismo
+  (`CLAUDE.md` §4).
+
+**Lo que no se contagia: `hooks:` sí funciona.** Los controles de las validaciones de los dos agentes de la plantilla
+pegaron el rechazo literal del filtro (medido, `docs/mediciones/2026-11-12-validacion-agentes.md`). En el origen, el
+control de punta a punta vio la denegación en la transcripción del subagente, con el texto del propio filtro (dicho por
+la revisión externa). La independencia del auditor no queda en duda por `#PP31`.
 **Aviso:** en el origen el filtro se probó con entradas, pero **el agente entero quedó sin probar** [leído]. Es la
 prueba que este prompt exige.
 
@@ -916,7 +956,8 @@ cola. Cómo se escribe, se pesa y se cierra una entrada: ver el manual de operac
 
 ```text
 PROMPT B · AUDITORÍA INTEGRAL EN DOS FASES ESTRICTAMENTE SEPARADAS.
-FASE A (solo lectura, PROHIBIDO modificar): audita código, CI, hooks, docs y estado git. Por hallazgo: TRIAJE P0
+FASE A (no modifica nada, POR INSTRUCCIÓN: la sesión tiene todas sus herramientas): audita código, CI, hooks, docs y
+estado git. Por hallazgo: TRIAJE P0
 (bug real) / P1 (deuda que morderá) / P2 (higiene), archivo:línea, EVIDENCIA verificada y marcada (medido / leído /
 sin medir), riesgo concreto, arreglo MÍNIMO, esfuerzo S/M/L, flags [TOCA-iOS][DECISIÓN-DE-PRODUCTO][CAMBIA-CONTRATO].
 Verificación adversarial: re-verifica cada hallazgo intentando refutarlo. Una afirmación de ausencia ("no hay forma de
