@@ -84,7 +84,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
 
-### #PP33 · 2026-11-12 · Los manuales escriben la versión de la app de escritorio, y `versiones.py` no los mira (higiene) (peso por decidir)
+### #PP33 · 2026-11-12 · Los manuales escriben la versión de la app de escritorio, y `versiones.py` no los mira (higiene)
 
 - **Mecanismo:** `versiones.py` solo recorre `CLAUDE.md`, `README.md`, `wiki/` y `.claude/`; sobre los dos manuales
   sale 1 con cuatro avisos: la versión de la app de escritorio dos veces, y «hallazgo 5.6» y «6.1», que son falsos
@@ -95,9 +95,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. los manuales citan la medición en vez de la versión, y `versiones.py` recorre `docs/manuales/kmp_*.md` y sale
      verde, con su mutación.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-pp29-manuales.md`, *Revisiones*).
 
-### #PP34 · 2026-11-12 · `validaciones.py --mecanismos` da seis falsos positivos sobre los manuales (higiene) (peso por decidir)
+### #PP34 · 2026-11-12 · `validaciones.py --mecanismos` da seis falsos positivos sobre los manuales (higiene)
 
 - **Mecanismo:** mira línea a línea y cuenta las frases citadas: sobre los manuales, sus seis fallos son un mecanismo
   partido entre dos líneas, citas «…» de lo que no vale, una condición («Sin acceso a GitHub sale 3») y dos frases
@@ -108,9 +108,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. `validaciones.py --mecanismos` une los párrafos y no cuenta las frases entre «», y corre sobre los manuales en la
      puerta, verde y con su mutación.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-pp29-manuales.md`, *Revisiones*).
 
-### #PP35 · 2026-11-12 · Nada comprueba las atribuciones ni la base de las marcas de los manuales (higiene) (peso por decidir)
+### #PP35 · 2026-11-12 · Nada comprueba las atribuciones ni la base de las marcas de los manuales (higiene)
 
 - **Mecanismo:** los criterios C6 (la base de cada marca) y C7 (las formas de atribución) de la pasada 2 de `#PP29`
   esperaban la decisión 5, ya tomada: «la revisión externa» es una atribución válida y «en la plantilla» una base válida
@@ -119,9 +119,9 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Fecha de revisión:** 2026-12-12.
 - **Vigente hasta que:**
   1. `manuales.py` comprueba C6 y C7, verde y con su mutación.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-pp29-manuales.md`, *Revisiones*).
 
-### #PP36 · 2026-11-12 · Las reglas de los manuales que piden juicio no tienen ni aviso (higiene) (peso por decidir)
+### #PP36 · 2026-11-12 · Las reglas de los manuales que piden juicio no tienen ni aviso (higiene)
 
 - **Mecanismo:** los candidatos C9 (las reglas «(v3…)» sin fila en su tabla), C10 (afirmaciones sin marca), C12
   (recuentos), C13 (reglas escritas como «X sale mal») y C14 (la tabla de lo que el arranque deja a operación) necesitan
@@ -133,7 +133,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Vigente hasta que:**
   1. los avisos salen en `manuales.py` (salida 0 con la línea), y lo leído está corregido en los manuales o tiene su
      porqué.
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-pp29-manuales.md`, *Revisiones*).
 
 ## Cerrados
 
