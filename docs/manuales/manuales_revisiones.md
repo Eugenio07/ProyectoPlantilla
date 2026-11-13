@@ -100,7 +100,7 @@ capacidad: dicen que no bloquean, y el texto ya da el mecanismo («No va en la p
 ## v3, 2026-11-12 (tercera entrada): `tools:` entregó dos de cuatro
 
 **Origen:** el encargo de la revisión externa sobre `#PP31`, literal en `docs/mediciones/2026-11-12-pp31-causa.md` del
-repo plantilla. Plan: `docs/plans/2026-11-12-pp31-tools.md`.
+repo plantilla. Plan: `docs/historico/planes/2026-11-12-pp31-tools.md`.
 
 | Cambio | Dónde |
 |---|---|

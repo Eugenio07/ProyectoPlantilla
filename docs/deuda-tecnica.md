@@ -96,7 +96,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
      de criterio de §4, casillas de cierre, las dos líneas del alcance provisional), con su mutación.
 - **Peso:** fuera de escala (higiene): solo lo ve el equipo. — Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/historico/planes/2026-11-12-revision-externa-v3.md`, *Revisiones*).
 
-### #PP32 · 2026-11-12 · La plantilla de plan pide «la puerta con `--rerun-tasks`» y `puerta.sh` no acepta ese argumento (higiene) (peso por decidir)
+### #PP32 · 2026-11-12 · La plantilla de plan pide «la puerta con `--rerun-tasks`» y `puerta.sh` no acepta ese argumento (higiene)
 
 - **Mecanismo:** `docs/plans/_plantilla.md` (etapa final) y el manual de operación §2 («La etapa de cierre») dicen «La
   puerta entera con `--rerun-tasks`». `puerta.sh` ya corre así por defecto (`--rapido` lo quita), y un argumento
@@ -107,7 +107,7 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 - **Fecha de revisión:** 2026-12-12.
 - **Vigente hasta que:**
   1. la plantilla de plan y el manual dicen «La puerta entera (sin `--rapido`)».
-- **Peso:** (peso por decidir) — propuesta: fuera de escala (higiene): solo lo ve el equipo.
+- **Peso:** fuera de escala (higiene): solo lo ve el equipo. — la revisión externa, por medio de Eugenio Martínez (quien decide), 2026-11-12, aceptando la propuesta (`docs/mediciones/2026-11-12-derivar.md`, la ficha, punto 5).
 
 ## Cerrados
 
