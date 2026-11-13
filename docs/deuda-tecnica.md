@@ -139,8 +139,8 @@ Plantilla de una entrada (copiar bajo «Abiertos»):
 
 | Id | Qué era | Commit que la cerró |
 |---|---|---|
-| `#PP29` | `manuales.py` no existía: nada mantenía que los manuales cumplieran sus reglas. Criterios de una pasada nueva del auditor sobre la v3; cinco en la puerta (C1, C2, C3, C5, C8) y los manuales corregidos hasta verde; lo que quedó fuera, en `#PP33`–`#PP36` | (este commit) |
-| `#PP32` | La plantilla de plan pedía «la puerta con `--rerun-tasks`». Dicen «La puerta entera (sin `--rapido`)» la plantilla y operación §2 | (este commit) |
+| `#PP29` | `manuales.py` no existía: nada mantenía que los manuales cumplieran sus reglas. Criterios de una pasada nueva del auditor sobre la v3; cinco en la puerta (C1, C2, C3, C5, C8) y los manuales corregidos hasta verde; lo que quedó fuera, en `#PP33`–`#PP36` | `4798b77` |
+| `#PP32` | La plantilla de plan pedía «la puerta con `--rerun-tasks`». Dicen «La puerta entera (sin `--rapido`)» la plantilla y operación §2 | `4798b77` |
 | `#PP3` | Los iconos de la barra de estado de Android no se leían sobre el fondo claro (tema de ventana y de la app fijos en claro). Mismo mecanismo que `#PP25`; cerrada con él | `2dbdf81` |
 | `#PP25` | Con el sistema en oscuro, la barra de estado de Android no se leía. `AppTheme` (claro/oscuro, sigue al sistema, colores base de Material provisionales) y tema de ventana con `values-night`; capturas en las dos plataformas, claro, oscuro y cambio de modo | `2dbdf81` |
 | `#PP31` | Los agentes declaraban Grep y Glob y no los recibían. Causa más cercana, medida: la app de escritorio no ofrece Grep ni Glob a ninguna sesión (la versión, en `docs/mediciones/2026-11-12-pp31-causa.md`; el porqué dentro del binario, sin medir). Opción A: `tools: Read, Bash` y descripciones con lo medido; revalidados 6 de 6. El manual (FASE 12) dice que `tools:` no es un suelo | `48048e0` |
