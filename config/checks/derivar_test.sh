@@ -34,7 +34,7 @@ copia() { # copia <destino>: el árbol de trabajo, como repositorio limpio de un
       -c core.hooksPath=/dev/null commit -qm base
 }
 
-commitea() { # commitea <repo> <mensaje>
+commitea() { # commitea <repo> <mensaje> · `add -A` solo en las copias desechables: §11 protege el índice de la plantilla
   git -C "$1" add -A && git -C "$1" -c user.name=derivar_test -c user.email=derivar_test@localhost \
     -c commit.gpgsign=false -c core.hooksPath=/dev/null commit -qm "$2" --allow-empty >/dev/null
 }
