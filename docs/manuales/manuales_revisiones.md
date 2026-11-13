@@ -108,3 +108,28 @@ repo plantilla. Plan: `docs/historico/planes/2026-11-12-pp31-tools.md`.
 | El PROMPT A ya no prescribe «tools Read, Grep, Glob, Bash; solo lectura»: solo lo que ofrece el entorno, y «no edita, por instrucción» | Arranque, FASE 12, PROMPT A |
 | Lo que no se contagia: `hooks:` sí funciona (medido aquí; en el origen, dicho por la revisión externa) | Arranque, FASE 12 |
 | La descripción del auditor y «quitarle `Bash`» ya no es una frontera practicable | Operación §1 |
+
+## v3, 2026-11-12 (cuarta entrada): los manuales cumplen sus propias reglas, y lo comprueba `manuales.py`
+
+**Origen:** `#PP29` del repo plantilla: la ficha y las pasadas del auditor sobre la v3 están en
+`docs/mediciones/2026-11-12-pp29-ficha.md`, con las cinco decisiones de quien decide literales. Plan:
+`docs/historico/planes/2026-11-12-pp29-manuales.md`. Los criterios salen de una pasada nueva sobre la v3, no de los
+C1–C6 de la v2 (decisión 1 de la revisión externa).
+
+| Cambio | Dónde |
+|---|---|
+| `config/checks/manuales.py` en la puerta, con cinco criterios: citas por número (C1), punteros de sección (C2), punteros a ficheros, guiones y `#PPn` (C3), marcas (C5) y tablas de pruebas (C8) | El repo plantilla |
+| La regla de citas rige los dos manuales (D1); un registro con fecha se puede citar por su numeración si la frase nombra el fichero (D2) | Operación, «Cómo se cita en este manual»; arranque, «Cómo se cita» |
+| §3 con su tabla «Regla de §3 \| La prueba» (D3); las filas de prueba que eran enunciados pasan a pregunta | Operación §2, §3 y §10 |
+| «La revisión externa», forma de atribución; «en la plantilla», base de `[medido]` (D5) | Operación §7, «Una decisión»; los dos «Cómo leer las marcas» |
+| Las citas por número de punto, por su nombre; las marcas, en sus formas | Los dos manuales |
+| «La puerta entera (sin `--rapido`)» (cierra `#PP32` del repo plantilla) | Operación §2, «La etapa de cierre» |
+
+**Lo que no se cumple de lo escrito en «v2»:** «cuando exista `manuales.py` se vuelve a medir con él» y «los 13 que
+volvieron se miden de nuevo con él». No se puede: esa lista está en el informe de la sesión del 2026-11-09, que no está
+en el repositorio [medido 2026-11-12: `docs/historico/auditorias/` solo tiene la auditoría de la app]. `manuales.py` mide
+la v3 tal como está.
+
+**Fuera, a la cola del repo plantilla:** la versión de la app de escritorio en los manuales y `versiones.py` (`#PP33`);
+`validaciones.py --mecanismos` sobre los manuales (`#PP34`); las atribuciones y la base de las marcas (`#PP35`); los
+avisos que necesitan juicio y lo que la pasada leyó (`#PP36`).

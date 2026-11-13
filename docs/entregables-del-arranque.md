@@ -77,3 +77,5 @@ Los artefactos que cada fase del manual de arranque prescribe. **Cada fase añad
 | 12 B | `config/checks/validaciones_test.sh` | Pruebas de `validaciones.py --mecanismos` (toda propiedad declarada dice su mecanismo) |
 | — | `config/derivar.sh` | Renombra la plantilla en un proyecto nuevo; se borra a sí mismo al terminar |
 | — | `config/checks/derivar_test.sh` | Su test, en la puerta y en `calidad` (se borra con el guion) |
+| 12 | `config/checks/manuales.py` | Los dos manuales cumplen sus propias reglas de forma (`#PP29`) |
+| 12 | `config/checks/manuales_test.sh` | Pruebas de `manuales.py`: un caso y su control por rama y por exención |
